@@ -12,6 +12,8 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
       navigate('/dashboard');
     } else if (tab === 'orderData') {
       navigate('/orders');
+    } else if (tab === 'alerts') {
+      navigate('/alerts');
     }
   };
   return (
@@ -55,7 +57,7 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
             alignItems: 'center',
             padding: '8px 9px',
             gap: '4px',
-            width: '301px',
+            width: '450px',
             height: '48px',
             backgroundColor: '#F8F8F9',
             borderRadius: '8px',
@@ -117,6 +119,35 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
               }}
             >
               Order Data
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => handleTabChange('alerts')}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '8px 12px',
+              gap: '4px',
+              height: '32px',
+              flex: 1,
+              backgroundColor: activeTab === 'alerts' ? '#FFFFFF' : '#F8F8F9',
+              boxShadow: activeTab === 'alerts' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: activeTab === 'alerts' ? 600 : 500,
+                fontSize: '14px',
+                lineHeight: '140%',
+                color: activeTab === 'alerts' ? '#434F64' : '#5F697B',
+              }}
+            >
+              Alerts
             </Typography>
           </Box>
         </Paper>

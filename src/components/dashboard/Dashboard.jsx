@@ -5,6 +5,7 @@ import DashboardHeader from './DashboardHeader';
 import HeroKPI from './HeroKPI';
 import SecondaryKPI from './SecondaryKPI';
 import LineChartKPI from './LineChartKPI';
+import AlertIndicator from './AlertIndicator';
 import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
@@ -102,6 +103,9 @@ const Dashboard = () => {
             />
           </Box>
         )}
+
+        {/* Alert Indicator */}
+        <AlertIndicator />
         {/* First Row - Hero KPI and KPI 2A/3A */}
         <Grid container spacing={2.5}>
           {/* Hero KPI */}

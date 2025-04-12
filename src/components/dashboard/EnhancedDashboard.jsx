@@ -5,6 +5,7 @@ import DashboardHeader from './DashboardHeader';
 import EnhancedHeroKPI from './EnhancedHeroKPI';
 import EnhancedSecondaryKPI from './EnhancedSecondaryKPI';
 import LineChartKPI from './LineChartKPI';
+import AlertIndicator from './AlertIndicator';
 import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
@@ -84,18 +85,21 @@ const EnhancedDashboard = () => {
             </IconButton>
           </Tooltip>
         </Box>
-        
+
         {/* Error message if any */}
         {error && (
           <Box sx={{ width: '100%', mb: 2 }}>
-            <Chip 
-              label={error} 
-              color="error" 
-              variant="outlined" 
-              sx={{ borderRadius: '4px' }} 
+            <Chip
+              label={error}
+              color="error"
+              variant="outlined"
+              sx={{ borderRadius: '4px' }}
             />
           </Box>
         )}
+
+        {/* Alert Indicator */}
+        <AlertIndicator />
 
         {/* Main KPI Grid Layout */}
         <Grid container spacing={2.5}>
@@ -141,7 +145,7 @@ const EnhancedDashboard = () => {
                 )}
               </Grid>
             </Grid>
-            
+
             {/* Bottom Row - KPI 3B and 3C */}
             <Grid container spacing={2.5}>
               <Grid item xs={12} md={6}>

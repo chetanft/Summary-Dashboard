@@ -6,6 +6,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
 import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
 import OrdersPage from './components/orders/OrdersPage';
+import AlertsWithLayout from './components/alerts/AlertsWithLayout';
 
 // Create a theme instance
 const theme = createTheme({
@@ -43,6 +44,16 @@ function App() {
                 <ProtectedRoute>
                   <DataProvider>
                     <OrdersPage />
+                  </DataProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/alerts"
+              element={
+                <ProtectedRoute>
+                  <DataProvider>
+                    <AlertsWithLayout />
                   </DataProvider>
                 </ProtectedRoute>
               }
