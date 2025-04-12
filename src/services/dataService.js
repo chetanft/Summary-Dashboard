@@ -12,16 +12,26 @@ import dashboardData from '../data/dashboardData.json';
  * @returns {Promise} - Promise that resolves to filtered dashboard data
  */
 export const fetchDashboardData = (userRole) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     // Simulate API call delay
     setTimeout(() => {
-      // In a real app, this would be an API call
-      // For now, we're using the imported JSON data
-      
-      // Filter KPIs based on user role
-      const filteredData = filterDataByRole(dashboardData, userRole);
-      
-      resolve(filteredData);
+      try {
+        // In a real app, this would be an API call
+        // For now, we're using the imported JSON data
+
+        // Filter KPIs based on user role
+        const filteredData = filterDataByRole(dashboardData, userRole);
+
+        // Validate data structure
+        if (!filteredData || !filteredData.kpis) {
+          throw new Error('Invalid dashboard data structure');
+        }
+
+        resolve(filteredData);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        reject(error.message || 'Failed to load dashboard data');
+      }
     }, 500);
   });
 };
@@ -35,18 +45,18 @@ export const fetchDashboardData = (userRole) => {
 const filterDataByRole = (data, userRole) => {
   // Clone the data to avoid modifying the original
   const filteredData = { ...data };
-  
+
   // In a real app, we would filter KPIs based on the user role
   // For now, we're returning all KPIs for all roles
-  
+
   // For demonstration, we'll filter some KPIs for Branch users
   if (userRole === 'Branch') {
     // Branch users only see specific KPIs
-    filteredData.kpis = data.kpis.filter(kpi => 
+    filteredData.kpis = data.kpis.filter(kpi =>
       ['vehicle_utilization', 'placement_efficiency', 'otif_percentage'].includes(kpi.id)
     );
   }
-  
+
   return filteredData;
 };
 
@@ -57,10 +67,10 @@ const filterDataByRole = (data, userRole) => {
  */
 export const transformDashboardData = (data) => {
   if (!data || !data.kpis) return null;
-  
+
   // Find the main KPI for the hero component (using freight_budget_actual)
   const heroKPI = data.kpis.find(kpi => kpi.id === 'freight_budget_actual');
-  
+
   // Get the remaining KPIs for secondary components
   const secondaryKPIs = data.kpis.filter(kpi => kpi.id !== 'freight_budget_actual')
     .map(kpi => ({
@@ -72,7 +82,7 @@ export const transformDashboardData = (data) => {
       unit: kpi.unit,
       trend: kpi.trend || []
     }));
-  
+
   // Transform hero KPI data
   const transformedHeroKPI = heroKPI ? {
     title: heroKPI.label,
@@ -83,7 +93,7 @@ export const transformDashboardData = (data) => {
     unit: heroKPI.unit,
     chartData: transformChartData(heroKPI.trend)
   } : null;
-  
+
   return {
     lastUpdated: data.lastUpdated,
     heroKPI: transformedHeroKPI,
@@ -100,7 +110,7 @@ export const transformDashboardData = (data) => {
  */
 const formatKPIValue = (value, unit) => {
   if (value === undefined || value === null) return 'N/A';
-  
+
   // Format based on unit
   switch (unit) {
     case 'INR':
@@ -130,9 +140,9 @@ const formatNumber = (num) => {
  */
 const transformChartData = (trend) => {
   if (!trend || !Array.isArray(trend)) return [];
-  
+
   const months = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
-  
+
   return trend.map((value, index) => ({
     month: months[index % months.length],
     value: value,

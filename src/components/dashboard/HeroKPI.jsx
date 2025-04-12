@@ -20,7 +20,7 @@ const HeroKPI = ({ title, data }) => {
         padding: '32px',
         gap: '24px',
         width: '100%',
-        height: '666px',
+        height: '500px',
         backgroundColor: '#FFFFFF',
         border: '1px solid #F0F1F7',
         boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',

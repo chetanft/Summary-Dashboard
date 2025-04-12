@@ -107,7 +107,7 @@ const Dashboard = () => {
           {/* Hero KPI */}
           <Grid item xs={12} md={6}>
             {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={666} sx={{ borderRadius: '32px' }} />
+              <Skeleton variant="rectangular" width="100%" height={500} sx={{ borderRadius: '32px' }} />
             ) : (
               <HeroKPI title="Hero KPI" data={kpiData.heroKPI} />
             )}
@@ -118,7 +118,7 @@ const Dashboard = () => {
             <Grid container spacing={2.5} direction="column">
               <Grid item>
                 {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
                 ) : (
                   <SecondaryKPI
                     title={kpiData.secondaryKPIs[0].title}
@@ -130,7 +130,7 @@ const Dashboard = () => {
               </Grid>
               <Grid item>
                 {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
                 ) : (
                   <SecondaryKPI
                     title={kpiData.secondaryKPIs[1].title}
@@ -148,7 +148,7 @@ const Dashboard = () => {
         <Grid container spacing={2.5}>
           <Grid item xs={12} md={6}>
             {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+              <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
             ) : (
               <SecondaryKPI
                 title={kpiData.secondaryKPIs[2].title}
@@ -160,7 +160,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+              <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
             ) : (
               <SecondaryKPI
                 title={kpiData.secondaryKPIs[3].title}
