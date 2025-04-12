@@ -4,7 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
-import Dashboard from './components/dashboard/Dashboard';
+import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
 import OrdersPage from './components/orders/OrdersPage';
 
 // Create a theme instance
@@ -32,7 +32,7 @@ function App() {
               element={
                 <ProtectedRoute>
                   <DataProvider>
-                    <Dashboard />
+                    <EnhancedDashboard />
                   </DataProvider>
                 </ProtectedRoute>
               }
