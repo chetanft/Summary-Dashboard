@@ -1,0 +1,62 @@
+{
+  "order_id": "7134895",
+  "date": "2023-03-12",
+  "timeline": [
+    {
+      "stage": "SO Generated",
+      "timestamp": "2023-03-12T09:34:00",
+      "details": {
+        "SO Number": "7134895"
+      }
+    },
+    {
+      "stage": "Planning",
+      "timestamp": "2023-03-12T09:34:00",
+      "time_taken_hrs": 2,
+      "sub_stages": [
+        {
+          "status": "In Process",
+          "details": {
+            "Weight": "21 Ton"
+          },
+          "duration_hrs": 2
+        },
+        {
+          "status": "Plan Generated",
+          "details": {
+            "Plan ID": "32151235"
+          }
+        }
+      ]
+    },
+    {
+      "stage": "Indent",
+      "timestamp": "2023-03-12T09:34:00",
+      "time_taken_hrs": 12,
+      "sub_stages": [
+        {
+          "status": "Published",
+          "details": {
+            "Acceptance Deadline": "2025-04-26T09:45:00",
+            "Published To": "Safe and Express Transporters"
+          }
+        },
+        {
+          "status": "Pending Acceptance",
+          "duration_hrs": 2
+        },
+        {
+          "status": "In Assignment",
+          "duration_hrs": 4
+        },
+        {
+          "status": "Reporting",
+          "timestamp": "2023-03-12T09:34:00",
+          "details": {
+            "Vehicle No": "AP 12K 1234"
+          }
+        }
+      ]
+    }
+  ]
+}
