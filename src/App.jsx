@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
+import { DataProvider } from './context/DataContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
@@ -30,7 +31,9 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <DataProvider>
+                    <Dashboard />
+                  </DataProvider>
                 </ProtectedRoute>
               }
             />
@@ -38,7 +41,9 @@ function App() {
               path="/orders"
               element={
                 <ProtectedRoute>
-                  <OrdersPage />
+                  <DataProvider>
+                    <OrdersPage />
+                  </DataProvider>
                 </ProtectedRoute>
               }
             />

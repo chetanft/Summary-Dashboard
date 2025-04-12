@@ -1,39 +1,20 @@
-import { useState, useEffect } from 'react';
-
+import { useState } from 'react';
+import { useData } from '../../context/DataContext';
 import Layout from '../layout/Layout';
 import DashboardHeader from './DashboardHeader';
 import HeroKPI from './HeroKPI';
 import SecondaryKPI from './SecondaryKPI';
 import LineChartKPI from './LineChartKPI';
-import { Box, Grid, Skeleton } from '@mui/material';
+import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const Dashboard = () => {
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('summary');
-
-  // Simulate data loading
-  useEffect(() => {
-    const loadData = () => {
-      setLoading(true);
-
-      // Simulate API call delay
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    };
-
-    loadData();
-  }, []);
+  const { dashboardData, loading, error, lastUpdated, refreshData } = useData();
 
   // Handle manual refresh
   const handleRefresh = () => {
-    setLoading(true);
-
-    // Simulate API call delay
-    setTimeout(() => {
-      // In a real app, we would fetch fresh data here
-      setLoading(false);
-    }, 1000);
+    refreshData();
   };
 
   // Handle tab change
@@ -41,8 +22,8 @@ const Dashboard = () => {
     setActiveTab(tab);
   };
 
-  // Sample KPI data
-  const kpiData = {
+  // KPI data from context
+  const kpiData = dashboardData || {
     heroKPI: {
       title: 'Hero KPI',
       actual: 'Span 6',
@@ -87,8 +68,40 @@ const Dashboard = () => {
           alignItems: 'flex-start',
           gap: '20px',
           width: '100%',
+          padding: '0 20px',
         }}
       >
+        {/* Refresh and Last Updated */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            mt: 1,
+          }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            {lastUpdated ? `Last updated: ${lastUpdated}` : ''}
+          </Typography>
+          <Tooltip title="Refresh data">
+            <IconButton onClick={handleRefresh} size="small" disabled={loading}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+
+        {/* Error message if any */}
+        {error && (
+          <Box sx={{ width: '100%', mb: 2 }}>
+            <Chip
+              label={error}
+              color="error"
+              variant="outlined"
+              sx={{ borderRadius: '4px' }}
+            />
+          </Box>
+        )}
         {/* First Row - Hero KPI and KPI 2A/3A */}
         <Grid container spacing={2.5}>
           {/* Hero KPI */}
@@ -111,6 +124,7 @@ const Dashboard = () => {
                     title={kpiData.secondaryKPIs[0].title}
                     value={kpiData.secondaryKPIs[0].value}
                     target={kpiData.secondaryKPIs[0].target}
+                    color={kpiData.secondaryKPIs[0].color}
                   />
                 )}
               </Grid>
@@ -122,6 +136,7 @@ const Dashboard = () => {
                     title={kpiData.secondaryKPIs[1].title}
                     value={kpiData.secondaryKPIs[1].value}
                     target={kpiData.secondaryKPIs[1].target}
+                    color={kpiData.secondaryKPIs[1].color}
                   />
                 )}
               </Grid>
@@ -139,6 +154,7 @@ const Dashboard = () => {
                 title={kpiData.secondaryKPIs[2].title}
                 value={kpiData.secondaryKPIs[2].value}
                 target={kpiData.secondaryKPIs[2].target}
+                color={kpiData.secondaryKPIs[2].color}
               />
             )}
           </Grid>
@@ -150,6 +166,7 @@ const Dashboard = () => {
                 title={kpiData.secondaryKPIs[3].title}
                 value={kpiData.secondaryKPIs[3].value}
                 target={kpiData.secondaryKPIs[3].target}
+                color={kpiData.secondaryKPIs[3].color}
               />
             )}
           </Grid>

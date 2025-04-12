@@ -1,4 +1,5 @@
-import { Box, Typography, Paper } from '@mui/material';
+import { Box, Typography, Paper, Tooltip } from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const HeroKPI = ({ title, data }) => {
   // Sample data for the chart
@@ -37,22 +38,27 @@ const HeroKPI = ({ title, data }) => {
           height: '34px',
         }}
       >
-        <Typography
-          sx={{
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: 600,
-            fontSize: '24px',
-            lineHeight: '140%',
-            color: '#5F697B',
-          }}
-        >
-          {title || 'Hero KPI'}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography
+            sx={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '24px',
+              lineHeight: '140%',
+              color: '#5F697B',
+            }}
+          >
+            {title || 'Hero KPI'}
+          </Typography>
+          <Tooltip title={`Compares actual MTD freight spend vs the planned budget for the month. Benchmark: ₹10,00,000`}>
+            <InfoOutlinedIcon sx={{ fontSize: 16, color: '#838C9D', cursor: 'pointer' }} />
+          </Tooltip>
+        </Box>
         <Box
           sx={{
             width: '25px',
             height: '25px',
-            backgroundColor: '#686868',
+            backgroundColor: data?.color === 'green' ? '#4CAF50' : data?.color === 'yellow' ? '#FFC107' : '#FF3533',
             borderRadius: '28px',
             display: 'flex',
             alignItems: 'center',
