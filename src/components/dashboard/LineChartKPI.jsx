@@ -10,14 +10,14 @@ const LineChartKPI = ({ title, value, target }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        padding: '32px',
+        padding: '24px',
         gap: '12px',
         width: '100%',
-        height: '221px',
+        height: '180px',
         backgroundColor: '#FFFFFF',
         border: '1px solid #F0F1F7',
-        boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-        borderRadius: '32px',
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.05)',
+        borderRadius: '16px',
       }}
     >
       {/* Title */}
@@ -25,9 +25,9 @@ const LineChartKPI = ({ title, value, target }) => {
         sx={{
           fontFamily: 'Inter, sans-serif',
           fontWeight: 600,
-          fontSize: '24px',
-          lineHeight: '29px',
-          color: '#5F697B',
+          fontSize: '20px',
+          lineHeight: '24px',
+          color: '#434F64',
           width: '100%',
         }}
       >
@@ -42,15 +42,15 @@ const LineChartKPI = ({ title, value, target }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           width: '100%',
-          height: '29px',
+          mt: -1,
         }}
       >
         <Typography
           sx={{
             fontFamily: 'Inter, sans-serif',
             fontWeight: 600,
-            fontSize: '24px',
-            lineHeight: '29px',
+            fontSize: '20px',
+            lineHeight: '24px',
             color: '#434F64',
           }}
         >
@@ -61,16 +61,16 @@ const LineChartKPI = ({ title, value, target }) => {
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'flex-start',
-            gap: '8px',
+            alignItems: 'center',
+            gap: '4px',
           }}
         >
           <Typography
             sx={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '140%',
+              fontSize: '12px',
+              lineHeight: '16px',
               color: '#5F697B',
             }}
           >
@@ -80,8 +80,8 @@ const LineChartKPI = ({ title, value, target }) => {
             sx={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 600,
-              fontSize: '16px',
-              lineHeight: '140%',
+              fontSize: '12px',
+              lineHeight: '16px',
               color: '#434F64',
             }}
           >
@@ -94,22 +94,23 @@ const LineChartKPI = ({ title, value, target }) => {
       <Box
         sx={{
           width: '100%',
-          height: '87px',
+          height: '80px',
           position: 'relative',
-          marginTop: '10px',
+          marginTop: '8px',
+          flexGrow: 1,
         }}
       >
         {/* Vertical lines */}
-        {months.map((month, index) => (
+        {months.map((monthLabel, index) => (
           <Box
             key={index}
             sx={{
               position: 'absolute',
               width: '1px',
-              height: '66px',
+              height: '60px',
               left: `${index * 25}%`,
               top: 0,
-              borderLeft: '1px solid rgba(0, 0, 0, 0.1)',
+              borderLeft: '1px solid rgba(0, 0, 0, 0.05)',
             }}
           />
         ))}
@@ -120,7 +121,7 @@ const LineChartKPI = ({ title, value, target }) => {
             position: 'absolute',
             width: '100%',
             height: '1px',
-            top: '31px',
+            top: '30px',
             left: 0,
             borderBottom: '1px dashed #CED1D7',
           }}
@@ -131,9 +132,9 @@ const LineChartKPI = ({ title, value, target }) => {
           sx={{
             position: 'absolute',
             width: '75%',
-            height: '36px',
+            height: '30px',
             left: 0,
-            top: '31px',
+            top: '30px',
             background: 'linear-gradient(180deg, #00C638 -442.68%, #FFFFFF 100%)',
             borderRadius: '2px',
           }}
@@ -144,9 +145,9 @@ const LineChartKPI = ({ title, value, target }) => {
           sx={{
             position: 'absolute',
             width: '25%',
-            height: '44px',
+            height: '40px',
             right: 0,
-            top: '22px',
+            top: '20px',
             background: 'linear-gradient(180deg, #FF3533 -332.48%, #FFFFFF 101.67%)',
             transform: 'matrix(-1, 0, 0, 1, 0, 0)',
             borderRadius: '2px',
@@ -163,20 +164,20 @@ const LineChartKPI = ({ title, value, target }) => {
             bottom: 0,
           }}
         >
-          {months.map((month, index) => (
+          {months.map((monthLabel, index) => (
             <Typography
               key={index}
               sx={{
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 400,
-                fontSize: '7.5px',
+                fontSize: '8px',
                 lineHeight: '140%',
                 color: '#434F64',
                 width: '20px',
                 textAlign: 'center',
               }}
             >
-              {month}
+              {monthLabel}
             </Typography>
           ))}
         </Box>

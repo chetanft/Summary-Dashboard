@@ -18,14 +18,14 @@ const SecondaryKPI = ({ title, value, target, chartData }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        padding: '32px',
-        gap: '28px',
+        padding: '24px',
+        gap: '16px',
         width: '100%',
-        height: '323px',
+        height: '240px',
         backgroundColor: '#FFFFFF',
         border: '1px solid #F0F1F7',
-        boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-        borderRadius: '32px',
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.05)',
+        borderRadius: '16px',
       }}
     >
       {/* Title */}
@@ -33,168 +33,140 @@ const SecondaryKPI = ({ title, value, target, chartData }) => {
         sx={{
           fontFamily: 'Inter, sans-serif',
           fontWeight: 600,
-          fontSize: '24px',
-          lineHeight: '29px',
-          color: '#5F697B',
+          fontSize: '20px',
+          lineHeight: '24px',
+          color: '#434F64',
+          mb: 1,
         }}
       >
         {title}
       </Typography>
 
-      {/* KPI Data and Chart */}
+      {/* Value */}
+      <Typography
+        sx={{
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: 600,
+          fontSize: '28px',
+          lineHeight: '140%',
+          color: '#434F64',
+          mt: -1,
+        }}
+      >
+        {value || 'Value'}
+      </Typography>
+
+      {/* Target */}
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          width: '100%',
-          height: '202px',
+          alignItems: 'center',
+          gap: '4px',
+          mt: -1,
         }}
       >
-        {/* Value and Target */}
+        <Typography
+          sx={{
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 500,
+            fontSize: '12px',
+            lineHeight: '140%',
+            color: '#5F697B',
+          }}
+        >
+          Target
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 600,
+            fontSize: '12px',
+            lineHeight: '140%',
+            color: '#434F64',
+          }}
+        >
+          {target || 'Value'}
+        </Typography>
+      </Box>
+
+      {/* Chart */}
+      <Box
+        sx={{
+          width: '100%',
+          height: '120px',
+          position: 'relative',
+          mt: 1,
+          flexGrow: 1,
+        }}
+      >
+        {/* Dashed line */}
+        <Box
+          sx={{
+            position: 'absolute',
+            width: '100%',
+            height: '1px',
+            top: '3px',
+            left: 0,
+            borderBottom: '1px dashed #CED1D7',
+          }}
+        />
+
+        {/* Bottom line */}
+        <Box
+          sx={{
+            position: 'absolute',
+            width: '100%',
+            height: '1px',
+            bottom: '20px',
+            left: 0,
+            borderBottom: '1px dashed #CED1D7',
+          }}
+        />
+
+        {/* Chart bars */}
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            height: '202px',
+            alignItems: 'flex-end',
+            height: '100%',
+            width: '100%',
+            paddingBottom: '20px',
           }}
         >
-          {/* Value */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: '8px',
-            }}
-          >
-            <Typography
+          {data.map((item, index) => (
+            <Box
+              key={index}
               sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 600,
-                fontSize: '40px',
-                lineHeight: '140%',
-                color: '#434F64',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                width: '18%',
               }}
             >
-              {value || 'Value'}
-            </Typography>
-          </Box>
-
-          {/* Target */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: '8px',
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 500,
-                fontSize: '14px',
-                lineHeight: '140%',
-                color: '#5F697B',
-              }}
-            >
-              Target
-            </Typography>
-            <Typography
-              sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 600,
-                fontSize: '16px',
-                lineHeight: '140%',
-                color: '#434F64',
-              }}
-            >
-              {target || 'Value'}
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Chart */}
-        <Box
-          sx={{
-            width: '350px',
-            height: '199px',
-            position: 'relative',
-          }}
-        >
-          {/* Dashed line */}
-          <Box
-            sx={{
-              position: 'absolute',
-              width: '100%',
-              height: '1px',
-              top: '3px',
-              left: 0,
-              borderBottom: '1px dashed #838C9D',
-            }}
-          />
-
-          {/* Bottom line */}
-          <Box
-            sx={{
-              position: 'absolute',
-              width: '100%',
-              height: '1px',
-              bottom: '30px',
-              left: 0,
-              borderBottom: '1px dashed #838C9D',
-            }}
-          />
-
-          {/* Chart bars */}
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              height: '169px',
-              width: '100%',
-              paddingTop: '10px',
-              paddingBottom: '30px',
-            }}
-          >
-            {data.map((item, index) => (
               <Box
-                key={index}
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '8px',
-                  width: '18%',
+                  width: '16px',
+                  height: `${item.value * 0.5}px`,
+                  backgroundColor: item.color,
+                  borderRadius: '2px',
+                }}
+              />
+              <Typography
+                sx={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 400,
+                  fontSize: '8px',
+                  lineHeight: '140%',
+                  color: '#434F64',
                 }}
               >
-                <Box
-                  sx={{
-                    width: '21px',
-                    height: `${item.value * 0.8}px`,
-                    backgroundColor: item.color,
-                    borderRadius: '2px',
-                  }}
-                />
-                <Typography
-                  sx={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: 400,
-                    fontSize: '10px',
-                    lineHeight: '140%',
-                    color: '#434F64',
-                  }}
-                >
-                  {item.month}
-                </Typography>
-              </Box>
-            ))}
-          </Box>
+                {item.month}
+              </Typography>
+            </Box>
+          ))}
         </Box>
       </Box>
     </Paper>
