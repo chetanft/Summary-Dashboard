@@ -1,37 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import Layout from '../layout/Layout';
-import {
-  Box,
-  Grid,
-  Paper,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Skeleton,
-} from '@mui/material';
-
-// Import dashboard data (will be replaced with API call in Phase 2)
-import dashboardData from '../../data/dashboardData.json';
+import DashboardHeader from './DashboardHeader';
+import HeroKPI from './HeroKPI';
+import SecondaryKPI from './SecondaryKPI';
+import LineChartKPI from './LineChartKPI';
+import { Box, Grid, Skeleton } from '@mui/material';
 
 const Dashboard = () => {
-  const { currentUser } = useAuth();
-  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [timePeriod, setTimePeriod] = useState('MTD');
-  const [lastUpdated, setLastUpdated] = useState('');
+  const [activeTab, setActiveTab] = useState('summary');
 
   // Simulate data loading
   useEffect(() => {
     const loadData = () => {
       setLoading(true);
-      
+
       // Simulate API call delay
       setTimeout(() => {
-        setData(dashboardData);
-        setLastUpdated(new Date().toLocaleString());
         setLoading(false);
       }, 1000);
     };
@@ -42,144 +27,150 @@ const Dashboard = () => {
   // Handle manual refresh
   const handleRefresh = () => {
     setLoading(true);
-    
+
     // Simulate API call delay
     setTimeout(() => {
       // In a real app, we would fetch fresh data here
-      setLastUpdated(new Date().toLocaleString());
       setLoading(false);
     }, 1000);
   };
 
-  // Handle time period change
-  const handleTimePeriodChange = (event) => {
-    setTimePeriod(event.target.value);
+  // Handle tab change
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
+  // Sample KPI data
+  const kpiData = {
+    heroKPI: {
+      title: 'Hero KPI',
+      actual: 'Span 6',
+      projected: 'Span 6',
+      budget: 'Span 6',
+      chartData: [
+        { month: 'Nov', value: 210, color: '#FF3533' },
+        { month: 'Dec', value: 307, color: '#838C9D' },
+        { month: 'Jan', value: 275, color: '#FF3533' },
+        { month: 'Feb', value: 348, color: '#838C9D' },
+        { month: 'Mar', value: 317, color: '#838C9D' },
+      ],
+    },
+    secondaryKPIs: [
+      { id: '2A', title: 'KPI 2A', value: 'Value', target: 'Value' },
+      { id: '3A', title: 'KPI 3A', value: 'Value', target: 'Value' },
+      { id: '3B', title: 'KPI 3B', value: 'Value', target: 'Value' },
+      { id: '3C', title: 'KPI 3C', value: 'Value', target: 'Value' },
+    ],
+    lineChartKPIs: [
+      { id: '4A', title: 'KPI 4A', value: 'Value', target: 'Value' },
+      { id: '4B', title: 'KPI 4B', value: 'Value', target: 'Value' },
+      { id: '4C', title: 'KPI 4C', value: 'Value', target: 'Value' },
+      { id: '4D', title: 'KPI 4D', value: 'Value', target: 'Value' },
+    ],
   };
 
   return (
-    <Layout title={`${currentUser.role} Dashboard`} onRefresh={handleRefresh}>
-      <Box sx={{ mb: 4 }}>
-        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="body2" color="text.secondary">
-              Last updated: {lastUpdated || 'Loading...'}
-            </Typography>
+    <Layout onRefresh={handleRefresh}>
+      {/* Dashboard Header */}
+      <DashboardHeader
+        title="Summary Dashboard"
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
+
+      {/* Content Container */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '20px',
+          width: '100%',
+        }}
+      >
+        {/* First Row - Hero KPI and KPI 2A/3A */}
+        <Grid container spacing={2.5}>
+          {/* Hero KPI */}
+          <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={666} sx={{ borderRadius: '32px' }} />
+            ) : (
+              <HeroKPI title="Hero KPI" data={kpiData.heroKPI} />
+            )}
           </Grid>
-          <Grid item>
-            <FormControl sx={{ minWidth: 120 }}>
-              <InputLabel id="time-period-label">Time Period</InputLabel>
-              <Select
-                labelId="time-period-label"
-                id="time-period"
-                value={timePeriod}
-                label="Time Period"
-                onChange={handleTimePeriodChange}
-              >
-                <MenuItem value="MTD">Month to Date</MenuItem>
-                <MenuItem value="QTD">Quarter to Date</MenuItem>
-                <MenuItem value="YTD">Year to Date</MenuItem>
-              </Select>
-            </FormControl>
+
+          {/* KPI 2A and 3A */}
+          <Grid item xs={12} md={6}>
+            <Grid container spacing={2.5} direction="column">
+              <Grid item>
+                {loading ? (
+                  <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+                ) : (
+                  <SecondaryKPI
+                    title={kpiData.secondaryKPIs[0].title}
+                    value={kpiData.secondaryKPIs[0].value}
+                    target={kpiData.secondaryKPIs[0].target}
+                  />
+                )}
+              </Grid>
+              <Grid item>
+                {loading ? (
+                  <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+                ) : (
+                  <SecondaryKPI
+                    title={kpiData.secondaryKPIs[1].title}
+                    value={kpiData.secondaryKPIs[1].value}
+                    target={kpiData.secondaryKPIs[1].target}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </Grid>
+        </Grid>
+
+        {/* Second Row - KPI 3B and 3C */}
+        <Grid container spacing={2.5}>
+          <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+            ) : (
+              <SecondaryKPI
+                title={kpiData.secondaryKPIs[2].title}
+                value={kpiData.secondaryKPIs[2].value}
+                target={kpiData.secondaryKPIs[2].target}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12} md={6}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={323} sx={{ borderRadius: '32px' }} />
+            ) : (
+              <SecondaryKPI
+                title={kpiData.secondaryKPIs[3].title}
+                value={kpiData.secondaryKPIs[3].value}
+                target={kpiData.secondaryKPIs[3].target}
+              />
+            )}
+          </Grid>
+        </Grid>
+
+        {/* Third Row - Line Chart KPIs */}
+        <Grid container spacing={2.5}>
+          {kpiData.lineChartKPIs.map((kpi) => (
+            <Grid item xs={12} sm={6} md={3} key={kpi.id}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={221} sx={{ borderRadius: '32px' }} />
+              ) : (
+                <LineChartKPI
+                  title={kpi.title}
+                  value={kpi.value}
+                  target={kpi.target}
+                />
+              )}
+            </Grid>
+          ))}
         </Grid>
       </Box>
-
-      {/* KPI Cards Section */}
-      <Typography variant="h6" gutterBottom>
-        Key Performance Indicators
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        {loading
-          ? Array.from(new Array(5)).map((_, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={2.4} key={index}>
-                <Paper sx={{ p: 2 }}>
-                  <Skeleton variant="text" width="80%" height={30} />
-                  <Skeleton variant="text" width="60%" height={50} />
-                  <Skeleton variant="text" width="40%" height={20} />
-                </Paper>
-              </Grid>
-            ))
-          : data?.kpis.map((kpi) => (
-              <Grid item xs={12} sm={6} md={4} lg={2.4} key={kpi.id}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    borderLeft: 5,
-                    borderColor: kpi.color,
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                    {kpi.label}
-                  </Typography>
-                  <Typography variant="h4" component="div" sx={{ mb: 1, fontWeight: 'bold' }}>
-                    {kpi.value.toLocaleString()}
-                    <Typography variant="body2" component="span" sx={{ ml: 0.5 }}>
-                      {kpi.unit}
-                    </Typography>
-                  </Typography>
-                  {kpi.budget && (
-                    <Typography variant="body2" color="text.secondary">
-                      Budget: {kpi.budget.toLocaleString()} {kpi.unit}
-                    </Typography>
-                  )}
-                </Paper>
-              </Grid>
-            ))}
-      </Grid>
-
-      {/* Charts Section - Placeholder */}
-      <Typography variant="h6" gutterBottom>
-        Performance Charts
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography variant="body1" color="text.secondary">
-              Chart 1 Placeholder
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2, height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography variant="body1" color="text.secondary">
-              Chart 2 Placeholder
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-
-      {/* Operational Alerts Section - Placeholder */}
-      <Typography variant="h6" gutterBottom>
-        Operational Alerts
-      </Typography>
-      <Grid container spacing={3}>
-        {loading
-          ? Array.from(new Array(3)).map((_, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Paper sx={{ p: 2 }}>
-                  <Skeleton variant="text" width="80%" height={30} />
-                  <Skeleton variant="text" width="100%" height={20} />
-                  <Skeleton variant="text" width="100%" height={20} />
-                  <Skeleton variant="text" width="60%" height={20} />
-                </Paper>
-              </Grid>
-            ))
-          : Array.from(new Array(3)).map((_, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Paper sx={{ p: 2 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Alert Placeholder {index + 1}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    This is a placeholder for operational alerts. Real alerts will be implemented in Phase 5.
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-      </Grid>
     </Layout>
   );
 };

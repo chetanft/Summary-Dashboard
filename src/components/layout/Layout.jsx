@@ -1,30 +1,30 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import Header from './Header';
 
-const Layout = ({ children, title, onRefresh }) => {
+const Layout = ({ children, onRefresh }) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      backgroundColor: '#FFFFFF',
+      width: '100%',
+    }}>
+      {/* Header */}
       <Header onRefresh={onRefresh} />
-      <Container component="main" sx={{ flexGrow: 1, py: 3 }}>
-        {title && (
-          <Typography variant="h4" component="h1" gutterBottom>
-            {title}
-          </Typography>
-        )}
-        {children}
-      </Container>
+
+      {/* Main Content */}
       <Box
-        component="footer"
+        component="main"
         sx={{
-          py: 2,
-          px: 2,
-          mt: 'auto',
-          backgroundColor: (theme) => theme.palette.grey[200],
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '20px 20px 0px',
+          gap: '20px',
         }}
       >
-        <Typography variant="body2" color="text.secondary" align="center">
-          TMS Dashboard © {new Date().getFullYear()}
-        </Typography>
+        {children}
       </Box>
     </Box>
   );

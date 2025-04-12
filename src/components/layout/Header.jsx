@@ -2,17 +2,23 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
   Box,
+  Typography,
   IconButton,
   Menu,
   MenuItem,
-  Chip,
+  InputBase,
+  Paper,
+  Divider,
 } from '@mui/material';
-import { AccountCircle, Refresh } from '@mui/icons-material';
+import {
+  Menu as MenuIcon,
+  Search as SearchIcon,
+  Notifications as NotificationsIcon,
+  Rocket as RocketIcon,
+  AccountCircle,
+} from '@mui/icons-material';
+import freightTigerLogo from '../../assets/freight-tiger-logo.svg';
 
 const Header = ({ onRefresh }) => {
   const { currentUser, logout } = useAuth();
@@ -39,70 +45,128 @@ const Header = ({ onRefresh }) => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          TMS Dashboard
-        </Typography>
+    <Box
+      sx={{
+        width: '100%',
+        height: '78px',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '13px 20px',
+        backgroundColor: '#F8F8F9',
+        borderBottom: '1px solid #CED1D7',
+      }}
+    >
+      {/* Left side - Logo */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <Box
+          sx={{
+            width: '53px',
+            height: '53px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '100px',
+          }}
+        >
+          <MenuIcon sx={{ color: '#434F64' }} />
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Box
+            component="img"
+            src={freightTigerLogo}
+            alt="Freight Tiger Logo"
+            sx={{ height: '28px' }}
+          />
+        </Box>
+      </Box>
 
-        {currentUser && (
-          <>
-            <Button 
-              color="inherit" 
-              startIcon={<Refresh />}
-              onClick={handleRefresh}
-              sx={{ mr: 2 }}
-            >
-              Refresh Now
-            </Button>
+      {/* Center - Search */}
+      <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+        <Paper
+          component="form"
+          sx={{
+            p: '2px 4px',
+            display: 'flex',
+            alignItems: 'center',
+            width: 400,
+            borderRadius: '8px',
+            border: '1px solid #CED1D7',
+          }}
+        >
+          <IconButton sx={{ p: '10px' }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search..."
+            inputProps={{ 'aria-label': 'search' }}
+          />
+        </Paper>
+      </Box>
 
-            <Chip
-              label={`Role: ${currentUser.role}`}
-              color="secondary"
-              variant="outlined"
-              sx={{ 
-                mr: 2, 
-                color: 'white', 
-                borderColor: 'rgba(255,255,255,0.5)' 
-              }}
-            />
+      {/* Right side - Notifications and User */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
+          <IconButton aria-label="quick actions">
+            <RocketIcon sx={{ color: '#434F64' }} />
+          </IconButton>
+          <IconButton aria-label="notifications">
+            <NotificationsIcon sx={{ color: '#434F64' }} />
+          </IconButton>
+        </Box>
 
-            <Box>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem disabled>
-                  {currentUser.name}
-                </MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </Box>
-          </>
-        )}
-      </Toolbar>
-    </AppBar>
+        <Paper
+          elevation={0}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '8px',
+            padding: '5px 20px',
+            height: '51px',
+            width: '229px',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+            <Typography variant="body1" sx={{ fontWeight: 500, color: '#434F64' }}>
+              {currentUser?.name || 'TATA MOTORS'}
+            </Typography>
+          </Box>
+          <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+          <IconButton
+            size="small"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <AccountCircle sx={{ color: '#434F64' }} />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem disabled>{currentUser?.name}</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 
