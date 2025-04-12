@@ -1,9 +1,10 @@
-import { Box, Typography, Paper, Tooltip } from '@mui/material';
+import { Box, Typography, Paper, Tooltip, IconButton } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import BarChartComponent from '../charts/BarChartComponent';
 import { formatCurrency } from '../../utils/chartUtils';
 
-const EnhancedHeroKPI = ({ title, data }) => {
+const EnhancedHeroKPI = ({ title, data, onDrillDown }) => {
   // Transform chart data for the bar chart
   const transformedChartData = data?.chartData?.map(item => ({
     name: item.month,
@@ -25,7 +26,17 @@ const EnhancedHeroKPI = ({ title, data }) => {
         border: '1px solid #F0F1F7',
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.05)',
         borderRadius: '16px',
+        cursor: onDrillDown ? 'pointer' : 'default',
+        '&:hover': onDrillDown ? {
+          boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
+          transition: 'box-shadow 0.3s ease-in-out'
+        } : {},
       }}
+      onClick={onDrillDown ? () => onDrillDown({
+        id: 'freight_budget_actual',
+        title: title || 'Budgeted Freight vs Actual',
+        unit: 'INR'
+      }) : undefined}
     >
       {/* Header */}
       <Box
@@ -54,24 +65,41 @@ const EnhancedHeroKPI = ({ title, data }) => {
             <InfoOutlinedIcon sx={{ fontSize: 16, color: '#838C9D', cursor: 'pointer' }} />
           </Tooltip>
         </Box>
-        <Box
-          sx={{
-            width: '20px',
-            height: '20px',
-            backgroundColor: data?.color === 'green' ? '#4CAF50' : data?.color === 'yellow' ? '#FFC107' : '#FF3533',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {onDrillDown && (
+            <Tooltip title="View regional breakdown">
+              <IconButton
+                size="small"
+                onClick={() => onDrillDown({
+                  id: 'freight_budget_actual',
+                  title: title || 'Budgeted Freight vs Actual',
+                  unit: 'INR'
+                })}
+                sx={{ mr: 1 }}
+              >
+                <ZoomInIcon sx={{ fontSize: 18, color: '#838C9D' }} />
+              </IconButton>
+            </Tooltip>
+          )}
           <Box
-            component="svg"
-            sx={{ width: 8, height: 8 }}
-            viewBox="0 0 10 10"
-            fill="#FFFFFF"
+            sx={{
+              width: '20px',
+              height: '20px',
+              backgroundColor: data?.color === 'green' ? '#4CAF50' : data?.color === 'yellow' ? '#FFC107' : '#FF3533',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <circle cx="5" cy="5" r="5" fill="#FFFFFF" />
+            <Box
+              component="svg"
+              sx={{ width: 8, height: 8 }}
+              viewBox="0 0 10 10"
+              fill="#FFFFFF"
+            >
+              <circle cx="5" cy="5" r="5" fill="#FFFFFF" />
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -109,7 +137,7 @@ const EnhancedHeroKPI = ({ title, data }) => {
           {data?.formattedActual || 'N/A'}
         </Typography>
       </Box>
-      
+
       {/* Projected/Budget Row */}
       <Box
         sx={{
@@ -198,7 +226,7 @@ const EnhancedHeroKPI = ({ title, data }) => {
           flexGrow: 1,
         }}
       >
-        <BarChartComponent 
+        <BarChartComponent
           data={transformedChartData}
           dataKey="value"
           xAxisKey="name"

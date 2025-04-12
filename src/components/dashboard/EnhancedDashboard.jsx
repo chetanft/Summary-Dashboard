@@ -6,11 +6,14 @@ import EnhancedHeroKPI from './EnhancedHeroKPI';
 import EnhancedSecondaryKPI from './EnhancedSecondaryKPI';
 import LineChartKPI from './LineChartKPI';
 import AlertIndicator from './AlertIndicator';
+import KPIDrilldownPane from './KPIDrilldownPane';
 import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 const EnhancedDashboard = () => {
   const [activeTab, setActiveTab] = useState('summary');
+  const [drilldownOpen, setDrilldownOpen] = useState(false);
+  const [selectedKPI, setSelectedKPI] = useState(null);
   const { dashboardData, loading, error, lastUpdated, refreshData } = useData();
 
   // Handle manual refresh
@@ -21,6 +24,17 @@ const EnhancedDashboard = () => {
   // Handle tab change
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  // Handle KPI drill-down
+  const handleKPIDrillDown = (kpi) => {
+    setSelectedKPI(kpi);
+    setDrilldownOpen(true);
+  };
+
+  // Handle drill-down close
+  const handleDrilldownClose = () => {
+    setDrilldownOpen(false);
   };
 
   // KPI data from context
@@ -108,7 +122,7 @@ const EnhancedDashboard = () => {
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={500} sx={{ borderRadius: '16px' }} />
             ) : (
-              <EnhancedHeroKPI title="Freight Budget vs Actual" data={kpiData.heroKPI} />
+              <EnhancedHeroKPI title="Freight Budget vs Actual" data={kpiData.heroKPI} onDrillDown={handleKPIDrillDown} />
             )}
           </Grid>
 
@@ -121,12 +135,14 @@ const EnhancedDashboard = () => {
                   <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
                 ) : (
                   <EnhancedSecondaryKPI
+                    id="freight_cost_per_km"
                     title={kpiData.secondaryKPIs[0].title}
                     value={kpiData.secondaryKPIs[0].value}
                     target={kpiData.secondaryKPIs[0].target}
                     color={kpiData.secondaryKPIs[0].color}
                     unit={kpiData.secondaryKPIs[0].unit}
                     trend={kpiData.secondaryKPIs[0].trend}
+                    onDrillDown={handleKPIDrillDown}
                   />
                 )}
               </Grid>
@@ -135,12 +151,14 @@ const EnhancedDashboard = () => {
                   <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
                 ) : (
                   <EnhancedSecondaryKPI
+                    id="vehicle_utilization"
                     title={kpiData.secondaryKPIs[1].title}
                     value={kpiData.secondaryKPIs[1].value}
                     target={kpiData.secondaryKPIs[1].target}
                     color={kpiData.secondaryKPIs[1].color}
                     unit={kpiData.secondaryKPIs[1].unit}
                     trend={kpiData.secondaryKPIs[1].trend}
+                    onDrillDown={handleKPIDrillDown}
                   />
                 )}
               </Grid>
@@ -153,12 +171,14 @@ const EnhancedDashboard = () => {
                   <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
                 ) : (
                   <EnhancedSecondaryKPI
+                    id="otif_percentage"
                     title={kpiData.secondaryKPIs[2].title}
                     value={kpiData.secondaryKPIs[2].value}
                     target={kpiData.secondaryKPIs[2].target}
                     color={kpiData.secondaryKPIs[2].color}
                     unit={kpiData.secondaryKPIs[2].unit}
                     trend={kpiData.secondaryKPIs[2].trend}
+                    onDrillDown={handleKPIDrillDown}
                   />
                 )}
               </Grid>
@@ -167,12 +187,14 @@ const EnhancedDashboard = () => {
                   <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
                 ) : (
                   <EnhancedSecondaryKPI
+                    id="placement_efficiency"
                     title={kpiData.secondaryKPIs[3].title}
                     value={kpiData.secondaryKPIs[3].value}
                     target={kpiData.secondaryKPIs[3].target}
                     color={kpiData.secondaryKPIs[3].color}
                     unit={kpiData.secondaryKPIs[3].unit}
                     trend={kpiData.secondaryKPIs[3].trend}
+                    onDrillDown={handleKPIDrillDown}
                   />
                 )}
               </Grid>
@@ -180,6 +202,12 @@ const EnhancedDashboard = () => {
           </Grid>
         </Grid>
       </Box>
+      {/* KPI Drill-down Pane */}
+      <KPIDrilldownPane
+        open={drilldownOpen}
+        onClose={handleDrilldownClose}
+        kpi={selectedKPI}
+      />
     </Layout>
   );
 };

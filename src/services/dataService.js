@@ -5,6 +5,7 @@
 
 // Import dashboard data
 import dashboardData from '../data/dashboardData.json';
+import { getRegionalData } from '../data/regionalData';
 
 /**
  * Fetches dashboard data based on user role
@@ -58,6 +59,33 @@ const filterDataByRole = (data, userRole) => {
   }
 
   return filteredData;
+};
+
+/**
+ * Fetches regional data for a specific KPI
+ * @param {string} kpiId - The ID of the KPI
+ * @returns {Promise} - Promise that resolves to regional data
+ */
+export const fetchRegionalData = (kpiId) => {
+  return new Promise((resolve, reject) => {
+    // Simulate API call delay
+    setTimeout(() => {
+      try {
+        // In a real app, this would be an API call
+        // For now, we're using the imported regional data
+        const data = getRegionalData(kpiId);
+
+        if (!data) {
+          throw new Error(`No regional data found for KPI: ${kpiId}`);
+        }
+
+        resolve(data);
+      } catch (error) {
+        console.error('Error fetching regional data:', error);
+        reject(error.message || 'Failed to load regional data');
+      }
+    }, 500);
+  });
 };
 
 /**
