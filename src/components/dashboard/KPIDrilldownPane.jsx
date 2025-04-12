@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Divider, 
-  IconButton, 
-  Chip, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
+import {
+  Box,
+  Typography,
+  Paper,
+  Divider,
+  IconButton,
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
   TableRow,
   Button,
   Dialog,
@@ -36,21 +36,32 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [performanceData, setPerformanceData] = useState({ top: [], worst: [] });
   const [branchData, setBranchData] = useState({ top: [], worst: [] });
+  const [loading, setLoading] = useState(false);
 
   // Load performance data when KPI changes
   useEffect(() => {
     if (kpi && kpi.id) {
-      const data = getPerformanceData(kpi.id);
-      setPerformanceData(data);
-      setSelectedRegion(null);
+      setLoading(true);
+      // Simulate API call with a small delay
+      setTimeout(() => {
+        const data = getPerformanceData(kpi.id);
+        setPerformanceData(data);
+        setSelectedRegion(null);
+        setLoading(false);
+      }, 500);
     }
   }, [kpi]);
 
   // Load branch data when region changes
   useEffect(() => {
     if (kpi && kpi.id && selectedRegion) {
-      const data = getBranchPerformanceData(kpi.id, selectedRegion.id);
-      setBranchData(data);
+      setLoading(true);
+      // Simulate API call with a small delay
+      setTimeout(() => {
+        const data = getBranchPerformanceData(kpi.id, selectedRegion.id);
+        setBranchData(data);
+        setLoading(false);
+      }, 300);
     }
   }, [kpi, selectedRegion]);
 
@@ -72,7 +83,7 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
   // Format value based on KPI unit
   const formatValue = (value, unit) => {
     if (value === undefined || value === null) return 'N/A';
-    
+
     if (unit === 'INR') {
       return formatCurrency(value, 'INR');
     } else if (unit === '%') {
@@ -80,7 +91,7 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
     } else if (unit === 'INR/km') {
       return `₹${value}/km`;
     }
-    
+
     return value;
   };
 
@@ -98,10 +109,24 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
     }
   };
 
+  // Get performance background color (lighter version)
+  const getPerformanceBackgroundColor = (performance) => {
+    switch (performance) {
+      case 'good':
+        return 'rgba(76, 175, 80, 0.1)';
+      case 'average':
+        return 'rgba(255, 193, 7, 0.1)';
+      case 'poor':
+        return 'rgba(255, 53, 51, 0.1)';
+      default:
+        return 'rgba(131, 140, 157, 0.1)';
+    }
+  };
+
   // Get performance icon
   const getPerformanceIcon = (performance) => {
-    return performance === 'good' ? 
-      <TrendingUpIcon sx={{ color: '#4CAF50', fontSize: 16 }} /> : 
+    return performance === 'good' ?
+      <TrendingUpIcon sx={{ color: '#4CAF50', fontSize: 16 }} /> :
       <TrendingDownIcon sx={{ color: '#FF3533', fontSize: 16 }} />;
   };
 
@@ -112,12 +137,12 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
         <Typography variant="h6" sx={{ mb: 2 }}>
           Regional Performance
         </Typography>
-        
+
         <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 2 }}>
           <Tab label="Top Performing" />
           <Tab label="Worst Performing" />
         </Tabs>
-        
+
         <TableContainer component={Paper} elevation={0} sx={{ mb: 3 }}>
           <Table>
             <TableHead>
@@ -130,11 +155,18 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
             </TableHead>
             <TableBody>
               {(activeTab === 0 ? performanceData.top : performanceData.worst).map((region) => (
-                <TableRow 
+                <TableRow
                   key={region.id}
                   hover
                   onClick={() => handleRegionSelect(region)}
-                  sx={{ cursor: 'pointer' }}
+                  sx={{
+                    cursor: 'pointer',
+                    backgroundColor: getPerformanceBackgroundColor(region.performance),
+                    '&:hover': {
+                      backgroundColor: `${getPerformanceBackgroundColor(region.performance)} !important`,
+                      opacity: 0.9
+                    }
+                  }}
                 >
                   <TableCell>{region.name}</TableCell>
                   <TableCell align="right">{formatValue(region.value, kpi?.unit)}</TableCell>
@@ -144,10 +176,10 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
                   <TableCell align="right">
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                       {getPerformanceIcon(region.performance)}
-                      <Chip 
-                        label={region.performance} 
+                      <Chip
+                        label={region.performance}
                         size="small"
-                        sx={{ 
+                        sx={{
                           ml: 1,
                           backgroundColor: getPerformanceColor(region.performance),
                           color: 'white',
@@ -161,7 +193,7 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
             </TableBody>
           </Table>
         </TableContainer>
-        
+
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
           Click on a region to view branch-level details
         </Typography>
@@ -181,12 +213,12 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
             {selectedRegion?.name} Region Branches
           </Typography>
         </Box>
-        
+
         <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 2 }}>
           <Tab label="Top Performing" />
           <Tab label="Worst Performing" />
         </Tabs>
-        
+
         <TableContainer component={Paper} elevation={0} sx={{ mb: 3 }}>
           <Table>
             <TableHead>
@@ -199,7 +231,12 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
             </TableHead>
             <TableBody>
               {(activeTab === 0 ? branchData.top : branchData.worst).map((branch) => (
-                <TableRow key={branch.id}>
+                <TableRow
+                  key={branch.id}
+                  sx={{
+                    backgroundColor: getPerformanceBackgroundColor(branch.performance),
+                  }}
+                >
                   <TableCell>{branch.name}</TableCell>
                   <TableCell align="right">{formatValue(branch.value, kpi?.unit)}</TableCell>
                   <TableCell align="right">
@@ -208,10 +245,10 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
                   <TableCell align="right">
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                       {getPerformanceIcon(branch.performance)}
-                      <Chip 
-                        label={branch.performance} 
+                      <Chip
+                        label={branch.performance}
                         size="small"
-                        sx={{ 
+                        sx={{
                           ml: 1,
                           backgroundColor: getPerformanceColor(branch.performance),
                           color: 'white',
@@ -242,7 +279,7 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
         }
       }}
     >
-      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1 }}>
+      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1, backgroundColor: '#f5f5f5' }}>
         <Typography variant="h5" component="div">
           {kpi?.title} - Drill Down
         </Typography>
@@ -250,17 +287,23 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      
+
       <Divider />
-      
+
       <DialogContent>
-        {kpi ? (
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+            <Typography variant="h6" color="text.secondary">
+              Loading data...
+            </Typography>
+          </Box>
+        ) : kpi ? (
           selectedRegion ? renderBranchView() : renderRegionView()
         ) : (
           <Typography>No KPI data available</Typography>
         )}
       </DialogContent>
-      
+
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>

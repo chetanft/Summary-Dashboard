@@ -60,9 +60,24 @@ const EnhancedSecondaryKPI = ({ title, value, target, color, unit, trend, id, on
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.05)',
         borderRadius: '16px',
         cursor: onDrillDown ? 'pointer' : 'default',
+        position: 'relative',
         '&:hover': onDrillDown ? {
           boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
-          transition: 'box-shadow 0.3s ease-in-out'
+          transition: 'box-shadow 0.3s ease-in-out',
+          '&::after': {
+            content: '"Click for details"',
+            position: 'absolute',
+            bottom: '12px',
+            right: '12px',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            color: '#fff',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            fontWeight: 500,
+            opacity: 0.9,
+            zIndex: 1
+          }
         } : {},
       }}
       onClick={onDrillDown && id ? () => onDrillDown({
