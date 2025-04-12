@@ -1,8 +1,19 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Paper, IconButton } from '@mui/material';
 import { Dashboard as DashboardIcon } from '@mui/icons-material';
 
 const DashboardHeader = ({ title, activeTab, onTabChange }) => {
+  const navigate = useNavigate();
+
+  const handleTabChange = (tab) => {
+    onTabChange(tab);
+    if (tab === 'summary') {
+      navigate('/dashboard');
+    } else if (tab === 'orderData') {
+      navigate('/orders');
+    }
+  };
   return (
     <Box
       sx={{
@@ -86,7 +97,7 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
           }}
         >
           <Box
-            onClick={() => onTabChange('summary')}
+            onClick={() => handleTabChange('summary')}
             sx={{
               display: 'flex',
               flexDirection: 'row',
@@ -115,7 +126,7 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
             </Typography>
           </Box>
           <Box
-            onClick={() => onTabChange('orderData')}
+            onClick={() => handleTabChange('orderData')}
             sx={{
               display: 'flex',
               flexDirection: 'row',
