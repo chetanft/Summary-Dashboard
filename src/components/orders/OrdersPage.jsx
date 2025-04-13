@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
+import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
   TableRow,
   Chip,
   IconButton,
@@ -17,7 +18,7 @@ import {
   FormControl,
   Button,
 } from '@mui/material';
-import { 
+import {
   Search as SearchIcon,
   FilterList as FilterIcon,
   Sort as SortIcon,
@@ -31,52 +32,52 @@ import DashboardHeader from '../dashboard/DashboardHeader';
 
 // Sample order data
 const orderData = [
-  { 
-    id: 'SO: 21424', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Star Retailers', 
-    route: 'AMRIT-MUM', 
-    tripType: 'FTL', 
-    stage: 'Planning', 
-    status: 'In Process', 
-    trackingId: '', 
+  {
+    id: 'SO: 21424',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-MUM',
+    tripType: 'FTL',
+    stage: 'Planning',
+    status: 'In Process',
+    trackingId: '',
     deliveryStatus: '25 April, 2025',
     statusColor: 'default',
   },
-  { 
-    id: 'SO: 21425', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Star Retailers', 
-    route: 'AMRIT-MUM', 
-    tripType: 'FTL', 
-    stage: 'Indent', 
-    status: 'In Assignment', 
-    trackingId: 'Indent: 875453', 
+  {
+    id: 'SO: 21425',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-MUM',
+    tripType: 'FTL',
+    stage: 'Indent',
+    status: 'In Assignment',
+    trackingId: 'Indent: 875453',
     deliveryStatus: '25 April, 2025',
     statusColor: 'default',
   },
-  { 
-    id: 'SO: 21426', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Star Retailers', 
-    route: 'AMRIT-HYD', 
-    tripType: 'FTL', 
-    stage: 'Tracking', 
-    status: 'In Transit', 
-    trackingId: 'Trip: 66147250', 
+  {
+    id: 'SO: 21426',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-HYD',
+    tripType: 'FTL',
+    stage: 'Tracking',
+    status: 'In Transit',
+    trackingId: 'Trip: 66147250',
     deliveryStatus: (
       <>
-        <Chip 
-          label="Delayed by 1 day" 
-          size="small" 
-          sx={{ 
-            bgcolor: '#FFEAEA', 
-            color: '#FF3533', 
-            fontWeight: 600, 
+        <Chip
+          label="Delayed by 1 day"
+          size="small"
+          sx={{
+            bgcolor: '#FFEAEA',
+            color: '#FF3533',
+            fontWeight: 600,
             fontSize: '14px',
             borderRadius: '4px',
             height: '24px',
-          }} 
+          }}
         />
         <Typography variant="body2" sx={{ color: '#434F64', mt: 0.5 }}>
           ETA: 25 April, 2025
@@ -85,28 +86,28 @@ const orderData = [
     ),
     statusColor: 'error',
   },
-  { 
-    id: 'SO: 21427', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Star Retailers', 
-    route: 'AMRIT-HYD', 
-    tripType: 'FTL', 
-    stage: 'ePOD', 
-    status: 'Pending', 
-    trackingId: 'EPOD: 623748', 
+  {
+    id: 'SO: 21427',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-HYD',
+    tripType: 'FTL',
+    stage: 'ePOD',
+    status: 'Pending',
+    trackingId: 'EPOD: 623748',
     deliveryStatus: (
       <>
-        <Chip 
-          label="Delayed by 1 day" 
-          size="small" 
-          sx={{ 
-            bgcolor: '#FFEAEA', 
-            color: '#FF3533', 
-            fontWeight: 600, 
+        <Chip
+          label="Delayed by 1 day"
+          size="small"
+          sx={{
+            bgcolor: '#FFEAEA',
+            color: '#FF3533',
+            fontWeight: 600,
             fontSize: '14px',
             borderRadius: '4px',
             height: '24px',
-          }} 
+          }}
         />
         <Typography variant="body2" sx={{ color: '#434F64', mt: 0.5 }}>
           25 April, 2025
@@ -115,28 +116,28 @@ const orderData = [
     ),
     statusColor: 'error',
   },
-  { 
-    id: 'SO: 214248', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Yonex Retailers', 
-    route: 'AMRIT-CHN', 
-    tripType: 'FTL', 
-    stage: 'Freight Invoicing', 
-    status: 'Pending Approval', 
-    trackingId: 'INV: 12635', 
+  {
+    id: 'SO: 214248',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Yonex Retailers',
+    route: 'AMRIT-CHN',
+    tripType: 'FTL',
+    stage: 'Freight Invoicing',
+    status: 'Pending Approval',
+    trackingId: 'INV: 12635',
     deliveryStatus: (
       <>
-        <Chip 
-          label="On time" 
-          size="small" 
-          sx={{ 
-            bgcolor: '#DFFFE8', 
-            color: '#00763D', 
-            fontWeight: 600, 
+        <Chip
+          label="On time"
+          size="small"
+          sx={{
+            bgcolor: '#DFFFE8',
+            color: '#00763D',
+            fontWeight: 600,
             fontSize: '14px',
             borderRadius: '4px',
             height: '24px',
-          }} 
+          }}
         />
         <Typography variant="body2" sx={{ color: '#434F64', mt: 0.5 }}>
           25 April, 2025
@@ -145,40 +146,40 @@ const orderData = [
     ),
     statusColor: 'success',
   },
-  { 
-    id: 'SO: 21425', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Star Retailers', 
-    route: 'AMRIT-MUM', 
-    tripType: 'PTL', 
-    stage: 'Order Booking', 
-    status: 'In Assignment', 
-    trackingId: 'Ref: 723895', 
+  {
+    id: 'SO: 21425',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-MUM',
+    tripType: 'PTL',
+    stage: 'Order Booking',
+    status: 'In Assignment',
+    trackingId: 'Ref: 723895',
     deliveryStatus: '25 April, 2025',
     statusColor: 'default',
   },
-  { 
-    id: 'SO: 21426', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Star Retailers', 
-    route: 'AMRIT-HYD', 
-    tripType: 'PTL', 
-    stage: 'Tracking', 
-    status: 'In Transit', 
-    trackingId: 'AWB: 872356', 
+  {
+    id: 'SO: 21426',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-HYD',
+    tripType: 'PTL',
+    stage: 'Tracking',
+    status: 'In Transit',
+    trackingId: 'AWB: 872356',
     deliveryStatus: (
       <>
-        <Chip 
-          label="Delayed by 1 day" 
-          size="small" 
-          sx={{ 
-            bgcolor: '#FFEAEA', 
-            color: '#FF3533', 
-            fontWeight: 600, 
+        <Chip
+          label="Delayed by 1 day"
+          size="small"
+          sx={{
+            bgcolor: '#FFEAEA',
+            color: '#FF3533',
+            fontWeight: 600,
             fontSize: '14px',
             borderRadius: '4px',
             height: '24px',
-          }} 
+          }}
         />
         <Typography variant="body2" sx={{ color: '#434F64', mt: 0.5 }}>
           ETA: 25 April, 2025
@@ -187,28 +188,28 @@ const orderData = [
     ),
     statusColor: 'error',
   },
-  { 
-    id: 'SO: 21427', 
-    consignor: 'JSW- AMRIT', 
-    consignee: 'Star Retailers', 
-    route: 'AMRIT-HYD', 
-    tripType: 'PTL', 
-    stage: 'Freight Invoicing', 
-    status: 'Reconciliation Pending', 
-    trackingId: 'AWB: 312567', 
+  {
+    id: 'SO: 21427',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-HYD',
+    tripType: 'PTL',
+    stage: 'Freight Invoicing',
+    status: 'Reconciliation Pending',
+    trackingId: 'AWB: 312567',
     deliveryStatus: (
       <>
-        <Chip 
-          label="On time" 
-          size="small" 
-          sx={{ 
-            bgcolor: '#DFFFE8', 
-            color: '#00763D', 
-            fontWeight: 600, 
+        <Chip
+          label="On time"
+          size="small"
+          sx={{
+            bgcolor: '#DFFFE8',
+            color: '#00763D',
+            fontWeight: 600,
             fontSize: '14px',
             borderRadius: '4px',
             height: '24px',
-          }} 
+          }}
         />
         <Typography variant="body2" sx={{ color: '#434F64', mt: 0.5 }}>
           25 April, 2025
@@ -220,6 +221,7 @@ const orderData = [
 ];
 
 const OrdersPage = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('orderData');
   const [page, setPage] = useState(1);
   const [selectedStage, setSelectedStage] = useState('All Stages');
@@ -236,13 +238,17 @@ const OrdersPage = () => {
     setSelectedStage(event.target.value);
   };
 
+  const handleOrderClick = (orderId) => {
+    navigate(`/orders/${orderId}`);
+  };
+
   return (
     <Layout>
       {/* Dashboard Header */}
-      <DashboardHeader 
-        title="Summary Dashboard" 
-        activeTab={activeTab} 
-        onTabChange={handleTabChange} 
+      <DashboardHeader
+        title="Summary Dashboard"
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
       />
 
       {/* Status Filters */}
@@ -449,10 +455,10 @@ const OrdersPage = () => {
         </Box>
 
         {/* Orders Table */}
-        <TableContainer 
-          component={Paper} 
-          sx={{ 
-            width: '100%', 
+        <TableContainer
+          component={Paper}
+          sx={{
+            width: '100%',
             borderRadius: '8px 8px 0 0',
             boxShadow: 'none',
           }}
@@ -460,90 +466,90 @@ const OrdersPage = () => {
           <Table sx={{ minWidth: 650 }}>
             <TableHead sx={{ bgcolor: '#838C9D' }}>
               <TableRow>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Order ID
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Consignor
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Consignee
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Route
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Trip Type
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Stage
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Status
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   ID
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
                 >
                   Delivery status
                 </TableCell>
-                <TableCell 
-                  sx={{ 
-                    color: '#FFFFFF', 
+                <TableCell
+                  sx={{
+                    color: '#FFFFFF',
                     fontWeight: 600,
                     padding: '15px 8px',
                   }}
@@ -556,101 +562,110 @@ const OrdersPage = () => {
               {orderData.map((order, index) => (
                 <TableRow
                   key={index}
-                  sx={{ 
-                    '&:nth-of-type(odd)': { 
+                  onClick={() => handleOrderClick(order.id)}
+                  sx={{
+                    '&:nth-of-type(odd)': {
                       bgcolor: '#F8F8F9',
                     },
                     height: order.statusColor === 'default' ? '80px' : '94px',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      bgcolor: '#f0f7ff',
+                    },
                   }}
                 >
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#434F64',
                     }}
                   >
                     {order.id}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#434F64',
                     }}
                   >
                     {order.consignor}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#434F64',
                     }}
                   >
                     {order.consignee}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#434F64',
                     }}
                   >
                     {order.route}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#434F64',
                     }}
                   >
                     {order.tripType}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#434F64',
                     }}
                   >
                     {order.stage}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                     }}
                   >
-                    <Chip 
-                      label={order.status} 
-                      size="small" 
-                      sx={{ 
-                        bgcolor: '#F0F1F7', 
-                        color: '#434F64', 
-                        fontWeight: 600, 
+                    <Chip
+                      label={order.status}
+                      size="small"
+                      sx={{
+                        bgcolor: '#F0F1F7',
+                        color: '#434F64',
+                        fontWeight: 600,
                         fontSize: '14px',
                         borderRadius: '4px',
                         height: '24px',
-                      }} 
+                      }}
                     />
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#1890FF',
                     }}
                   >
                     {order.trackingId}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '20px 8px',
                       color: '#434F64',
                     }}
                   >
                     {order.deliveryStatus}
                   </TableCell>
-                  <TableCell 
-                    sx={{ 
+                  <TableCell
+                    sx={{
                       padding: '0px 8px',
                     }}
                   >
                     <IconButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOrderClick(order.id);
+                      }}
                       sx={{
                         width: '40px',
                         height: '40px',
