@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import {
   Box,
   Typography,
@@ -222,9 +223,17 @@ const orderData = [
 
 const OrdersPage = () => {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState('orderData');
   const [page, setPage] = useState(1);
   const [selectedStage, setSelectedStage] = useState('All Stages');
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser, navigate]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import {
   Box,
   Typography,
@@ -157,9 +158,17 @@ const orderData = {
 const OrderDetailPage = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     // In a real app, this would be an API call
@@ -349,9 +358,9 @@ const OrderDetailPage = () => {
                   {Object.entries(order.generatedIds).map(([key, value]) => (
                     <Grid item xs={6} key={key}>
                       <Typography variant="body2" color="text.secondary">{key}</Typography>
-                      <Typography 
-                        variant="body1" 
-                        sx={{ 
+                      <Typography
+                        variant="body1"
+                        sx={{
                           color: value !== 'Pending' ? '#1890FF' : 'text.primary',
                           fontWeight: value !== 'Pending' ? 500 : 400
                         }}
@@ -465,11 +474,11 @@ const OrderDetailPage = () => {
             </Typography>
             <List>
               {order.comments.map((comment, index) => (
-                <ListItem 
+                <ListItem
                   key={index}
                   alignItems="flex-start"
-                  sx={{ 
-                    borderLeft: '2px solid #1890FF', 
+                  sx={{
+                    borderLeft: '2px solid #1890FF',
                     pl: 2,
                     mb: 2,
                     bgcolor: index % 2 === 0 ? '#f9f9f9' : 'white',
