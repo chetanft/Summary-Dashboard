@@ -14,7 +14,7 @@ const AlertsWithLayout = () => {
     <Layout>
       {/* Dashboard Header */}
       <DashboardHeader
-        title="Summary Dashboard"
+        title="Operations Dashboard"
         activeTab={activeTab}
         onTabChange={handleTabChange}
       />
