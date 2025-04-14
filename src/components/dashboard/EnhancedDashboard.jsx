@@ -333,7 +333,7 @@ const EnhancedDashboard = () => {
             <Grid size={{ xs:12, md:6 }}>
               <Grid container direction="column" spacing={2} sx={{ width: '100%', m: 0 }}>
                 {/* Vehicle Utilisation KPI */}
-                <Grid item>
+                <Grid>
                   {loading ? (
                     <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
                   ) : (

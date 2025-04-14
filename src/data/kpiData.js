@@ -1,5 +1,7 @@
 // Sample KPI data for the dashboard
-export const kpiData = [
+// Common KPI data that will be used for all user roles
+const commonKpis = [
+
   {
     id: 'revenue',
     title: 'Total Revenue',
@@ -307,3 +309,148 @@ export const kpiData = [
     }
   }
 ];
+
+// Export KPI data with the structure expected by dataService.js
+export const kpiData = {
+  cxo: {
+    budgetedVsActual: {
+      value: 85,
+      target: 90,
+      trend: +2
+    },
+    vehicleUtilization: {
+      value: 78,
+      target: 85,
+      trend: -1
+    },
+    freightCost: {
+      value: 42,
+      target: 40,
+      trend: +1
+    },
+    placementEfficiency: {
+      value: 92,
+      target: 95,
+      trend: +3
+    },
+    orderDeliveryTime: {
+      value: 3.2,
+      target: 3.0,
+      trend: -0.1
+    },
+    otif: {
+      value: 88,
+      target: 95,
+      trend: +1
+    },
+    delayedDelivery: {
+      value: 15,
+      target: 10,
+      trend: -2
+    },
+    pendingDispatched: {
+      value: 25,
+      target: 20,
+      trend: -3
+    },
+    deliveredRunningDelayed: {
+      value: 12,
+      target: 8,
+      trend: -1
+    }
+  },
+  company: {
+    budgetedVsActual: {
+      value: 82,
+      target: 90,
+      trend: +1
+    },
+    vehicleUtilization: {
+      value: 75,
+      target: 85,
+      trend: -2
+    },
+    freightCost: {
+      value: 44,
+      target: 40,
+      trend: +2
+    },
+    placementEfficiency: {
+      value: 90,
+      target: 95,
+      trend: +2
+    },
+    orderDeliveryTime: {
+      value: 3.4,
+      target: 3.0,
+      trend: -0.2
+    },
+    otif: {
+      value: 85,
+      target: 95,
+      trend: +1
+    },
+    delayedDelivery: {
+      value: 18,
+      target: 10,
+      trend: -1
+    },
+    pendingDispatched: {
+      value: 28,
+      target: 20,
+      trend: -2
+    },
+    deliveredRunningDelayed: {
+      value: 14,
+      target: 8,
+      trend: -1
+    }
+  },
+  branch: {
+    budgetedVsActual: {
+      value: 80,
+      target: 90,
+      trend: +1
+    },
+    vehicleUtilization: {
+      value: 72,
+      target: 85,
+      trend: -3
+    },
+    freightCost: {
+      value: 46,
+      target: 40,
+      trend: +3
+    },
+    placementEfficiency: {
+      value: 88,
+      target: 95,
+      trend: +1
+    },
+    orderDeliveryTime: {
+      value: 3.6,
+      target: 3.0,
+      trend: -0.3
+    },
+    otif: {
+      value: 82,
+      target: 95,
+      trend: +1
+    },
+    delayedDelivery: {
+      value: 20,
+      target: 10,
+      trend: -1
+    },
+    pendingDispatched: {
+      value: 30,
+      target: 20,
+      trend: -1
+    },
+    deliveredRunningDelayed: {
+      value: 16,
+      target: 8,
+      trend: -1
+    }
+  }
+};

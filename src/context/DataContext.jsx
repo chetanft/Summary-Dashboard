@@ -48,7 +48,7 @@ export const DataProvider = ({ children }) => {
       setError('Failed to load dashboard data. Please try again.');
       setLoading(false);
     }
-  }, [currentUser]);
+  }, []); // Empty dependency array to prevent re-creation on every render
 
   // Function to load real-time KPI data
   const loadRealtimeKpiData = useCallback(() => {
@@ -62,7 +62,7 @@ export const DataProvider = ({ children }) => {
       console.error('Error loading real-time KPI data:', err);
       setError('Failed to load real-time KPI data');
     }
-  }, [currentUser, userRole]);
+  }, []); // Empty dependency array to prevent re-creation on every render
 
   // Function to update real-time KPI data
   const updateRealtimeKpiData = useCallback(() => {
@@ -75,7 +75,7 @@ export const DataProvider = ({ children }) => {
     } catch (err) {
       console.error('Error updating real-time KPI data:', err);
     }
-  }, [realtimeKpiData, userRole]);
+  }, []); // Empty dependency array to prevent re-creation on every render
 
   // Function to change user role for real-time KPI data
   const changeUserRole = useCallback((role) => {
@@ -84,7 +84,7 @@ export const DataProvider = ({ children }) => {
     const data = generateRealtimeKpiData(role);
     setRealtimeKpiData(data);
     setLastUpdated(new Date());
-  }, []);
+  }, []); // Empty dependency array is fine here
 
   // Function to refresh all data
   const refreshAllData = useCallback(() => {
@@ -94,18 +94,20 @@ export const DataProvider = ({ children }) => {
 
   // Load data on initial render and when user changes
   useEffect(() => {
-    loadDashboardData();
-    loadRealtimeKpiData();
-
-    // Set up auto-refresh interval (5 minutes)
-    const refreshInterval = setInterval(() => {
+    if (currentUser) {
       loadDashboardData();
-      updateRealtimeKpiData();
-    }, 5 * 60 * 1000);
+      loadRealtimeKpiData();
 
-    // Clean up interval on unmount
-    return () => clearInterval(refreshInterval);
-  }, [loadDashboardData, loadRealtimeKpiData, updateRealtimeKpiData]);
+      // Set up auto-refresh interval (5 minutes)
+      const refreshInterval = setInterval(() => {
+        loadDashboardData();
+        updateRealtimeKpiData();
+      }, 5 * 60 * 1000);
+
+      // Clean up interval on unmount
+      return () => clearInterval(refreshInterval);
+    }
+  }, [currentUser]); // Only depend on currentUser to prevent infinite loops
 
   // Format the last updated timestamp
   const formattedLastUpdated = lastUpdated
