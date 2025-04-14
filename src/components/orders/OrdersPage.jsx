@@ -232,12 +232,47 @@ const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [currentOrderIndex, setCurrentOrderIndex] = useState(-1);
 
+  // Filter states
+  const [filterFTL, setFilterFTL] = useState(false);
+  const [filterPTL, setFilterPTL] = useState(false);
+  const [filterDelayed, setFilterDelayed] = useState(false);
+
+  // Filtered order data
+  const [filteredOrders, setFilteredOrders] = useState(orderData);
+
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!currentUser) {
       navigate('/login');
     }
   }, [currentUser, navigate]);
+
+  // Apply filters when filter states or selected stage changes
+  useEffect(() => {
+    let result = [...orderData];
+
+    // Apply trip type filters
+    if (filterFTL && !filterPTL) {
+      result = result.filter(order => order.tripType === 'FTL');
+    } else if (filterPTL && !filterFTL) {
+      result = result.filter(order => order.tripType === 'PTL');
+    }
+
+    // Apply delayed deliveries filter
+    if (filterDelayed) {
+      result = result.filter(order => order.statusColor === 'error');
+    }
+
+    // Apply stage filter
+    if (selectedStage !== 'All Stages') {
+      result = result.filter(order => order.stage === selectedStage);
+    }
+
+    setFilteredOrders(result);
+
+    // Reset current order index when filters change
+    setCurrentOrderIndex(-1);
+  }, [filterFTL, filterPTL, filterDelayed, selectedStage]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -265,16 +300,29 @@ const OrdersPage = () => {
     if (currentOrderIndex > 0) {
       const prevIndex = currentOrderIndex - 1;
       setCurrentOrderIndex(prevIndex);
-      setSelectedOrder(orderData[prevIndex]);
+      setSelectedOrder(filteredOrders[prevIndex]);
     }
   };
 
   const handleNavigateNext = () => {
-    if (currentOrderIndex < orderData.length - 1) {
+    if (currentOrderIndex < filteredOrders.length - 1) {
       const nextIndex = currentOrderIndex + 1;
       setCurrentOrderIndex(nextIndex);
-      setSelectedOrder(orderData[nextIndex]);
+      setSelectedOrder(filteredOrders[nextIndex]);
     }
+  };
+
+  // Filter toggle handlers
+  const handleToggleFTL = () => {
+    setFilterFTL(!filterFTL);
+  };
+
+  const handleTogglePTL = () => {
+    setFilterPTL(!filterPTL);
+  };
+
+  const handleToggleDelayed = () => {
+    setFilterDelayed(!filterDelayed);
   };
 
   return (
@@ -310,32 +358,47 @@ const OrdersPage = () => {
           >
             <Chip
               label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px' }}>121</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>FTL</Typography></>}
+              onClick={handleToggleFTL}
               sx={{
                 height: '40px',
                 borderRadius: '8px',
                 border: '1px solid #CED1D7',
-                bgcolor: '#FFFFFF',
+                bgcolor: filterFTL ? '#E6F7FF' : '#FFFFFF',
                 px: 1.5,
+                cursor: 'pointer',
+                '&:hover': {
+                  bgcolor: filterFTL ? '#CCF0FF' : '#F5F5F5',
+                },
               }}
             />
             <Chip
               label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px' }}>76</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>PTL</Typography></>}
+              onClick={handleTogglePTL}
               sx={{
                 height: '40px',
                 borderRadius: '8px',
                 border: '1px solid #CED1D7',
-                bgcolor: '#FFFFFF',
+                bgcolor: filterPTL ? '#E6F7FF' : '#FFFFFF',
                 px: 1.5,
+                cursor: 'pointer',
+                '&:hover': {
+                  bgcolor: filterPTL ? '#CCF0FF' : '#F5F5F5',
+                },
               }}
             />
             <Chip
-              label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px', color: '#FF3533' }}>76</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>Delivery delayed</Typography></>}
+              label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px', color: filterDelayed ? '#FF3533' : '#FF3533' }}>76</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>Delivery delayed</Typography></>}
+              onClick={handleToggleDelayed}
               sx={{
                 height: '40px',
                 borderRadius: '8px',
                 border: '1px solid #CED1D7',
-                bgcolor: '#FFFFFF',
+                bgcolor: filterDelayed ? '#FFEAEA' : '#FFFFFF',
                 px: 1.5,
+                cursor: 'pointer',
+                '&:hover': {
+                  bgcolor: filterDelayed ? '#FFD6D6' : '#F5F5F5',
+                },
               }}
             />
             <FormControl sx={{ minWidth: 200 }}>
@@ -394,7 +457,7 @@ const OrdersPage = () => {
                 color: '#434F64',
               }}
             >
-              248 Orders available
+              {filteredOrders.length} Orders available
             </Typography>
 
             <Box
@@ -595,7 +658,7 @@ const OrdersPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orderData.map((order, index) => (
+                {filteredOrders.map((order, index) => (
                   <TableRow
                     key={index}
                     onClick={() => handleOrderClick(order, index)}
