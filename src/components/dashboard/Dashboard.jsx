@@ -141,96 +141,156 @@ const Dashboard = () => {
 
         {/* Alert Indicator */}
         <AlertIndicator />
-        {/* First Row - Hero KPI and KPI 2A/3A */}
-        <Grid container spacing={2.5}>
-          {/* Hero KPI */}
-          <Grid item xs={12} md={6}>
-            {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={500} sx={{ borderRadius: '32px' }} />
-            ) : (
-              <HeroKPI title="Hero KPI" data={kpiData.heroKPI} />
-            )}
-          </Grid>
 
-          {/* KPI 2A and 3A */}
-          <Grid item xs={12} md={6}>
-            <Grid container spacing={2.5} direction="column">
-              <Grid item>
-                {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
-                ) : (
-                  <SecondaryKPI
-                    title={kpiData.secondaryKPIs[0].title}
-                    value={kpiData.secondaryKPIs[0].value}
-                    target={kpiData.secondaryKPIs[0].target}
-                    color={kpiData.secondaryKPIs[0].color}
-                    onDrillDown={handleKPIDrillDown}
-                  />
-                )}
-              </Grid>
-              <Grid item>
-                {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
-                ) : (
-                  <SecondaryKPI
-                    title={kpiData.secondaryKPIs[1].title}
-                    value={kpiData.secondaryKPIs[1].value}
-                    target={kpiData.secondaryKPIs[1].target}
-                    color={kpiData.secondaryKPIs[1].color}
-                    onDrillDown={handleKPIDrillDown}
-                  />
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {/* Second Row - KPI 3B and 3C */}
+        {/* First Row - Budgeted vs Actual vs Projected Freight and Vehicle Utilisation */}
         <Grid container spacing={2.5}>
-          <Grid item xs={12} md={6}>
+          {/* Budgeted vs Actual vs Projected Freight */}
+          <Grid item xs={12} md={8}>
             {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
+              <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
             ) : (
-              <SecondaryKPI
-                title={kpiData.secondaryKPIs[2].title}
-                value={kpiData.secondaryKPIs[2].value}
-                target={kpiData.secondaryKPIs[2].target}
-                color={kpiData.secondaryKPIs[2].color}
-                onDrillDown={handleKPIDrillDown}
+              <HeroKPI
+                title="Budgeted vs Actual vs Projected Freight"
+                data={{
+                  actual: "₹ 10 Cr",
+                  projected: "₹ 22 Cr",
+                  budget: "₹ 20 cr",
+                  chartData: kpiData.heroKPI.chartData
+                }}
               />
             )}
           </Grid>
-          <Grid item xs={12} md={6}>
+
+          {/* Vehicle Utilisation */}
+          <Grid item xs={12} md={4}>
             {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
+              <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
             ) : (
               <SecondaryKPI
-                title={kpiData.secondaryKPIs[3].title}
-                value={kpiData.secondaryKPIs[3].value}
-                target={kpiData.secondaryKPIs[3].target}
-                color={kpiData.secondaryKPIs[3].color}
+                title="Vehicle Utilisation"
+                value="84%"
+                target="96%"
+                color="primary"
+                chartType="line"
                 onDrillDown={handleKPIDrillDown}
               />
             )}
           </Grid>
         </Grid>
 
-        {/* Third Row - Line Chart KPIs */}
+        {/* Second Row - Freight cost per KM */}
         <Grid container spacing={2.5}>
-          {kpiData.lineChartKPIs.map((kpi) => (
-            <Grid item xs={12} sm={6} md={3} key={kpi.id}>
-              {loading ? (
-                <Skeleton variant="rectangular" width="100%" height={221} sx={{ borderRadius: '32px' }} />
-              ) : (
-                <LineChartKPI
-                  title={kpi.title}
-                  value={kpi.value}
-                  target={kpi.target}
-                  onDrillDown={handleKPIDrillDown}
-                />
-              )}
-            </Grid>
-          ))}
+          <Grid item xs={12} md={8}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
+            ) : (
+              <SecondaryKPI
+                title="Freight cost per KM"
+                value="₹ 120"
+                target="₹ 100"
+                color="error"
+                chartType="line"
+                note="Low vehicle utilization (84%) may be driving up freight cost per KM."
+                onDrillDown={handleKPIDrillDown}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12} md={4}>
+            {/* Placeholder for future content */}
+          </Grid>
+        </Grid>
+
+        {/* Third Row - Placement Efficiency, Order to Delivery Time, OTIF */}
+        <Grid container spacing={2.5}>
+          <Grid item xs={12} md={4}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
+            ) : (
+              <SecondaryKPI
+                title="Placement Efficiency"
+                value="87%"
+                target="96%"
+                color="primary"
+                chartType="bar"
+                onDrillDown={handleKPIDrillDown}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12} md={4}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
+            ) : (
+              <SecondaryKPI
+                title="Order to Delivery Time"
+                value="4 days"
+                target="3 days"
+                color="error"
+                chartType="bar"
+                onDrillDown={handleKPIDrillDown}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12} md={4}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
+            ) : (
+              <SecondaryKPI
+                title="OTIF"
+                value="86%"
+                target="98%"
+                color="primary"
+                chartType="bar"
+                onDrillDown={handleKPIDrillDown}
+              />
+            )}
+          </Grid>
+        </Grid>
+
+        {/* Fourth Row - Delayed Delivery %, Pending Dispatched, Delivered vs Running Delayed */}
+        <Grid container spacing={2.5}>
+          <Grid item xs={12} md={4}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
+            ) : (
+              <SecondaryKPI
+                title="Delayed Delivery %"
+                value="10%"
+                target="2%"
+                color="error"
+                chartType="bar"
+                onDrillDown={handleKPIDrillDown}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12} md={4}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
+            ) : (
+              <SecondaryKPI
+                title="Pending Dispatched"
+                value="24%"
+                target="10%"
+                color="error"
+                chartType="donut"
+                additionalInfo="290 Trips"
+                onDrillDown={handleKPIDrillDown}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12} md={4}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
+            ) : (
+              <SecondaryKPI
+                title="Delivered vs Running Delayed"
+                value="48% vs 23%"
+                target="10%"
+                color="success"
+                chartType="donut"
+                onDrillDown={handleKPIDrillDown}
+              />
+            )}
+          </Grid>
         </Grid>
         </Box>
       </Layout>

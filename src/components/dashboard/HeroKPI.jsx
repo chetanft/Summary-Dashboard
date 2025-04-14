@@ -1,14 +1,15 @@
 import { Box, Typography, Paper, Tooltip } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 
 const HeroKPI = ({ title, data }) => {
   // Sample data for the chart
   const chartData = data?.chartData || [
-    { month: 'Nov', value: 210, color: '#FF3533' },
-    { month: 'Dec', value: 307, color: '#838C9D' },
-    { month: 'Jan', value: 275, color: '#FF3533' },
-    { month: 'Feb', value: 348, color: '#838C9D' },
-    { month: 'Mar', value: 317, color: '#838C9D' },
+    { month: '1', value: 0 },
+    { month: '7', value: 5 },
+    { month: '15', value: 10 },
+    { month: '21', value: 15 },
+    { month: '30', value: 20 },
   ];
 
   return (
@@ -17,14 +18,14 @@ const HeroKPI = ({ title, data }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        padding: '32px',
-        gap: '24px',
+        padding: '24px',
+        gap: '16px',
         width: '100%',
-        height: '500px',
+        height: '400px',
         backgroundColor: '#FFFFFF',
         border: '1px solid #F0F1F7',
-        boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-        borderRadius: '32px',
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.05)',
+        borderRadius: '16px',
       }}
     >
       {/* Header */}
@@ -35,7 +36,6 @@ const HeroKPI = ({ title, data }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           width: '100%',
-          height: '34px',
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -43,48 +43,40 @@ const HeroKPI = ({ title, data }) => {
             sx={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 600,
-              fontSize: '24px',
+              fontSize: '18px',
               lineHeight: '140%',
               color: '#5F697B',
             }}
           >
-            {title || 'Hero KPI'}
+            {title}
           </Typography>
-          <Tooltip title={`Compares actual MTD freight spend vs the planned budget for the month. Benchmark: ₹10,00,000`}>
-            <InfoOutlinedIcon sx={{ fontSize: 16, color: '#838C9D', cursor: 'pointer' }} />
+          <Tooltip title="Comparison of budgeted, actual, and projected freight costs" placement="top">
+            <InfoOutlinedIcon
+              sx={{
+                fontSize: '16px',
+                color: '#838C9D',
+                cursor: 'help',
+              }}
+            />
           </Tooltip>
         </Box>
-        <Box
-          sx={{
-            width: '25px',
-            height: '25px',
-            backgroundColor: data?.color === 'green' ? '#4CAF50' : data?.color === 'yellow' ? '#FFC107' : '#FF3533',
-            borderRadius: '28px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Box
-            component="svg"
-            sx={{ width: 10, height: 10 }}
-            viewBox="0 0 10 10"
-            fill="#FFFFFF"
-          >
-            <circle cx="5" cy="5" r="5" fill="#FFFFFF" />
-          </Box>
-        </Box>
+        <ArrowOutwardIcon 
+          sx={{ 
+            fontSize: '16px', 
+            color: '#838C9D' 
+          }} 
+        />
       </Box>
 
-      {/* KPI Data */}
+      {/* KPI Values */}
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          alignItems: 'flex-end',
+          alignItems: 'center',
           width: '100%',
-          height: '84px',
+          mt: 1,
         }}
       >
         {/* Actual */}
@@ -93,30 +85,31 @@ const HeroKPI = ({ title, data }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            gap: '8px',
+            padding: '0px',
+            gap: '4px',
           }}
         >
           <Typography
             sx={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '140%',
-              color: '#5F697B',
-            }}
-          >
-            Actual
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              fontSize: '40px',
+              fontWeight: 700,
+              fontSize: '28px',
               lineHeight: '140%',
               color: '#434F64',
             }}
           >
-            {data?.actual || 'Span 6'}
+            {data?.actual || '₹ 10 Cr'}
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400,
+              fontSize: '14px',
+              lineHeight: '140%',
+              color: '#838C9D',
+            }}
+          >
+            Actual
           </Typography>
         </Box>
 
@@ -126,30 +119,33 @@ const HeroKPI = ({ title, data }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            gap: '8px',
+            padding: '0px',
+            gap: '4px',
           }}
         >
           <Typography
             sx={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
+              fontWeight: 700,
+              fontSize: '28px',
               lineHeight: '140%',
-              color: '#5F697B',
+              color: '#FF3533',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            Projected
+            {data?.projected || '₹ 22 Cr'} <ArrowOutwardIcon sx={{ fontSize: '16px', color: '#FF3533', transform: 'rotate(45deg)', ml: 0.5 }} />
           </Typography>
           <Typography
             sx={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              fontSize: '16px',
+              fontWeight: 400,
+              fontSize: '14px',
               lineHeight: '140%',
-              color: '#434F64',
+              color: '#838C9D',
             }}
           >
-            {data?.projected || 'Span 6'}
+            Projected
           </Typography>
         </Box>
 
@@ -159,30 +155,31 @@ const HeroKPI = ({ title, data }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            gap: '8px',
+            padding: '0px',
+            gap: '4px',
           }}
         >
           <Typography
             sx={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '140%',
-              color: '#5F697B',
-            }}
-          >
-            Budget
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              fontSize: '16px',
+              fontWeight: 700,
+              fontSize: '28px',
               lineHeight: '140%',
               color: '#434F64',
             }}
           >
-            {data?.budget || 'Span 6'}
+            {data?.budget || '₹ 20 cr'}
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400,
+              fontSize: '14px',
+              lineHeight: '140%',
+              color: '#838C9D',
+            }}
+          >
+            Budget
           </Typography>
         </Box>
       </Box>
@@ -191,78 +188,87 @@ const HeroKPI = ({ title, data }) => {
       <Box
         sx={{
           width: '100%',
-          height: '436px',
+          height: '250px',
+          mt: 3,
           position: 'relative',
         }}
       >
-        {/* Dashed line */}
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '100%',
-            height: '1px',
-            top: '50%',
-            left: 0,
-            borderBottom: '1px dashed #838C9D',
-          }}
-        />
-
-        {/* Bottom line */}
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '100%',
-            height: '1px',
-            bottom: 0,
-            left: 0,
-            borderBottom: '1px dashed #838C9D',
-          }}
-        />
-
-        {/* Chart bars */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            height: '100%',
-            width: '100%',
-            paddingTop: '20px',
-            paddingBottom: '30px',
-          }}
-        >
-          {chartData.map((item, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '10px',
-                width: '18%',
-              }}
-            >
-              <Box
-                sx={{
-                  width: '46px',
-                  height: `${item.value}px`,
-                  backgroundColor: item.color,
-                  borderRadius: '2px',
-                }}
-              />
-              <Typography
-                sx={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: 400,
-                  fontSize: '10px',
-                  lineHeight: '140%',
-                  color: '#434F64',
-                }}
-              >
-                {item.month}
-              </Typography>
-            </Box>
-          ))}
+        {/* Y-axis labels */}
+        <Box sx={{ position: 'absolute', left: 0, top: 0, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <Typography variant="caption" color="text.secondary">₹ 30 Cr</Typography>
+          <Typography variant="caption" color="text.secondary">₹ 22 Cr</Typography>
+          <Typography variant="caption" color="text.secondary">₹ 20 Cr</Typography>
+          <Typography variant="caption" color="text.secondary">₹ 10 Cr</Typography>
+          <Typography variant="caption" color="text.secondary">₹ 0</Typography>
+        </Box>
+        
+        {/* Chart area */}
+        <Box sx={{ 
+          ml: 5, 
+          height: '100%', 
+          width: 'calc(100% - 40px)', 
+          position: 'relative',
+          borderLeft: '1px dashed #CED1D7',
+          borderBottom: '1px dashed #CED1D7',
+        }}>
+          {/* Horizontal grid lines */}
+          <Box sx={{ position: 'absolute', top: '0%', width: '100%', height: '1px', borderTop: '1px dashed #CED1D7' }} />
+          <Box sx={{ position: 'absolute', top: '25%', width: '100%', height: '1px', borderTop: '1px dashed #CED1D7' }} />
+          <Box sx={{ position: 'absolute', top: '50%', width: '100%', height: '1px', borderTop: '1px dashed #CED1D7' }} />
+          <Box sx={{ position: 'absolute', top: '75%', width: '100%', height: '1px', borderTop: '1px dashed #CED1D7' }} />
+          
+          {/* Budget line (dotted) */}
+          <Box sx={{ 
+            position: 'absolute', 
+            top: '33%', 
+            width: '100%', 
+            height: '1px', 
+            borderTop: '1px dashed #434F64',
+            zIndex: 1,
+          }} />
+          
+          {/* Actual line (solid) */}
+          <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
+            <path 
+              d={`M 0,${100 - 10/30*100} L ${100/5},${100 - 10/30*100} L ${200/5},${100 - 10/30*100} L ${300/5},${100 - 10/30*100} L ${400/5},${100 - 10/30*100} L ${500/5},${100 - 10/30*100}`} 
+              stroke="#AAAAAA" 
+              strokeWidth="2" 
+              fill="none" 
+            />
+          </svg>
+          
+          {/* Projected line (dotted, increasing) */}
+          <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
+            <path 
+              d={`M ${300/5},${100 - 10/30*100} L ${400/5},${100 - 15/30*100} L ${500/5},${100 - 22/30*100}`} 
+              stroke="#FF3533" 
+              strokeWidth="2" 
+              strokeDasharray="5,5" 
+              fill="none" 
+            />
+          </svg>
+        </Box>
+        
+        {/* X-axis labels */}
+        <Box sx={{ ml: 5, display: 'flex', justifyContent: 'space-between', mt: 1 }}>
+          <Typography variant="caption" color="text.secondary">1</Typography>
+          <Typography variant="caption" color="text.secondary">7</Typography>
+          <Typography variant="caption" color="text.secondary">15</Typography>
+          <Typography variant="caption" color="text.secondary">21</Typography>
+          <Typography variant="caption" color="text.secondary">30</Typography>
+        </Box>
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, textAlign: 'center', display: 'block' }}>March</Typography>
+      </Box>
+      
+      {/* Legend */}
+      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 3, mt: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ width: 16, height: 2, backgroundColor: '#AAAAAA' }} />
+          <Typography variant="caption" color="text.secondary">Budget</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ width: 16, height: 2, backgroundColor: '#AAAAAA' }} />
+          <Typography variant="caption" color="text.secondary">Projected</Typography>
         </Box>
       </Box>
     </Paper>
