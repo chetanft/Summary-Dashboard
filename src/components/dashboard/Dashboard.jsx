@@ -142,10 +142,10 @@ const Dashboard = () => {
         {/* Alert Indicator */}
         <AlertIndicator />
 
-        {/* First Row - Budgeted vs Actual vs Projected Freight and Vehicle Utilisation */}
+        {/* First Row - Budgeted vs Actual vs Projected Freight and Vehicle Utilisation/Freight cost per KM stack */}
         <Grid container spacing={2.5}>
           {/* Budgeted vs Actual vs Projected Freight */}
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -161,42 +161,42 @@ const Dashboard = () => {
             )}
           </Grid>
 
-          {/* Vehicle Utilisation */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
-            ) : (
-              <SecondaryKPI
-                title="Vehicle Utilisation"
-                value="84%"
-                target="96%"
-                color="primary"
-                chartType="line"
-                onDrillDown={handleKPIDrillDown}
-              />
-            )}
-          </Grid>
-        </Grid>
+          {/* Vertical Stack: Vehicle Utilisation and Freight cost per KM */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Grid container spacing={2.5} direction="column">
+              {/* Vehicle Utilisation */}
+              <Grid item>
+                {loading ? (
+                  <Skeleton variant="rectangular" width="100%" height={190} sx={{ borderRadius: '16px' }} />
+                ) : (
+                  <SecondaryKPI
+                    title="Vehicle Utilisation"
+                    value="84%"
+                    target="96%"
+                    color="primary"
+                    chartType="line"
+                    onDrillDown={handleKPIDrillDown}
+                  />
+                )}
+              </Grid>
 
-        {/* Second Row - Freight cost per KM */}
-        <Grid container spacing={2.5}>
-          <Grid size={{ xs: 12, md: 8 }}>
-            {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
-            ) : (
-              <SecondaryKPI
-                title="Freight cost per KM"
-                value="₹ 120"
-                target="₹ 100"
-                color="error"
-                chartType="line"
-                note="Low vehicle utilization (84%) may be driving up freight cost per KM."
-                onDrillDown={handleKPIDrillDown}
-              />
-            )}
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
-            {/* Placeholder for future content */}
+              {/* Freight cost per KM */}
+              <Grid item>
+                {loading ? (
+                  <Skeleton variant="rectangular" width="100%" height={190} sx={{ borderRadius: '16px' }} />
+                ) : (
+                  <SecondaryKPI
+                    title="Freight cost per KM"
+                    value="₹ 120"
+                    target="₹ 100"
+                    color="error"
+                    chartType="line"
+                    note="Low vehicle utilization (84%) may be driving up freight cost per KM."
+                    onDrillDown={handleKPIDrillDown}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 
