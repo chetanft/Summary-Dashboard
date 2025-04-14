@@ -67,28 +67,134 @@ function a11yProps(index) {
   };
 }
 
-const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavigateNext }) => {
+// Function to generate timeline data based on order stage
+const generateTimelineData = (stage, status) => {
+  // Base timeline - all orders have SO Generated
+  const timeline = [
+    {
+      stage: 'SO Generated',
+      date: '12 March 2023',
+      time: '09:34 AM',
+      soNumber: '7134895',
+      completed: true
+    }
+  ];
+
+  // Add Planning stage if the order is at or past Planning
+  if (['Planning', 'Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+    timeline.push({
+      stage: 'Planning',
+      soNumber: '7134895',
+      timeTaken: '2 hrs',
+      completed: stage !== 'Planning' || status === 'Plan generated',
+      details: [
+        {
+          status: 'In Process',
+          weight: '21 Ton',
+          runtime: '2 hr'
+        },
+        {
+          status: 'Plan generated',
+          planId: '32151235',
+          time: '09:34 AM'
+        }
+      ]
+    });
+  }
+
+  // Add Indent stage if the order is at or past Indent
+  if (['Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+    timeline.push({
+      stage: 'Indent',
+      indentId: '7283465',
+      timeTaken: '12 hrs',
+      completed: stage !== 'Indent' || ['Published', 'Pending Acceptance', 'In Assignment', 'Reporting'].includes(status),
+      details: [
+        {
+          status: 'Published',
+          time: '09:34 AM',
+          acceptanceDeadline: '09:45 AM, 26 April 2025',
+          publishedTo: 'Safe and Express Transporters'
+        },
+        {
+          status: 'Pending Acceptance',
+          timeTaken: '2 hrs',
+          start: '09:34 AM',
+          end: '11:34 AM'
+        },
+        {
+          status: 'In Assignment',
+          timeTaken: '4 hrs',
+          start: '09:34 AM',
+          end: '11:34 AM'
+        },
+        {
+          status: 'Reporting',
+          reportedOn: '09:34 AM',
+          vehicleNo: 'AP 12K 1234'
+        }
+      ]
+    });
+  }
+
+  // Add Tracking stage if the order is at or past Tracking
+  if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+    timeline.push({
+      stage: 'Transit',
+      tripId: '7283465',
+      timeTaken: '3 days',
+      completed: stage !== 'Tracking' || status !== 'In Transit'
+    });
+  }
+
+  // Add ePOD stage if the order is at or past ePOD
+  if (['ePOD', 'Freight Invoicing'].includes(stage)) {
+    timeline.push({
+      stage: 'ePOD',
+      epodId: '623748',
+      timeTaken: '1 day',
+      completed: stage !== 'ePOD' || status !== 'Pending'
+    });
+  }
+
+  // Add Freight Invoicing stage if the order is at Freight Invoicing
+  if (stage === 'Freight Invoicing') {
+    timeline.push({
+      stage: 'Freight Invoicing',
+      invoiceId: '12635',
+      timeTaken: '2 days',
+      completed: status === 'Approved'
+    });
+  }
+
+  return timeline;
+}
+
+const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNavigateNext }) => {
   const [tabValue, setTabValue] = useState(0);
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (open && orderId) {
+    if (open && order) {
       // In a real app, this would be an API call to fetch order details
-      // For now, we'll use mock data
+      // For now, we'll use mock data based on the order stage
       setLoading(true);
-      
+
       // Simulate API call
       setTimeout(() => {
+        // Generate timeline data based on order stage
+        const timelineData = generateTimelineData(order.stage, order.status);
+
         setOrderDetails({
-          id: orderId,
-          soNumber: '21424',
+          id: order.id,
+          soNumber: order.id.replace('SO: ', ''),
           totalWeight: '70 Ton',
           numberOfDOs: 1,
           numberOfSKUs: 20,
           totalCost: '₹ 5,00,000',
           createdAt: '3 PM, 10 Feb 24',
-          status: 'In Transit',
+          status: order.status,
           isOnTime: true,
           eta: '09:34 AM, 12 Mar 23',
           sta: '06:14 AM, 11 Mar 23',
@@ -122,70 +228,7 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
             epodId: '-',
             invoiceNumber: '-'
           },
-          timeline: [
-            {
-              stage: 'SO Generated',
-              date: '12 March 2023',
-              time: '09:34 AM',
-              soNumber: '7134895',
-              completed: true
-            },
-            {
-              stage: 'Planning',
-              soNumber: '7134895',
-              timeTaken: '2 hrs',
-              completed: true,
-              details: [
-                {
-                  status: 'In Process',
-                  weight: '21 Ton',
-                  runtime: '2 hr'
-                },
-                {
-                  status: 'Plan generated',
-                  planId: '32151235',
-                  time: '09:34 AM'
-                }
-              ]
-            },
-            {
-              stage: 'Indent',
-              indentId: '7283465',
-              timeTaken: '12 hrs',
-              completed: true,
-              details: [
-                {
-                  status: 'Published',
-                  time: '09:34 AM',
-                  acceptanceDeadline: '09:45 AM, 26 April 2025',
-                  publishedTo: 'Safe and Express Transporters'
-                },
-                {
-                  status: 'Pending Acceptance',
-                  timeTaken: '2 hrs',
-                  start: '09:34 AM',
-                  end: '11:34 AM'
-                },
-                {
-                  status: 'In Assignment',
-                  timeTaken: '4 hrs',
-                  start: '09:34 AM',
-                  end: '11:34 AM'
-                },
-                {
-                  status: 'Reporting',
-                  reportedOn: '09:34 AM',
-                  vehicleNo: 'AP 12K 1234'
-                }
-              ]
-            },
-            {
-              stage: 'Transit',
-              tripId: '7283465',
-              timeTaken: '3 days',
-              completed: false
-            }
-          ],
+          timeline: timelineData,
           comments: [
             {
               user: 'Shastri',
@@ -202,7 +245,7 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
         setLoading(false);
       }, 500);
     }
-  }, [open, orderId]);
+  }, [open, order]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -245,12 +288,12 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
         <Divider sx={{ my: 3 }} />
 
         {/* Current Status */}
-        <Box sx={{ 
-          display: 'flex', 
-          bgcolor: '#F5F7FA', 
-          borderRadius: 1, 
-          p: 2, 
-          mb: 3 
+        <Box sx={{
+          display: 'flex',
+          bgcolor: '#F5F7FA',
+          borderRadius: 1,
+          p: 2,
+          mb: 3
         }}>
           <Box sx={{ flex: 1 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
@@ -267,9 +310,9 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
               </Box>
             </Box>
           </Box>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'center',
             ml: 2,
             borderLeft: '1px dashed #CBD5E1',
@@ -291,12 +334,12 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
         </Box>
 
         {/* Next Milestone */}
-        <Box sx={{ 
-          display: 'flex', 
-          bgcolor: '#F5F7FA', 
-          borderRadius: 1, 
-          p: 2, 
-          mb: 3 
+        <Box sx={{
+          display: 'flex',
+          bgcolor: '#F5F7FA',
+          borderRadius: 1,
+          p: 2,
+          mb: 3
         }}>
           <Box sx={{ flex: 1 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
@@ -304,9 +347,9 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
             </Typography>
             <Typography variant="body1" fontWeight="medium">{orderDetails.nextMilestone}</Typography>
           </Box>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'center',
             ml: 2,
             borderLeft: '1px dashed #CBD5E1',
@@ -450,19 +493,19 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
 
     return (
       <Box sx={{ p: 2 }}>
-        <Typography variant="body2" sx={{ 
-          display: 'inline-block', 
-          bgcolor: '#F1F5F9', 
-          borderRadius: '16px', 
-          px: 1.5, 
-          py: 0.5, 
-          mb: 2 
+        <Typography variant="body2" sx={{
+          display: 'inline-block',
+          bgcolor: '#F1F5F9',
+          borderRadius: '16px',
+          px: 1.5,
+          py: 0.5,
+          mb: 2
         }}>
           12 March 2023
         </Typography>
 
-        <Timeline position="right" sx={{ 
-          p: 0, 
+        <Timeline position="right" sx={{
+          p: 0,
           m: 0,
           [`& .MuiTimelineItem-root`]: {
             minHeight: 'auto',
@@ -481,20 +524,20 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
               <TimelineOppositeContent color="text.secondary">
                 {item.time && <Typography variant="body2">At {item.time}</Typography>}
               </TimelineOppositeContent>
-              
+
               <TimelineSeparator>
-                <TimelineDot 
-                  sx={{ 
+                <TimelineDot
+                  sx={{
                     bgcolor: item.completed ? 'primary.main' : 'grey.300',
                     boxShadow: 'none',
                     m: 0,
-                  }} 
+                  }}
                 />
                 {index < orderDetails.timeline.length - 1 && (
                   <TimelineConnector sx={{ height: item.details ? 'auto' : 40 }} />
                 )}
               </TimelineSeparator>
-              
+
               <TimelineContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -511,25 +554,25 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
                     </Box>
                   )}
                 </Box>
-                
+
                 {item.soNumber && (
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                     SO: {item.soNumber}
                   </Typography>
                 )}
-                
+
                 {item.indentId && (
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                     Indent ID: {item.indentId}
                   </Typography>
                 )}
-                
+
                 {item.tripId && (
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                     Trip ID: {item.tripId}
                   </Typography>
                 )}
-                
+
                 {/* Render sub-details if available */}
                 {item.details && item.details.map((detail, detailIndex) => (
                   <Box key={detailIndex} sx={{ mt: 2, ml: 2 }}>
@@ -556,31 +599,31 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
                         </Typography>
                       )}
                     </Box>
-                    
+
                     {detail.weight && (
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                         Weight: {detail.weight}
                       </Typography>
                     )}
-                    
+
                     {detail.planId && (
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                         Plan ID: {detail.planId}
                       </Typography>
                     )}
-                    
+
                     {detail.acceptanceDeadline && (
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                         Acceptance deadline: {detail.acceptanceDeadline}
                       </Typography>
                     )}
-                    
+
                     {detail.publishedTo && (
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                         Published to: {detail.publishedTo}
                       </Typography>
                     )}
-                    
+
                     {detail.timeTaken && (
                       <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
                         <AccessTimeIcon fontSize="small" sx={{ mr: 0.5, color: 'text.secondary' }} />
@@ -589,7 +632,7 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
                         </Typography>
                       </Box>
                     )}
-                    
+
                     {(detail.start || detail.end) && (
                       <Box sx={{ display: 'flex', flexDirection: 'column', mt: 0.5 }}>
                         {detail.start && (
@@ -604,7 +647,7 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
                         )}
                       </Box>
                     )}
-                    
+
                     {detail.vehicleNo && (
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                         Vehicle No: {detail.vehicleNo}
@@ -635,11 +678,11 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
               {comment.comment}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar 
-                sx={{ 
-                  width: 24, 
-                  height: 24, 
-                  bgcolor: 'warning.main', 
+              <Avatar
+                sx={{
+                  width: 24,
+                  height: 24,
+                  bgcolor: 'warning.main',
                   fontSize: '0.75rem',
                   mr: 1
                 }}
@@ -669,9 +712,9 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
       }}
     >
       {/* Header */}
-      <Box sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
         p: 2,
         borderBottom: '1px solid',
@@ -693,9 +736,9 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
 
       {/* Tabs */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs 
-          value={tabValue} 
-          onChange={handleTabChange} 
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
           aria-label="order details tabs"
           variant="fullWidth"
         >
@@ -730,7 +773,7 @@ const OrderDetailsDrawer = ({ open, onClose, orderId, onNavigatePrevious, onNavi
 OrderDetailsDrawer.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  orderId: PropTypes.string,
+  order: PropTypes.object,
   onNavigatePrevious: PropTypes.func.isRequired,
   onNavigateNext: PropTypes.func.isRequired,
 };

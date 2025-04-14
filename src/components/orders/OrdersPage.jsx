@@ -229,7 +229,7 @@ const OrdersPage = () => {
   const [page, setPage] = useState(1);
   const [selectedStage, setSelectedStage] = useState('All Stages');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [currentOrderIndex, setCurrentOrderIndex] = useState(-1);
 
   // Redirect to login if not authenticated
@@ -251,8 +251,8 @@ const OrdersPage = () => {
     setSelectedStage(event.target.value);
   };
 
-  const handleOrderClick = (orderId, index) => {
-    setSelectedOrderId(orderId);
+  const handleOrderClick = (order, index) => {
+    setSelectedOrder(order);
     setCurrentOrderIndex(index);
     setDrawerOpen(true);
   };
@@ -265,7 +265,7 @@ const OrdersPage = () => {
     if (currentOrderIndex > 0) {
       const prevIndex = currentOrderIndex - 1;
       setCurrentOrderIndex(prevIndex);
-      setSelectedOrderId(orderData[prevIndex].id);
+      setSelectedOrder(orderData[prevIndex]);
     }
   };
 
@@ -273,7 +273,7 @@ const OrdersPage = () => {
     if (currentOrderIndex < orderData.length - 1) {
       const nextIndex = currentOrderIndex + 1;
       setCurrentOrderIndex(nextIndex);
-      setSelectedOrderId(orderData[nextIndex].id);
+      setSelectedOrder(orderData[nextIndex]);
     }
   };
 
@@ -598,7 +598,7 @@ const OrdersPage = () => {
                 {orderData.map((order, index) => (
                   <TableRow
                     key={index}
-                    onClick={() => handleOrderClick(order.id, index)}
+                    onClick={() => handleOrderClick(order, index)}
                     sx={{
                       '&:nth-of-type(odd)': {
                         bgcolor: '#F8F8F9',
@@ -700,7 +700,7 @@ const OrdersPage = () => {
                       <IconButton
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleOrderClick(order.id, index);
+                          handleOrderClick(order, index);
                         }}
                         sx={{
                           width: '40px',
@@ -724,7 +724,7 @@ const OrdersPage = () => {
       <OrderDetailsDrawer
         open={drawerOpen}
         onClose={handleCloseDrawer}
-        orderId={selectedOrderId}
+        order={selectedOrder}
         onNavigatePrevious={handleNavigatePrevious}
         onNavigateNext={handleNavigateNext}
       />
