@@ -5,6 +5,14 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Deploy all branches, not just production
+[context.branch-deploy]
+  command = "npm run build"
+
+# Deploy preview contexts
+[context.deploy-preview]
+  command = "npm run build"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
