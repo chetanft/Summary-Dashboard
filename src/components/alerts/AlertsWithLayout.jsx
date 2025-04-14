@@ -4,7 +4,7 @@ import DashboardHeader from '../dashboard/DashboardHeader';
 import Alerts from './Alerts';
 
 const AlertsWithLayout = () => {
-  const [activeTab, setActiveTab] = useState('alerts');
+  const [activeTab, setActiveTab] = useState('operations');
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -14,7 +14,7 @@ const AlertsWithLayout = () => {
     <Layout>
       {/* Dashboard Header */}
       <DashboardHeader
-        title="Summary Dashboard"
+        title="Operations Dashboard"
         activeTab={activeTab}
         onTabChange={handleTabChange}
       />

@@ -330,7 +330,7 @@ const OrdersPage = () => {
       <Layout>
         {/* Dashboard Header */}
         <DashboardHeader
-          title="Summary Dashboard"
+          title="Orders Dashboard"
           activeTab={activeTab}
           onTabChange={handleTabChange}
         />

@@ -21,7 +21,7 @@ import PendingDispatchedKPI from './PendingDispatchedKPI';
 import DeliveredVsRunningDelayedKPI from './DeliveredVsRunningDelayedKPI';
 
 const EnhancedDashboard = () => {
-  const [activeTab, setActiveTab] = useState('summary');
+  const [activeTab, setActiveTab] = useState('performance');
   const [drilldownOpen, setDrilldownOpen] = useState(false);
   const [selectedKPI, setSelectedKPI] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -288,7 +288,7 @@ const EnhancedDashboard = () => {
       <StyledContainer>
         {/* Dashboard Header */}
         <DashboardHeader
-          title="Summary Dashboard"
+          title="Performance Dashboard"
           activeTab={activeTab}
           onTabChange={handleTabChange}
           searchTerm={searchTerm}
@@ -328,7 +328,7 @@ const EnhancedDashboard = () => {
                 />
               )}
             </Grid>
-            
+
             {/* First row: Right half - Stacked KPIs */}
             <Grid size={{ xs:12, md:6 }}>
               <Grid container direction="column" spacing={2} sx={{ width: '100%', m: 0 }}>
@@ -346,7 +346,7 @@ const EnhancedDashboard = () => {
                     />
                   )}
                 </Grid>
-                
+
                 {/* Freight Cost KPI */}
                 <Grid item>
                   {loading ? (
@@ -364,7 +364,7 @@ const EnhancedDashboard = () => {
                 </Grid>
               </Grid>
             </Grid>
-            
+
             {/* Second row: Three KPIs horizontally */}
             <Grid size={{ xs:12, md:12 }}>
               <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
@@ -381,7 +381,7 @@ const EnhancedDashboard = () => {
                     />
                   )}
                 </Grid>
-                
+
                 <Grid size={{ xs:12, md:4 }}>
                   {loading ? (
                     <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
@@ -395,7 +395,7 @@ const EnhancedDashboard = () => {
                     />
                   )}
                 </Grid>
-                
+
                 <Grid size={{ xs:12, md:4 }}>
                   {loading ? (
                     <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
@@ -411,7 +411,7 @@ const EnhancedDashboard = () => {
                 </Grid>
               </Grid>
             </Grid>
-            
+
             {/* Third row: Three KPIs horizontally */}
             <Grid size={{ xs:12, md:12 }}>
               <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
@@ -428,7 +428,7 @@ const EnhancedDashboard = () => {
                     />
                   )}
                 </Grid>
-                
+
                 <Grid size={{ xs:12, md:4 }}>
                   {loading ? (
                     <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
@@ -442,7 +442,7 @@ const EnhancedDashboard = () => {
                     />
                   )}
                 </Grid>
-                
+
                 <Grid size={{ xs:12, md:4 }}>
                   {loading ? (
                     <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
