@@ -1,0 +1,11 @@
+<svg width="570" height="100" viewBox="0 0 570 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Yellow diamond shapes -->
+  <path d="M20.8333 0L0 20.8333L20.8333 41.6667L41.6667 20.8333L20.8333 0Z" fill="#FFC700"/>
+  <path d="M41.6667 20.8333L20.8333 41.6667L41.6667 62.5L62.5 41.6667L41.6667 20.8333Z" fill="#FFC700"/>
+  <path d="M62.5 41.6667L41.6667 62.5L62.5 83.3333L83.3333 62.5L62.5 41.6667Z" fill="#FFC700"/>
+  <path d="M41.6667 62.5L20.8333 83.3333L41.6667 104.167L62.5 83.3333L41.6667 62.5Z" fill="#FFC700"/>
+  <path d="M41.6667 20.8333L62.5 41.6667L41.6667 62.5L20.8333 41.6667L41.6667 20.8333Z" fill="#1A1A1A"/>
+  
+  <!-- Text "FREIGHT TIGER" -->
+  <text x="129" y="65" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#1A1A1A">FREIGHT TIGER</text>
+</svg>
