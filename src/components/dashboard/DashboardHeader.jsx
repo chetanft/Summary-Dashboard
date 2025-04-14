@@ -8,12 +8,12 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
 
   const handleTabChange = (tab) => {
     onTabChange(tab);
-    if (tab === 'summary') {
+    if (tab === 'performance') {
       navigate('/dashboard');
+    } else if (tab === 'operations') {
+      navigate('/alerts');
     } else if (tab === 'orderData') {
       navigate('/orders');
-    } else if (tab === 'alerts') {
-      navigate('/alerts');
     }
   };
   return (
@@ -64,7 +64,7 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
           }}
         >
           <Box
-            onClick={() => handleTabChange('summary')}
+            onClick={() => handleTabChange('performance')}
             sx={{
               display: 'flex',
               flexDirection: 'row',
@@ -74,8 +74,8 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
               gap: '4px',
               height: '32px',
               flex: 1,
-              backgroundColor: activeTab === 'summary' ? '#FFFFFF' : '#F8F8F9',
-              boxShadow: activeTab === 'summary' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
+              backgroundColor: activeTab === 'performance' ? '#FFFFFF' : '#F8F8F9',
+              boxShadow: activeTab === 'performance' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
               borderRadius: '5px',
               cursor: 'pointer',
             }}
@@ -83,13 +83,42 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
             <Typography
               sx={{
                 fontFamily: 'Inter, sans-serif',
-                fontWeight: activeTab === 'summary' ? 600 : 500,
+                fontWeight: activeTab === 'performance' ? 600 : 500,
                 fontSize: '14px',
                 lineHeight: '140%',
-                color: activeTab === 'summary' ? '#434F64' : '#5F697B',
+                color: activeTab === 'performance' ? '#434F64' : '#5F697B',
               }}
             >
-              Summary
+              Performance
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => handleTabChange('operations')}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '8px 12px',
+              gap: '4px',
+              height: '32px',
+              flex: 1,
+              backgroundColor: activeTab === 'operations' ? '#FFFFFF' : '#F8F8F9',
+              boxShadow: activeTab === 'operations' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: activeTab === 'operations' ? 600 : 500,
+                fontSize: '14px',
+                lineHeight: '140%',
+                color: activeTab === 'operations' ? '#434F64' : '#5F697B',
+              }}
+            >
+              Operations
             </Typography>
           </Box>
           <Box
@@ -118,36 +147,7 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
                 color: activeTab === 'orderData' ? '#434F64' : '#5F697B',
               }}
             >
-              Order Data
-            </Typography>
-          </Box>
-          <Box
-            onClick={() => handleTabChange('alerts')}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '8px 12px',
-              gap: '4px',
-              height: '32px',
-              flex: 1,
-              backgroundColor: activeTab === 'alerts' ? '#FFFFFF' : '#F8F8F9',
-              boxShadow: activeTab === 'alerts' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: activeTab === 'alerts' ? 600 : 500,
-                fontSize: '14px',
-                lineHeight: '140%',
-                color: activeTab === 'alerts' ? '#434F64' : '#5F697B',
-              }}
-            >
-              Alerts
+              Orders
             </Typography>
           </Box>
         </Paper>
