@@ -1,6 +1,7 @@
-import { Box, Typography, Paper } from '@mui/material';
+import { Box, Typography, Paper, Tooltip, IconButton } from '@mui/material';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
-const LineChartKPI = ({ title, value, target }) => {
+const LineChartKPI = ({ title, value, target, onDrillDown }) => {
   // Months for the x-axis
   const months = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
 
@@ -18,21 +19,42 @@ const LineChartKPI = ({ title, value, target }) => {
         border: '1px solid #F0F1F7',
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.05)',
         borderRadius: '16px',
+        cursor: onDrillDown ? 'pointer' : 'default',
+        transition: 'box-shadow 0.3s ease',
+        '&:hover': onDrillDown ? {
+          boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
+        } : {},
       }}
+      onClick={() => onDrillDown && onDrillDown({ id: title.toLowerCase().replace(/\s+/g, '_'), title })}
     >
       {/* Title */}
-      <Typography
-        sx={{
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: 600,
-          fontSize: '20px',
-          lineHeight: '24px',
-          color: '#434F64',
-          width: '100%',
-        }}
-      >
-        {title}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <Typography
+          sx={{
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 600,
+            fontSize: '20px',
+            lineHeight: '24px',
+            color: '#434F64',
+          }}
+        >
+          {title}
+        </Typography>
+        {onDrillDown && (
+          <Tooltip title="View details">
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDrillDown({ id: title.toLowerCase().replace(/\s+/g, '_'), title });
+              }}
+              sx={{ color: '#434F64' }}
+            >
+              <OpenInFullIcon sx={{ fontSize: 16 }} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
 
       {/* Value and Target */}
       <Box

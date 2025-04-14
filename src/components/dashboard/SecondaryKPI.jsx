@@ -1,7 +1,8 @@
-import { Box, Typography, Paper, Tooltip } from '@mui/material';
+import { Box, Typography, Paper, Tooltip, IconButton } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
-const SecondaryKPI = ({ title, value, target, chartData, color }) => {
+const SecondaryKPI = ({ title, value, target, chartData, color, onDrillDown }) => {
   // Default chart data if none provided
   const defaultChartData = [
     { month: 'Nov', value: 96, color: '#FF3533' },
@@ -43,24 +44,46 @@ const SecondaryKPI = ({ title, value, target, chartData, color }) => {
         border: '1px solid #F0F1F7',
         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.05)',
         borderRadius: '16px',
+        cursor: onDrillDown ? 'pointer' : 'default',
+        transition: 'box-shadow 0.3s ease',
+        '&:hover': onDrillDown ? {
+          boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
+        } : {},
       }}
+      onClick={() => onDrillDown && onDrillDown({ id: title.toLowerCase().replace(/\s+/g, '_'), title, unit: title.includes('%') ? '%' : '' })}
     >
       {/* Title */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-        <Typography
-          sx={{
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: 600,
-            fontSize: '20px',
-            lineHeight: '24px',
-            color: '#434F64',
-          }}
-        >
-          {title}
-        </Typography>
-        <Tooltip title={getTooltipText(title)}>
-          <InfoOutlinedIcon sx={{ fontSize: 16, color: '#838C9D', cursor: 'pointer' }} />
-        </Tooltip>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography
+            sx={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '20px',
+              lineHeight: '24px',
+              color: '#434F64',
+            }}
+          >
+            {title}
+          </Typography>
+          <Tooltip title={getTooltipText(title)}>
+            <InfoOutlinedIcon sx={{ fontSize: 16, color: '#838C9D', cursor: 'pointer' }} />
+          </Tooltip>
+        </Box>
+        {onDrillDown && (
+          <Tooltip title="View details">
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDrillDown({ id: title.toLowerCase().replace(/\s+/g, '_'), title, unit: title.includes('%') ? '%' : '' });
+              }}
+              sx={{ color: '#434F64' }}
+            >
+              <OpenInFullIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
 
       {/* Value */}

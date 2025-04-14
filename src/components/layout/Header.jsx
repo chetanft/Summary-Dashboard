@@ -7,13 +7,11 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  InputBase,
   Paper,
   Divider,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
-  Search as SearchIcon,
   Notifications as NotificationsIcon,
   Rocket as RocketIcon,
   AccountCircle,
@@ -83,29 +81,8 @@ const Header = ({ onRefresh }) => {
         </Box>
       </Box>
 
-      {/* Center - Search */}
-      <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-        <Paper
-          component="form"
-          sx={{
-            p: '2px 4px',
-            display: 'flex',
-            alignItems: 'center',
-            width: 400,
-            borderRadius: '8px',
-            border: '1px solid #CED1D7',
-          }}
-        >
-          <IconButton sx={{ p: '10px' }} aria-label="search">
-            <SearchIcon />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search..."
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </Paper>
-      </Box>
+      {/* Center - Empty space */}
+      <Box sx={{ flex: 1 }} />
 
       {/* Right side - Notifications and User */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

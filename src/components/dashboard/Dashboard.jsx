@@ -6,11 +6,16 @@ import HeroKPI from './HeroKPI';
 import SecondaryKPI from './SecondaryKPI';
 import LineChartKPI from './LineChartKPI';
 import AlertIndicator from './AlertIndicator';
-import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip } from '@mui/material';
+import KPIDrilldownPane from './KPIDrilldownPane';
+import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip, TextField, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('summary');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [drilldownOpen, setDrilldownOpen] = useState(false);
+  const [selectedKPI, setSelectedKPI] = useState(null);
   const { dashboardData, loading, error, lastUpdated, refreshData } = useData();
 
   // Handle manual refresh
@@ -21,6 +26,17 @@ const Dashboard = () => {
   // Handle tab change
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  // Handle search term change
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Handle KPI drill-down
+  const handleKPIDrillDown = (kpi) => {
+    setSelectedKPI(kpi);
+    setDrilldownOpen(true);
   };
 
   // KPI data from context
@@ -53,26 +69,27 @@ const Dashboard = () => {
   };
 
   return (
-    <Layout onRefresh={handleRefresh}>
-      {/* Dashboard Header */}
-      <DashboardHeader
-        title="Summary Dashboard"
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
+    <>
+      <Layout onRefresh={handleRefresh}>
+        {/* Dashboard Header */}
+        <DashboardHeader
+          title="Summary Dashboard"
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
 
-      {/* Content Container */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '20px',
-          width: '100%',
-          padding: '0 20px',
-        }}
-      >
-        {/* Refresh and Last Updated */}
+        {/* Content Container */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '20px',
+            width: '100%',
+            padding: '0 20px',
+          }}
+        >
+        {/* Search and Refresh Bar */}
         <Box
           sx={{
             display: 'flex',
@@ -80,11 +97,29 @@ const Dashboard = () => {
             alignItems: 'center',
             width: '100%',
             mt: 1,
+            mb: 2,
           }}
         >
-          <Typography variant="body2" color="text.secondary">
-            {lastUpdated ? `Last updated: ${lastUpdated}` : ''}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
+            <TextField
+              placeholder="Search KPIs..."
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              sx={{ minWidth: 250, maxWidth: 400 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Typography variant="body2" color="text.secondary">
+              {lastUpdated ? `Last updated: ${lastUpdated}` : ''}
+            </Typography>
+          </Box>
           <Tooltip title="Refresh data">
             <IconButton onClick={handleRefresh} size="small" disabled={loading}>
               <RefreshIcon />
@@ -129,6 +164,7 @@ const Dashboard = () => {
                     value={kpiData.secondaryKPIs[0].value}
                     target={kpiData.secondaryKPIs[0].target}
                     color={kpiData.secondaryKPIs[0].color}
+                    onDrillDown={handleKPIDrillDown}
                   />
                 )}
               </Grid>
@@ -141,6 +177,7 @@ const Dashboard = () => {
                     value={kpiData.secondaryKPIs[1].value}
                     target={kpiData.secondaryKPIs[1].target}
                     color={kpiData.secondaryKPIs[1].color}
+                    onDrillDown={handleKPIDrillDown}
                   />
                 )}
               </Grid>
@@ -159,6 +196,7 @@ const Dashboard = () => {
                 value={kpiData.secondaryKPIs[2].value}
                 target={kpiData.secondaryKPIs[2].target}
                 color={kpiData.secondaryKPIs[2].color}
+                onDrillDown={handleKPIDrillDown}
               />
             )}
           </Grid>
@@ -171,6 +209,7 @@ const Dashboard = () => {
                 value={kpiData.secondaryKPIs[3].value}
                 target={kpiData.secondaryKPIs[3].target}
                 color={kpiData.secondaryKPIs[3].color}
+                onDrillDown={handleKPIDrillDown}
               />
             )}
           </Grid>
@@ -187,13 +226,22 @@ const Dashboard = () => {
                   title={kpi.title}
                   value={kpi.value}
                   target={kpi.target}
+                  onDrillDown={handleKPIDrillDown}
                 />
               )}
             </Grid>
           ))}
         </Grid>
-      </Box>
-    </Layout>
+        </Box>
+      </Layout>
+
+      {/* KPI Drilldown Pane */}
+      <KPIDrilldownPane
+        open={drilldownOpen}
+        onClose={() => setDrilldownOpen(false)}
+        kpi={selectedKPI}
+      />
+    </>
   );
 };
 
