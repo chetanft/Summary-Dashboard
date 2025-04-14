@@ -1,19 +1,30 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import Layout from '../layout/Layout';
 import DashboardHeader from './DashboardHeader';
-import EnhancedHeroKPI from './EnhancedHeroKPI';
-import EnhancedSecondaryKPI from './EnhancedSecondaryKPI';
-import LineChartKPI from './LineChartKPI';
-import AlertIndicator from './AlertIndicator';
 import KPIDrilldownPane from './KPIDrilldownPane';
-import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip } from '@mui/material';
+import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip, Container } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
+
+// Import our new KPI components
+import BudgetedVsActualKPI from './BudgetedVsActualKPI';
+import VehicleUtilizationKPI from './VehicleUtilizationKPI';
+import FreightCostKPI from './FreightCostKPI';
+import PlacementEfficiencyKPI from './PlacementEfficiencyKPI';
+import OrderDeliveryTimeKPI from './OrderDeliveryTimeKPI';
+import OTIFKPI from './OTIFKPI';
+import DelayedDeliveryKPI from './DelayedDeliveryKPI';
+import PendingDispatchedKPI from './PendingDispatchedKPI';
+import DeliveredVsRunningDelayedKPI from './DeliveredVsRunningDelayedKPI';
 
 const EnhancedDashboard = () => {
   const [activeTab, setActiveTab] = useState('summary');
   const [drilldownOpen, setDrilldownOpen] = useState(false);
   const [selectedKPI, setSelectedKPI] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const { dashboardData, loading, error, lastUpdated, refreshData } = useData();
 
   // Handle manual refresh
@@ -21,9 +32,17 @@ const EnhancedDashboard = () => {
     refreshData();
   };
 
+  // Initialize navigate
+  const navigate = useNavigate();
+
   // Handle tab change
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+
+    // Navigate to orders page when 'orders' tab is selected
+    if (tab === 'orders') {
+      navigate('/orders');
+    }
   };
 
   // Handle KPI drill-down
@@ -37,68 +56,246 @@ const EnhancedDashboard = () => {
     setDrilldownOpen(false);
   };
 
-  // KPI data from context
-  const kpiData = dashboardData || {
-    heroKPI: {
-      title: 'Hero KPI',
-      actual: 'Span 6',
-      projected: 'Span 6',
-      budget: 'Span 6',
-      chartData: [
-        { month: 'Nov', value: 210, color: '#FF3533' },
-        { month: 'Dec', value: 307, color: '#838C9D' },
-        { month: 'Jan', value: 275, color: '#FF3533' },
-        { month: 'Feb', value: 348, color: '#838C9D' },
-        { month: 'Mar', value: 317, color: '#838C9D' },
-      ],
-    },
-    secondaryKPIs: [
-      { id: '2A', title: 'KPI 2A', value: 'Value', target: 'Value', color: 'green', unit: '%' },
-      { id: '3A', title: 'KPI 3A', value: 'Value', target: 'Value', color: 'yellow', unit: 'INR' },
-      { id: '3B', title: 'KPI 3B', value: 'Value', target: 'Value', color: 'red', unit: '%' },
-      { id: '3C', title: 'KPI 3C', value: 'Value', target: 'Value', color: 'green', unit: 'INR' },
-    ],
+  // Generate sample chart data for KPIs
+  const generateChartData = (length = 30) => {
+    return Array.from({ length }, (_, i) => ({
+      date: i + 1,
+      value: 75 + Math.floor(Math.random() * 30),
+      projected: 85 + Math.floor(Math.random() * 20),
+      budget: 90 + Math.floor(Math.random() * 15),
+      actual: 70 + Math.floor(Math.random() * 35)
+    }));
+  };
+
+  // Regional data for bar charts
+  const regionData = [
+    { region: 'North', value: 80 },
+    { region: 'South', value: 78 },
+    { region: 'East', value: 75 },
+    { region: 'West', value: 95 },
+    { region: 'Central', value: 97 }
+  ];
+
+  // Get data from context if available, otherwise use sample data
+  const getKpiData = () => {
+    if (dashboardData?.kpis) {
+      // Try to map from real data if available
+      return {
+        budgetVsActual: {
+          actual: dashboardData.kpis.budgetVsActual?.actual || 10,
+          projected: dashboardData.kpis.budgetVsActual?.projected || 22,
+          budget: dashboardData.kpis.budgetVsActual?.budget || 20,
+          chartData: dashboardData.kpis.budgetVsActual?.chartData || generateChartData()
+        },
+        vehicleUtilization: {
+          value: dashboardData.kpis.vehicleUtilization?.value || 84,
+          target: dashboardData.kpis.vehicleUtilization?.target || 96,
+          chartData: dashboardData.kpis.vehicleUtilization?.chartData || generateChartData()
+        },
+        freightCost: {
+          value: dashboardData.kpis.freightCost?.value || 120,
+          target: dashboardData.kpis.freightCost?.target || 100,
+          chartData: dashboardData.kpis.freightCost?.chartData || generateChartData(),
+          info: "Low vehicle utilisation (84%) may be driving up freight cost per KM."
+        },
+        placementEfficiency: {
+          value: dashboardData.kpis.placementEfficiency?.value || 87,
+          target: dashboardData.kpis.placementEfficiency?.target || 96,
+          chartData: dashboardData.kpis.placementEfficiency?.chartData || regionData
+        },
+        orderDeliveryTime: {
+          value: dashboardData.kpis.orderDeliveryTime?.value || 4,
+          target: dashboardData.kpis.orderDeliveryTime?.target || 3,
+          chartData: dashboardData.kpis.orderDeliveryTime?.chartData || [
+            { region: 'North', value: 5 },
+            { region: 'South', value: 5 },
+            { region: 'East', value: 5.5 },
+            { region: 'West', value: 3 },
+            { region: 'Central', value: 3 }
+          ]
+        },
+        otif: {
+          value: dashboardData.kpis.otif?.value || 86,
+          target: dashboardData.kpis.otif?.target || 98,
+          chartData: dashboardData.kpis.otif?.chartData || regionData.map(item => ({...item, value: item.value - 5}))
+        },
+        delayedDelivery: {
+          value: dashboardData.kpis.delayedDelivery?.value || 10,
+          target: dashboardData.kpis.delayedDelivery?.target || 2,
+          chartData: dashboardData.kpis.delayedDelivery?.chartData || [
+            { region: 'North', value: 12 },
+            { region: 'South', value: 10 },
+            { region: 'East', value: 12 },
+            { region: 'West', value: 1 },
+            { region: 'Central', value: 1 }
+          ]
+        },
+        pendingDispatched: {
+          value: dashboardData.kpis.pendingDispatched?.value || 24,
+          target: dashboardData.kpis.pendingDispatched?.target || 10,
+          count: dashboardData.kpis.pendingDispatched?.count || 290
+        },
+        deliveredRunningDelayed: {
+          deliveredValue: dashboardData.kpis.deliveredRunningDelayed?.deliveredValue || 48,
+          runningDelayedValue: dashboardData.kpis.deliveredRunningDelayed?.runningDelayedValue || 23,
+          runningDelayedTarget: dashboardData.kpis.deliveredRunningDelayed?.runningDelayedTarget || 10,
+          deliveredCount: dashboardData.kpis.deliveredRunningDelayed?.deliveredCount || 97,
+          runningDelayedCount: dashboardData.kpis.deliveredRunningDelayed?.runningDelayedCount || 47
+        }
+      };
+    }
+
+    // Fallback to sample data
+    return {
+      budgetVsActual: {
+        actual: 10,
+        projected: 22,
+        budget: 20,
+        chartData: generateChartData()
+      },
+      vehicleUtilization: {
+        value: 84,
+        target: 96,
+        chartData: generateChartData()
+      },
+      freightCost: {
+        value: 120,
+        target: 100,
+        chartData: generateChartData(),
+        info: "Low vehicle utilisation (84%) may be driving up freight cost per KM."
+      },
+      placementEfficiency: {
+        value: 87,
+        target: 96,
+        chartData: regionData
+      },
+      orderDeliveryTime: {
+        value: 4,
+        target: 3,
+        chartData: [
+          { region: 'North', value: 5 },
+          { region: 'South', value: 5 },
+          { region: 'East', value: 5.5 },
+          { region: 'West', value: 3 },
+          { region: 'Central', value: 3 }
+        ]
+      },
+      otif: {
+        value: 86,
+        target: 98,
+        chartData: regionData.map(item => ({...item, value: item.value - 5}))
+      },
+      delayedDelivery: {
+        value: 10,
+        target: 2,
+        chartData: [
+          { region: 'North', value: 12 },
+          { region: 'South', value: 10 },
+          { region: 'East', value: 12 },
+          { region: 'West', value: 1 },
+          { region: 'Central', value: 1 }
+        ]
+      },
+      pendingDispatched: {
+        value: 24,
+        target: 10,
+        count: 290
+      },
+      deliveredRunningDelayed: {
+        deliveredValue: 48,
+        runningDelayedValue: 23,
+        runningDelayedTarget: 10,
+        deliveredCount: 97,
+        runningDelayedCount: 47
+      }
+    };
+  };
+
+  const kpiData = getKpiData();
+
+  // Styled components to match the Figma design
+  const StyledContainer = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    padding: '20px 20px 0px',
+    gap: '20px',
+    width: '1728px',
+    maxWidth: '100%',
+    height: 'calc(100vh - 78px)',
+    backgroundColor: '#FFFFFF',
+  }));
+
+  const StyledTitleBar = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0px 20px',
+    gap: '10px',
+    width: '100%',
+    height: '48px',
+    backgroundColor: '#FFFFFF',
+  }));
+
+  const StyledFilterBar = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: '0px',
+    gap: '20px',
+  }));
+
+  const StyledContentContainer = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    padding: '0px',
+    gap: '20px',
+    width: '100%',
+    flexGrow: 1,
+  }));
+
+  const StyledToggleButton = styled(Box)(({ theme, active }) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '8px 12px',
+    gap: '4px',
+    height: '32px',
+    background: active ? '#FFFFFF' : '#F8F8F9',
+    boxShadow: active ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
+    borderRadius: '5px',
+    flex: 1,
+    cursor: 'pointer',
+  }));
+
+  // Dashboard styling variables to match design
+  const dashboardStyles = {
+    cardBorderRadius: '32px',
+    gridSpacing: 2.5, // 20px spacing
+    contentPadding: { xs: '20px', md: '20px' },
+    rowHeights: {
+      row1: 666, // Height for first row cards (Hero KPIs)
+      row2: 323, // Height for second row cards
+      row3: 221  // Height for third row cards
+    }
   };
 
   return (
     <Layout onRefresh={handleRefresh}>
-      {/* Dashboard Header */}
-      <DashboardHeader
-        title="Summary Dashboard"
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
+      {/* Main Container */}
+      <StyledContainer>
+        {/* Dashboard Header */}
+        <DashboardHeader
+          title="Summary Dashboard"
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          searchTerm={searchTerm}
+          onSearchChange={(value) => setSearchTerm(value)}
+        />
 
-      {/* Content Container */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '20px',
-          width: '100%',
-          padding: '0 20px',
-        }}
-      >
-        {/* Refresh and Last Updated */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-            mt: 1,
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            {lastUpdated ? `Last updated: ${lastUpdated}` : ''}
-          </Typography>
-          <Tooltip title="Refresh data">
-            <IconButton onClick={handleRefresh} size="small" disabled={loading}>
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        {/* Title Bar and Filter Bar removed - now in DashboardHeader */}
 
         {/* Error message if any */}
         {error && (
@@ -112,102 +309,168 @@ const EnhancedDashboard = () => {
           </Box>
         )}
 
-        {/* Alert Indicator */}
-        <AlertIndicator />
-
-        {/* Main KPI Grid Layout */}
-        <Grid container spacing={2.5}>
-          {/* Left Column - Hero KPI */}
-          <Grid item xs={12} md={4}>
-            {loading ? (
-              <Skeleton variant="rectangular" width="100%" height={500} sx={{ borderRadius: '16px' }} />
-            ) : (
-              <EnhancedHeroKPI title="Freight Budget vs Actual" data={kpiData.heroKPI} onDrillDown={handleKPIDrillDown} />
-            )}
-          </Grid>
-
-          {/* Right Column - Secondary KPIs */}
-          <Grid item xs={12} md={8}>
-            {/* Top Row - KPI 2A and 3A */}
-            <Grid container spacing={2.5} sx={{ mb: 2.5 }}>
-              <Grid item xs={12} md={6}>
-                {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
-                ) : (
-                  <EnhancedSecondaryKPI
-                    id="freight_cost_per_km"
-                    title={kpiData.secondaryKPIs[0].title}
-                    value={kpiData.secondaryKPIs[0].value}
-                    target={kpiData.secondaryKPIs[0].target}
-                    color={kpiData.secondaryKPIs[0].color}
-                    unit={kpiData.secondaryKPIs[0].unit}
-                    trend={kpiData.secondaryKPIs[0].trend}
-                    onDrillDown={handleKPIDrillDown}
-                  />
-                )}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
-                ) : (
-                  <EnhancedSecondaryKPI
-                    id="vehicle_utilization"
-                    title={kpiData.secondaryKPIs[1].title}
-                    value={kpiData.secondaryKPIs[1].value}
-                    target={kpiData.secondaryKPIs[1].target}
-                    color={kpiData.secondaryKPIs[1].color}
-                    unit={kpiData.secondaryKPIs[1].unit}
-                    trend={kpiData.secondaryKPIs[1].trend}
-                    onDrillDown={handleKPIDrillDown}
-                  />
-                )}
-              </Grid>
+        {/* Content Container */}
+        <StyledContentContainer>
+          {/* Row 1: Two columns side by side */}
+          <Grid container spacing={dashboardStyles.gridSpacing} sx={{ width: '100%', m: 0 }}>
+            {/* Left column: Budgeted vs Actual KPI */}
+            <Grid item xs={12} lg={6} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row1} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+              ) : (
+                <BudgetedVsActualKPI
+                  title="Budgeted vs Actual vs Projected Freight"
+                  actual={kpiData.budgetVsActual.actual}
+                  projected={kpiData.budgetVsActual.projected}
+                  budget={kpiData.budgetVsActual.budget}
+                  chartData={kpiData.budgetVsActual.chartData}
+                  onDrillDown={handleKPIDrillDown}
+                />
+              )}
             </Grid>
 
-            {/* Bottom Row - KPI 3B and 3C */}
-            <Grid container spacing={2.5}>
-              <Grid item xs={12} md={6}>
-                {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
-                ) : (
-                  <EnhancedSecondaryKPI
-                    id="otif_percentage"
-                    title={kpiData.secondaryKPIs[2].title}
-                    value={kpiData.secondaryKPIs[2].value}
-                    target={kpiData.secondaryKPIs[2].target}
-                    color={kpiData.secondaryKPIs[2].color}
-                    unit={kpiData.secondaryKPIs[2].unit}
-                    trend={kpiData.secondaryKPIs[2].trend}
-                    onDrillDown={handleKPIDrillDown}
-                  />
-                )}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {loading ? (
-                  <Skeleton variant="rectangular" width="100%" height={240} sx={{ borderRadius: '16px' }} />
-                ) : (
-                  <EnhancedSecondaryKPI
-                    id="placement_efficiency"
-                    title={kpiData.secondaryKPIs[3].title}
-                    value={kpiData.secondaryKPIs[3].value}
-                    target={kpiData.secondaryKPIs[3].target}
-                    color={kpiData.secondaryKPIs[3].color}
-                    unit={kpiData.secondaryKPIs[3].unit}
-                    trend={kpiData.secondaryKPIs[3].trend}
-                    onDrillDown={handleKPIDrillDown}
-                  />
-                )}
+            {/* Right column: Two KPIs stacked vertically */}
+            <Grid item xs={12} lg={6} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              <Grid container direction="column" spacing={dashboardStyles.gridSpacing}>
+                {/* Vehicle Utilization KPI */}
+                <Grid item xs={12}>
+                  {loading ? (
+                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                  ) : (
+                    <VehicleUtilizationKPI
+                      title="Vehicle Utilisation"
+                      value={kpiData.vehicleUtilization.value}
+                      target={kpiData.vehicleUtilization.target}
+                      chartData={kpiData.vehicleUtilization.chartData}
+                      onDrillDown={handleKPIDrillDown}
+                    />
+                  )}
+                </Grid>
+                {/* Freight Cost KPI */}
+                <Grid item xs={12}>
+                  {loading ? (
+                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                  ) : (
+                    <FreightCostKPI
+                      title="Freight cost per KM"
+                      value={kpiData.freightCost.value}
+                      target={kpiData.freightCost.target}
+                      chartData={kpiData.freightCost.chartData}
+                      info={kpiData.freightCost.info}
+                      onDrillDown={handleKPIDrillDown}
+                    />
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Box>
-      {/* KPI Drill-down Pane */}
-      <KPIDrilldownPane
-        open={drilldownOpen}
-        onClose={handleDrilldownClose}
-        kpi={selectedKPI}
-      />
+
+          {/* Row 2: Three KPIs horizontally */}
+          <Grid container spacing={dashboardStyles.gridSpacing} sx={{ width: '100%', m: 0, mt: 3 }}>
+            {/* Placement Efficiency KPI */}
+            <Grid item xs={12} lg={4} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+              ) : (
+                <PlacementEfficiencyKPI
+                  title="Placement Efficiency"
+                  value={kpiData.placementEfficiency.value}
+                  target={kpiData.placementEfficiency.target}
+                  chartData={kpiData.placementEfficiency.chartData}
+                  onDrillDown={handleKPIDrillDown}
+                />
+              )}
+            </Grid>
+
+            {/* Order to Delivery Time KPI */}
+            <Grid item xs={12} lg={4} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+              ) : (
+                <OrderDeliveryTimeKPI
+                  title="Order to Delivery Time"
+                  value={kpiData.orderDeliveryTime.value}
+                  target={kpiData.orderDeliveryTime.target}
+                  chartData={kpiData.orderDeliveryTime.chartData}
+                  onDrillDown={handleKPIDrillDown}
+                />
+              )}
+            </Grid>
+
+            {/* OTIF KPI */}
+            <Grid item xs={12} lg={4} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+              ) : (
+                <OTIFKPI
+                  title="OTIF"
+                  value={kpiData.otif.value}
+                  target={kpiData.otif.target}
+                  chartData={kpiData.otif.chartData}
+                  onDrillDown={handleKPIDrillDown}
+                />
+              )}
+            </Grid>
+          </Grid>
+
+          {/* Row 3: Three KPIs horizontally */}
+          <Grid container spacing={dashboardStyles.gridSpacing} sx={{ width: '100%', m: 0, mt: 3 }}>
+            {/* Delayed Delivery KPI */}
+            <Grid item xs={12} lg={4} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+              ) : (
+                <DelayedDeliveryKPI
+                  title="Delayed Delivery %"
+                  value={kpiData.delayedDelivery.value}
+                  target={kpiData.delayedDelivery.target}
+                  chartData={kpiData.delayedDelivery.chartData}
+                  onDrillDown={handleKPIDrillDown}
+                />
+              )}
+            </Grid>
+
+            {/* Pending Dispatched KPI */}
+            <Grid item xs={12} lg={4} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+              ) : (
+                <PendingDispatchedKPI
+                  title="Pending Dispatched"
+                  value={kpiData.pendingDispatched.value}
+                  target={kpiData.pendingDispatched.target}
+                  count={kpiData.pendingDispatched.count}
+                  onDrillDown={handleKPIDrillDown}
+                />
+              )}
+            </Grid>
+
+            {/* Delivered vs Running Delayed KPI */}
+            <Grid item xs={12} lg={4} sx={{ pl: { xs: 0, sm: '16px' }, pr: { xs: 0, sm: '16px' } }}>
+              {loading ? (
+                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+              ) : (
+                <DeliveredVsRunningDelayedKPI
+                  title="Delivered vs Running Delayed"
+                  deliveredValue={kpiData.deliveredRunningDelayed.deliveredValue}
+                  runningDelayedValue={kpiData.deliveredRunningDelayed.runningDelayedValue}
+                  runningDelayedTarget={kpiData.deliveredRunningDelayed.runningDelayedTarget}
+                  deliveredCount={kpiData.deliveredRunningDelayed.deliveredCount}
+                  runningDelayedCount={kpiData.deliveredRunningDelayed.runningDelayedCount}
+                  onDrillDown={handleKPIDrillDown}
+                />
+              )}
+            </Grid>
+          </Grid>
+        </StyledContentContainer>
+
+        {/* KPI Drill-down Pane */}
+        <KPIDrilldownPane
+          open={drilldownOpen}
+          onClose={handleDrilldownClose}
+          kpi={selectedKPI}
+        />
+      </StyledContainer>
     </Layout>
   );
 };
