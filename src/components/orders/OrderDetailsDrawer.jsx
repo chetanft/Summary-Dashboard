@@ -67,6 +67,72 @@ function a11yProps(index) {
   };
 }
 
+// Mapping of consignor names to their full details
+const consignorDetails = {
+  'JSW- AMRIT': {
+    name: 'JSW Steel Ltd - Amritsar',
+    address: 'Plot No. 123, Industrial Area, Phase II, Amritsar, Punjab - 143001',
+    gstin: 'GSTIN1234567890',
+    email: 'orders@jswsteel-amritsar.com',
+    phone: '0183-2345678'
+  },
+  'TATA Steel': {
+    name: 'TATA Steel Ltd',
+    address: 'TATA Centre, 43 Jawaharlal Nehru Road, Kolkata, West Bengal - 700071',
+    gstin: 'GSTIN9876543210',
+    email: 'orders@tatasteel.com',
+    phone: '033-65432198'
+  },
+  'Jindal Steel': {
+    name: 'Jindal Steel & Power Ltd',
+    address: 'Jindal Centre, 12 Bhikaji Cama Place, New Delhi - 110066',
+    gstin: 'GSTIN5678901234',
+    email: 'orders@jindalsteel.com',
+    phone: '011-26188340'
+  },
+  // Default consignor details if name not found in mapping
+  'default': {
+    name: 'Unknown Consignor',
+    address: 'Address not available',
+    gstin: 'GSTIN not available',
+    email: 'email@example.com',
+    phone: 'Phone not available'
+  }
+};
+
+// Mapping of consignee names to their full details
+const consigneeDetails = {
+  'Star Retailers': {
+    name: 'Star Retailers Pvt Ltd',
+    address: '456 MG Road, Bangalore, Karnataka - 560001',
+    gstin: 'GSTIN2468013579',
+    email: 'orders@starretailers.com',
+    phone: '080-87654321'
+  },
+  'Yonex Retailers': {
+    name: 'Yonex Retailers India Pvt Ltd',
+    address: '789 Anna Salai, Chennai, Tamil Nadu - 600002',
+    gstin: 'GSTIN1357924680',
+    email: 'orders@yonexindia.com',
+    phone: '044-23456789'
+  },
+  'Metro Mart': {
+    name: 'Metro Mart Supermarkets',
+    address: '234 Linking Road, Mumbai, Maharashtra - 400050',
+    gstin: 'GSTIN3691215478',
+    email: 'orders@metromart.com',
+    phone: '022-98765432'
+  },
+  // Default consignee details if name not found in mapping
+  'default': {
+    name: 'Unknown Consignee',
+    address: 'Address not available',
+    gstin: 'GSTIN not available',
+    email: 'email@example.com',
+    phone: 'Phone not available'
+  }
+};
+
 // Function to generate dynamic IDs based on order stage and trip type
 const generateOrderIds = (stage, status, tripType = 'FTL') => {
   // Base IDs object - all fields start as '-'
@@ -340,6 +406,12 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
         // Generate IDs based on order stage and trip type
         const orderIds = generateOrderIds(order.stage, order.status, order.tripType);
 
+        // Get consignor details from mapping or use default if not found
+        const senderDetails = consignorDetails[order.consignor] || consignorDetails['default'];
+
+        // Get consignee details from mapping or use default if not found
+        const receiverDetails = consigneeDetails[order.consignee] || consigneeDetails['default'];
+
         setOrderDetails({
           id: order.id,
           soNumber: order.id.replace('SO: ', ''),
@@ -354,26 +426,29 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
           sta: '06:14 AM, 11 Mar 23',
           nextMilestone: 'At Destination',
           nextMilestoneEta: '07:20 AM, 11 Mar 23',
+          // Use the consignor details for sender
           sender: {
-            name: 'MDC Labs Ltd',
-            address: 'Consignor Address, 11th & 12th Floor, Hansalaya Building, 15 Barakhamba Road, Amritsar, Punjab',
-            gstin: '123456789',
-            email: 'someemailaddress@somemail.com',
-            phone: '84973-47593'
+            name: senderDetails.name,
+            address: senderDetails.address,
+            gstin: senderDetails.gstin,
+            email: senderDetails.email,
+            phone: senderDetails.phone
           },
+          // Use the consignee details for shipTo
           shipTo: {
-            name: 'Sai Traders',
-            address: 'Consignor Address, 11th & 12th Floor, Hansalaya Building, 15 Barakhamba Road, New Delhi 110001',
-            gstin: '123456789',
-            email: 'someemailaddress@somemail.com',
-            phone: '84973-47593'
+            name: receiverDetails.name,
+            address: receiverDetails.address,
+            gstin: receiverDetails.gstin,
+            email: receiverDetails.email,
+            phone: receiverDetails.phone
           },
+          // Use the same consignee details for billTo
           billTo: {
-            name: 'Sai Traders',
-            address: 'Consignor Address, 11th & 12th Floor, Hansalaya Building, 15 Barakhamba Road, New Delhi 110001',
-            gstin: '123456789',
-            email: 'someemailaddress@somemail.com',
-            phone: '84973-47593'
+            name: receiverDetails.name,
+            address: receiverDetails.address,
+            gstin: receiverDetails.gstin,
+            email: receiverDetails.email,
+            phone: receiverDetails.phone
           },
           ids: orderIds,
           timeline: timelineData,
