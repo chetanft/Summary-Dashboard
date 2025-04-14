@@ -488,6 +488,222 @@ export const regionalData = {
         ]
       }
     ]
+  },
+
+  // Vehicle Utilization regional data
+  vehicle_utilization: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 82.5,
+        target: 96.0,
+        performance: 'average',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 84.8, target: 96.0, performance: 'average' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 81.2, target: 96.0, performance: 'average' },
+          { id: 'jaipur', name: 'Jaipur', value: 81.5, target: 96.0, performance: 'average' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 85.8,
+        target: 96.0,
+        performance: 'average',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 86.5, target: 96.0, performance: 'average' },
+          { id: 'chennai', name: 'Chennai', value: 85.2, target: 96.0, performance: 'average' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 85.7, target: 96.0, performance: 'average' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 79.2,
+        target: 96.0,
+        performance: 'poor',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 80.5, target: 96.0, performance: 'average' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 78.8, target: 96.0, performance: 'poor' },
+          { id: 'patna', name: 'Patna', value: 78.3, target: 96.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 88.2,
+        target: 96.0,
+        performance: 'good',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 89.5, target: 96.0, performance: 'good' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 87.7, target: 96.0, performance: 'good' },
+          { id: 'pune', name: 'Pune', value: 87.4, target: 96.0, performance: 'good' }
+        ]
+      }
+    ]
+  },
+
+  // Freight cost per KM regional data
+  freight_cost_per_km: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 125.5,
+        target: 100.0,
+        performance: 'poor',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 128.8, target: 100.0, performance: 'poor' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 124.2, target: 100.0, performance: 'poor' },
+          { id: 'jaipur', name: 'Jaipur', value: 123.5, target: 100.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 118.8,
+        target: 100.0,
+        performance: 'poor',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 119.5, target: 100.0, performance: 'poor' },
+          { id: 'chennai', name: 'Chennai', value: 118.2, target: 100.0, performance: 'poor' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 118.7, target: 100.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 130.2,
+        target: 100.0,
+        performance: 'poor',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 131.5, target: 100.0, performance: 'poor' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 129.8, target: 100.0, performance: 'poor' },
+          { id: 'patna', name: 'Patna', value: 129.3, target: 100.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 110.2,
+        target: 100.0,
+        performance: 'average',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 109.5, target: 100.0, performance: 'average' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 110.7, target: 100.0, performance: 'average' },
+          { id: 'pune', name: 'Pune', value: 110.4, target: 100.0, performance: 'average' }
+        ]
+      }
+    ]
+  },
+
+  // Placement Efficiency regional data
+  placement_efficiency: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 85.5,
+        target: 96.0,
+        performance: 'average',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 86.8, target: 96.0, performance: 'average' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 84.2, target: 96.0, performance: 'average' },
+          { id: 'jaipur', name: 'Jaipur', value: 85.5, target: 96.0, performance: 'average' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 82.8,
+        target: 96.0,
+        performance: 'average',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 83.5, target: 96.0, performance: 'average' },
+          { id: 'chennai', name: 'Chennai', value: 82.2, target: 96.0, performance: 'average' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 82.7, target: 96.0, performance: 'average' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 80.2,
+        target: 96.0,
+        performance: 'poor',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 81.5, target: 96.0, performance: 'average' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 79.8, target: 96.0, performance: 'poor' },
+          { id: 'patna', name: 'Patna', value: 79.3, target: 96.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 92.2,
+        target: 96.0,
+        performance: 'good',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 93.5, target: 96.0, performance: 'good' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 91.7, target: 96.0, performance: 'good' },
+          { id: 'pune', name: 'Pune', value: 91.4, target: 96.0, performance: 'good' }
+        ]
+      }
+    ]
+  },
+
+  // OTIF percentage regional data
+  otif_percentage: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 84.5,
+        target: 98.0,
+        performance: 'average',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 85.8, target: 98.0, performance: 'average' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 83.2, target: 98.0, performance: 'average' },
+          { id: 'jaipur', name: 'Jaipur', value: 84.5, target: 98.0, performance: 'average' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 87.8,
+        target: 98.0,
+        performance: 'average',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 88.5, target: 98.0, performance: 'average' },
+          { id: 'chennai', name: 'Chennai', value: 87.2, target: 98.0, performance: 'average' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 87.7, target: 98.0, performance: 'average' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 82.2,
+        target: 98.0,
+        performance: 'poor',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 83.5, target: 98.0, performance: 'average' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 81.8, target: 98.0, performance: 'poor' },
+          { id: 'patna', name: 'Patna', value: 81.3, target: 98.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 90.2,
+        target: 98.0,
+        performance: 'good',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 91.5, target: 98.0, performance: 'good' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 89.7, target: 98.0, performance: 'good' },
+          { id: 'pune', name: 'Pune', value: 89.4, target: 98.0, performance: 'good' }
+        ]
+      }
+    ]
   }
 };
 
@@ -506,8 +722,13 @@ export const getRegionalData = (kpiId) => {
  * @returns {Object} - Object containing top and worst performing regions
  */
 export const getPerformanceData = (kpiId) => {
-  const data = regionalData[kpiId];
+  // Map the KPI ID to the correct key in regionalData if needed
+  let dataKey = kpiId;
+
+  // Check if the data exists for the given KPI ID
+  const data = regionalData[dataKey];
   if (!data || !data.regions || data.regions.length === 0) {
+    console.warn(`No data found for KPI ID: ${kpiId}`);
     return { top: [], worst: [] };
   }
 
@@ -541,8 +762,13 @@ export const getPerformanceData = (kpiId) => {
  * @returns {Array} - Branch data for the region
  */
 export const getBranchData = (kpiId, regionId) => {
-  const data = regionalData[kpiId];
+  // Map the KPI ID to the correct key in regionalData if needed
+  let dataKey = kpiId;
+
+  // Check if the data exists for the given KPI ID
+  const data = regionalData[dataKey];
   if (!data || !data.regions) {
+    console.warn(`No data found for KPI ID: ${kpiId}`);
     return [];
   }
 
