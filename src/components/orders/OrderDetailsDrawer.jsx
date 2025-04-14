@@ -67,6 +67,46 @@ function a11yProps(index) {
   };
 }
 
+// Function to generate dynamic IDs based on order stage
+const generateOrderIds = (stage, status) => {
+  // Base IDs object - all fields start as '-'
+  const ids = {
+    planningId: '-',
+    indentId: '-',
+    journeyId: '-',
+    epodId: '-',
+    invoiceNumber: '-'
+  };
+
+  // Generate random ID with prefix
+  const generateId = (prefix) => {
+    return `${prefix}${Math.floor(1000000 + Math.random() * 9000000)}`;
+  };
+
+  // Update IDs based on stage
+  if (['Planning', 'Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+    ids.planningId = generateId('PL');
+  }
+
+  if (['Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+    ids.indentId = generateId('IN');
+  }
+
+  if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+    ids.journeyId = generateId('JN');
+  }
+
+  if (['ePOD', 'Freight Invoicing'].includes(stage)) {
+    ids.epodId = generateId('EP');
+  }
+
+  if (stage === 'Freight Invoicing') {
+    ids.invoiceNumber = generateId('INV');
+  }
+
+  return ids;
+};
+
 // Function to generate timeline data based on order stage
 const generateTimelineData = (stage, status) => {
   // Base timeline - all orders have SO Generated
@@ -186,6 +226,9 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
         // Generate timeline data based on order stage
         const timelineData = generateTimelineData(order.stage, order.status);
 
+        // Generate IDs based on order stage
+        const orderIds = generateOrderIds(order.stage, order.status);
+
         setOrderDetails({
           id: order.id,
           soNumber: order.id.replace('SO: ', ''),
@@ -221,13 +264,7 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
             email: 'someemailaddress@somemail.com',
             phone: '84973-47593'
           },
-          ids: {
-            planningId: '84975345',
-            indentId: '84975345',
-            journeyId: '84975345',
-            epodId: '-',
-            invoiceNumber: '-'
-          },
+          ids: orderIds,
           timeline: timelineData,
           comments: [
             {
@@ -452,21 +489,27 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
             <Typography variant="body2" color="text.secondary">Planning ID</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body1" fontWeight="medium">{orderDetails.ids.planningId}</Typography>
-              <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+              {orderDetails.ids.planningId !== '-' && (
+                <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+              )}
             </Box>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">Indent ID</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body1" fontWeight="medium">{orderDetails.ids.indentId}</Typography>
-              <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+              {orderDetails.ids.indentId !== '-' && (
+                <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+              )}
             </Box>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">Journey ID</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body1" fontWeight="medium">{orderDetails.ids.journeyId}</Typography>
-              <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+              {orderDetails.ids.journeyId !== '-' && (
+                <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+              )}
             </Box>
           </Grid>
           <Grid item xs={6}>
@@ -480,7 +523,12 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">Invoice Number</Typography>
-            <Typography variant="body1" fontWeight="medium">{orderDetails.ids.invoiceNumber}</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="body1" fontWeight="medium">{orderDetails.ids.invoiceNumber}</Typography>
+              {orderDetails.ids.invoiceNumber !== '-' && (
+                <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+              )}
+            </Box>
           </Grid>
         </Grid>
       </Box>
