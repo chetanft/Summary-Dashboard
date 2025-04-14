@@ -71,7 +71,52 @@ const SecondaryKPI = ({
           boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
         } : {},
       }}
-      onClick={() => onDrillDown && onDrillDown({ id: title.toLowerCase().replace(/\s+/g, '_'), title, unit: title.includes('%') ? '%' : '' })}
+      onClick={() => {
+        if (!onDrillDown) return;
+
+        // Map title to appropriate KPI ID and unit
+        let kpiId, unit;
+
+        switch(title) {
+          case 'Vehicle Utilisation':
+            kpiId = 'vehicle_utilization';
+            unit = '%';
+            break;
+          case 'Freight cost per KM':
+            kpiId = 'freight_cost_per_km';
+            unit = 'INR/km';
+            break;
+          case 'Placement Efficiency':
+            kpiId = 'placement_efficiency';
+            unit = '%';
+            break;
+          case 'Order to Delivery Time':
+            kpiId = 'order_delivery_time';
+            unit = 'days';
+            break;
+          case 'OTIF':
+            kpiId = 'otif_percentage';
+            unit = '%';
+            break;
+          case 'Delayed Delivery %':
+            kpiId = 'delayed_delivery';
+            unit = '%';
+            break;
+          case 'Pending Dispatched':
+            kpiId = 'pending_dispatched';
+            unit = '%';
+            break;
+          case 'Delivered vs Running Delayed':
+            kpiId = 'delivered_vs_running_delayed';
+            unit = '%';
+            break;
+          default:
+            kpiId = title.toLowerCase().replace(/\s+/g, '_');
+            unit = title.includes('%') ? '%' : '';
+        }
+
+        onDrillDown({ id: kpiId, title, unit });
+      }
     >
       {/* Title */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', mb: 1 }}>
@@ -107,52 +152,66 @@ const SecondaryKPI = ({
         )}
       </Box>
 
-      {/* Value */}
-      <Typography
-        sx={{
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: 600,
-          fontSize: '28px',
-          lineHeight: '140%',
-          color: color === 'green' ? '#4CAF50' : color === 'yellow' ? '#FFC107' : color === 'red' ? '#FF3533' : '#434F64',
-          mt: -1,
-        }}
-      >
-        {value || 'Value'}
-      </Typography>
-
-      {/* Target */}
+      {/* Value and Target - Horizontal Layout */}
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          gap: '4px',
+          justifyContent: 'space-between',
+          width: '100%',
           mt: -1,
+          mb: 1,
         }}
       >
-        <Typography
-          sx={{
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: 500,
-            fontSize: '12px',
-            lineHeight: '140%',
-            color: '#5F697B',
-          }}
-        >
-          Target
-        </Typography>
+        {/* Value */}
         <Typography
           sx={{
             fontFamily: 'Inter, sans-serif',
             fontWeight: 600,
-            fontSize: '12px',
+            fontSize: '28px',
             lineHeight: '140%',
-            color: '#434F64',
+            color: color === 'green' ? '#4CAF50' : color === 'yellow' ? '#FFC107' : color === 'red' ? '#FF3533' : '#434F64',
           }}
         >
-          {target || 'Value'}
+          {value || 'Value'}
         </Typography>
+
+        {/* Target */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '4px',
+            backgroundColor: '#F5F5F5',
+            padding: '4px 8px',
+            borderRadius: '4px',
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 500,
+              fontSize: '12px',
+              lineHeight: '140%',
+              color: '#5F697B',
+            }}
+          >
+            Target:
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              lineHeight: '140%',
+              color: '#434F64',
+            }}
+          >
+            {target || 'Value'}
+          </Typography>
+        </Box>
       </Box>
 
       {/* Note if provided */}
