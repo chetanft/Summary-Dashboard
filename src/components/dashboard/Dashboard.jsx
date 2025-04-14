@@ -145,7 +145,7 @@ const Dashboard = () => {
         {/* First Row - Budgeted vs Actual vs Projected Freight and Vehicle Utilisation */}
         <Grid container spacing={2.5}>
           {/* Budgeted vs Actual vs Projected Freight */}
-          <Grid item xs={12} md={8}>
+          <Grid size={{ xs: 12, md: 8 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -162,7 +162,7 @@ const Dashboard = () => {
           </Grid>
 
           {/* Vehicle Utilisation */}
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -180,7 +180,7 @@ const Dashboard = () => {
 
         {/* Second Row - Freight cost per KM */}
         <Grid container spacing={2.5}>
-          <Grid item xs={12} md={8}>
+          <Grid size={{ xs: 12, md: 8 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -195,14 +195,14 @@ const Dashboard = () => {
               />
             )}
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {/* Placeholder for future content */}
           </Grid>
         </Grid>
 
         {/* Third Row - Placement Efficiency, Order to Delivery Time, OTIF */}
         <Grid container spacing={2.5}>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -216,7 +216,7 @@ const Dashboard = () => {
               />
             )}
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -230,7 +230,7 @@ const Dashboard = () => {
               />
             )}
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -248,7 +248,7 @@ const Dashboard = () => {
 
         {/* Fourth Row - Delayed Delivery %, Pending Dispatched, Delivered vs Running Delayed */}
         <Grid container spacing={2.5}>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -262,7 +262,7 @@ const Dashboard = () => {
               />
             )}
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
             ) : (
@@ -277,7 +277,7 @@ const Dashboard = () => {
               />
             )}
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             {loading ? (
               <Skeleton variant="rectangular" width="100%" height={300} sx={{ borderRadius: '16px' }} />
             ) : (
