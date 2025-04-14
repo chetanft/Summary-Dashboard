@@ -67,13 +67,15 @@ function a11yProps(index) {
   };
 }
 
-// Function to generate dynamic IDs based on order stage
-const generateOrderIds = (stage, status) => {
+// Function to generate dynamic IDs based on order stage and trip type
+const generateOrderIds = (stage, status, tripType = 'FTL') => {
   // Base IDs object - all fields start as '-'
   const ids = {
     planningId: '-',
-    indentId: '-',
-    journeyId: '-',
+    indentId: '-',          // FTL only
+    bookingId: '-',         // PTL only
+    journeyId: '-',         // FTL - Trip ID
+    awbId: '-',             // PTL - AWB ID
     epodId: '-',
     invoiceNumber: '-'
   };
@@ -83,23 +85,43 @@ const generateOrderIds = (stage, status) => {
     return `${prefix}${Math.floor(1000000 + Math.random() * 9000000)}`;
   };
 
-  // Update IDs based on stage
-  if (['Planning', 'Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+  // Update IDs based on stage and trip type
+  // Planning ID is common for both FTL and PTL
+  if (['Planning', 'Indent', 'Order Booking', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
     ids.planningId = generateId('PL');
   }
 
-  if (['Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
-    ids.indentId = generateId('IN');
+  // FTL Path
+  if (tripType === 'FTL') {
+    // Indent ID for FTL
+    if (['Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      ids.indentId = generateId('IN');
+    }
+
+    // Journey ID (Trip ID) for FTL
+    if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      ids.journeyId = generateId('TR');
+    }
+  }
+  // PTL Path
+  else if (tripType === 'PTL') {
+    // Booking ID for PTL
+    if (['Order Booking', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      ids.bookingId = generateId('BK');
+    }
+
+    // AWB ID for PTL
+    if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      ids.awbId = generateId('AWB');
+    }
   }
 
-  if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
-    ids.journeyId = generateId('JN');
-  }
-
+  // ePOD ID is common for both FTL and PTL
   if (['ePOD', 'Freight Invoicing'].includes(stage)) {
     ids.epodId = generateId('EP');
   }
 
+  // Invoice Number is common for both FTL and PTL
   if (stage === 'Freight Invoicing') {
     ids.invoiceNumber = generateId('INV');
   }
@@ -107,8 +129,8 @@ const generateOrderIds = (stage, status) => {
   return ids;
 };
 
-// Function to generate timeline data based on order stage
-const generateTimelineData = (stage, status) => {
+// Function to generate timeline data based on order stage and trip type
+const generateTimelineData = (stage, status, tripType = 'FTL') => {
   // Base timeline - all orders have SO Generated
   const timeline = [
     {
@@ -121,7 +143,8 @@ const generateTimelineData = (stage, status) => {
   ];
 
   // Add Planning stage if the order is at or past Planning
-  if (['Planning', 'Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+  // Planning is common for both FTL and PTL paths
+  if (['Planning', 'Indent', 'Order Booking', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
     timeline.push({
       stage: 'Planning',
       soNumber: '7134895',
@@ -136,75 +159,163 @@ const generateTimelineData = (stage, status) => {
         {
           status: 'Plan generated',
           planId: '32151235',
-          time: '09:34 AM'
-        }
-      ]
-    });
-  }
-
-  // Add Indent stage if the order is at or past Indent
-  if (['Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
-    timeline.push({
-      stage: 'Indent',
-      indentId: '7283465',
-      timeTaken: '12 hrs',
-      completed: stage !== 'Indent' || ['Published', 'Pending Acceptance', 'In Assignment', 'Reporting'].includes(status),
-      details: [
-        {
-          status: 'Published',
           time: '09:34 AM',
-          acceptanceDeadline: '09:45 AM, 26 April 2025',
-          publishedTo: 'Safe and Express Transporters'
-        },
-        {
-          status: 'Pending Acceptance',
-          timeTaken: '2 hrs',
-          start: '09:34 AM',
-          end: '11:34 AM'
-        },
-        {
-          status: 'In Assignment',
-          timeTaken: '4 hrs',
-          start: '09:34 AM',
-          end: '11:34 AM'
-        },
-        {
-          status: 'Reporting',
-          reportedOn: '09:34 AM',
-          vehicleNo: 'AP 12K 1234'
+          tripType: tripType // Show which trip type was decided
         }
       ]
     });
   }
 
-  // Add Tracking stage if the order is at or past Tracking
-  if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
-    timeline.push({
-      stage: 'Transit',
-      tripId: '7283465',
-      timeTaken: '3 days',
-      completed: stage !== 'Tracking' || status !== 'In Transit'
-    });
+  // FTL Path: Indent → Tracking → ePOD → Freight Invoicing
+  if (tripType === 'FTL') {
+    // Add Indent stage if the order is at or past Indent (FTL only)
+    if (['Indent', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      timeline.push({
+        stage: 'Indent',
+        indentId: '7283465',
+        timeTaken: '12 hrs',
+        completed: stage !== 'Indent' || ['Published', 'Pending Acceptance', 'In Assignment', 'Reporting'].includes(status),
+        details: [
+          {
+            status: 'Published',
+            time: '09:34 AM',
+            acceptanceDeadline: '09:45 AM, 26 April 2025',
+            publishedTo: 'Safe and Express Transporters'
+          },
+          {
+            status: 'Pending Acceptance',
+            timeTaken: '2 hrs',
+            start: '09:34 AM',
+            end: '11:34 AM'
+          },
+          {
+            status: 'In Assignment',
+            timeTaken: '4 hrs',
+            start: '09:34 AM',
+            end: '11:34 AM'
+          },
+          {
+            status: 'Reporting',
+            reportedOn: '09:34 AM',
+            vehicleNo: 'AP 12K 1234'
+          }
+        ]
+      });
+    }
+
+    // Add Tracking stage if the order is at or past Tracking (FTL)
+    if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      timeline.push({
+        stage: 'Tracking',
+        tripId: '7283465',
+        timeTaken: '3 days',
+        completed: stage !== 'Tracking' || !['At Loading', 'In Transit', 'At Unloading'].includes(status),
+        details: [
+          {
+            status: status || 'At Loading',
+            time: '09:34 AM',
+            location: status === 'In Transit' ? 'Highway NH-8, Jaipur' : 'Warehouse 7, Mumbai'
+          }
+        ]
+      });
+    }
+  }
+  // PTL Path: Order Booking → Tracking → ePOD → Freight Invoicing
+  else if (tripType === 'PTL') {
+    // Add Order Booking stage if the order is at or past Order Booking (PTL only)
+    if (['Order Booking', 'Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      timeline.push({
+        stage: 'Order Booking',
+        bookingId: '7283465',
+        timeTaken: '8 hrs',
+        completed: stage !== 'Order Booking' || ['Created', 'In Assignment', 'Confirmed'].includes(status),
+        details: [
+          {
+            status: 'Created',
+            time: '09:34 AM',
+            reference: 'REF-7283465'
+          },
+          {
+            status: 'In Assignment',
+            timeTaken: '4 hrs',
+            start: '09:34 AM',
+            end: '11:34 AM'
+          },
+          {
+            status: 'Confirmed',
+            time: '13:34 PM',
+            confirmationId: 'CNF-8273645'
+          }
+        ]
+      });
+    }
+
+    // Add Tracking stage if the order is at or past Tracking (PTL)
+    if (['Tracking', 'ePOD', 'Freight Invoicing'].includes(stage)) {
+      timeline.push({
+        stage: 'Tracking',
+        awbId: '7283465',
+        timeTaken: '2 days',
+        completed: stage !== 'Tracking' || !['Picked up', 'In Transit', 'At Destination', 'Out for delivery', 'Delivered'].includes(status),
+        details: [
+          {
+            status: status || 'Picked up',
+            time: '09:34 AM',
+            location: status === 'In Transit' ? 'Highway NH-8, Jaipur' : 'Warehouse 7, Mumbai'
+          }
+        ]
+      });
+    }
   }
 
-  // Add ePOD stage if the order is at or past ePOD
+  // Add ePOD stage if the order is at or past ePOD (common for both FTL and PTL)
   if (['ePOD', 'Freight Invoicing'].includes(stage)) {
     timeline.push({
       stage: 'ePOD',
       epodId: '623748',
       timeTaken: '1 day',
-      completed: stage !== 'ePOD' || status !== 'Pending'
+      completed: stage !== 'ePOD' || !['Pending', 'Approved', 'Disputed', 'Rejected'].includes(status),
+      details: [
+        {
+          status: status || 'Pending',
+          time: '09:34 AM',
+          submittedBy: 'Driver: Rajesh Kumar'
+        }
+      ]
     });
   }
 
   // Add Freight Invoicing stage if the order is at Freight Invoicing
   if (stage === 'Freight Invoicing') {
-    timeline.push({
-      stage: 'Freight Invoicing',
-      invoiceId: '12635',
-      timeTaken: '2 days',
-      completed: status === 'Approved'
-    });
+    if (tripType === 'FTL') {
+      timeline.push({
+        stage: 'Freight Invoicing',
+        invoiceId: '12635',
+        timeTaken: '2 days',
+        completed: ['Generated', 'Approved'].includes(status),
+        details: [
+          {
+            status: status || 'Generated',
+            time: '09:34 AM',
+            amount: '₹ 45,000'
+          }
+        ]
+      });
+    } else { // PTL
+      timeline.push({
+        stage: 'Freight Invoicing',
+        invoiceId: '12635',
+        timeTaken: '3 days',
+        completed: ['Contracted Bill', 'Reconciliation', 'Approved'].includes(status),
+        details: [
+          {
+            status: status || 'Contracted Bill',
+            time: '09:34 AM',
+            amount: '₹ 12,500'
+          }
+        ]
+      });
+    }
   }
 
   return timeline;
@@ -223,11 +334,11 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
 
       // Simulate API call
       setTimeout(() => {
-        // Generate timeline data based on order stage
-        const timelineData = generateTimelineData(order.stage, order.status);
+        // Generate timeline data based on order stage and trip type
+        const timelineData = generateTimelineData(order.stage, order.status, order.tripType);
 
-        // Generate IDs based on order stage
-        const orderIds = generateOrderIds(order.stage, order.status);
+        // Generate IDs based on order stage and trip type
+        const orderIds = generateOrderIds(order.stage, order.status, order.tripType);
 
         setOrderDetails({
           id: order.id,
@@ -485,6 +596,7 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
 
         {/* IDs Section */}
         <Grid container spacing={2} sx={{ mb: 2 }}>
+          {/* Planning ID - Common for both FTL and PTL */}
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">Planning ID</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -494,24 +606,58 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
               )}
             </Box>
           </Grid>
-          <Grid item xs={6}>
-            <Typography variant="body2" color="text.secondary">Indent ID</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="body1" fontWeight="medium">{orderDetails.ids.indentId}</Typography>
-              {orderDetails.ids.indentId !== '-' && (
-                <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
-              )}
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant="body2" color="text.secondary">Journey ID</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="body1" fontWeight="medium">{orderDetails.ids.journeyId}</Typography>
-              {orderDetails.ids.journeyId !== '-' && (
-                <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
-              )}
-            </Box>
-          </Grid>
+
+          {/* FTL-specific IDs */}
+          {order.tripType === 'FTL' && (
+            <Grid item xs={6}>
+              <Typography variant="body2" color="text.secondary">Indent ID</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" fontWeight="medium">{orderDetails.ids.indentId}</Typography>
+                {orderDetails.ids.indentId !== '-' && (
+                  <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+                )}
+              </Box>
+            </Grid>
+          )}
+
+          {order.tripType === 'FTL' && (
+            <Grid item xs={6}>
+              <Typography variant="body2" color="text.secondary">Trip ID</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" fontWeight="medium">{orderDetails.ids.journeyId}</Typography>
+                {orderDetails.ids.journeyId !== '-' && (
+                  <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+                )}
+              </Box>
+            </Grid>
+          )}
+
+          {/* PTL-specific IDs */}
+          {order.tripType === 'PTL' && (
+            <Grid item xs={6}>
+              <Typography variant="body2" color="text.secondary">Booking ID</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" fontWeight="medium">{orderDetails.ids.bookingId}</Typography>
+                {orderDetails.ids.bookingId !== '-' && (
+                  <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+                )}
+              </Box>
+            </Grid>
+          )}
+
+          {order.tripType === 'PTL' && (
+            <Grid item xs={6}>
+              <Typography variant="body2" color="text.secondary">AWB ID</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" fontWeight="medium">{orderDetails.ids.awbId}</Typography>
+                {orderDetails.ids.awbId !== '-' && (
+                  <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5, color: 'primary.main' }} />
+                )}
+              </Box>
+            </Grid>
+          )}
+
+          {/* Common IDs for both FTL and PTL */}
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">ePOD ID</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -521,6 +667,7 @@ const OrderDetailsDrawer = ({ open, onClose, order, onNavigatePrevious, onNaviga
               )}
             </Box>
           </Grid>
+
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">Invoice Number</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
