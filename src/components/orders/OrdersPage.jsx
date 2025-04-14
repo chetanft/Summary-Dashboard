@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import OrderDetailsDrawer from './OrderDetailsDrawer';
 import {
   Box,
   Typography,
@@ -227,6 +228,9 @@ const OrdersPage = () => {
   const [activeTab, setActiveTab] = useState('orderData');
   const [page, setPage] = useState(1);
   const [selectedStage, setSelectedStage] = useState('All Stages');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [currentOrderIndex, setCurrentOrderIndex] = useState(-1);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -247,451 +251,484 @@ const OrdersPage = () => {
     setSelectedStage(event.target.value);
   };
 
-  const handleOrderClick = (orderId) => {
-    navigate(`/orders/${orderId}`);
+  const handleOrderClick = (orderId, index) => {
+    setSelectedOrderId(orderId);
+    setCurrentOrderIndex(index);
+    setDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setDrawerOpen(false);
+  };
+
+  const handleNavigatePrevious = () => {
+    if (currentOrderIndex > 0) {
+      const prevIndex = currentOrderIndex - 1;
+      setCurrentOrderIndex(prevIndex);
+      setSelectedOrderId(orderData[prevIndex].id);
+    }
+  };
+
+  const handleNavigateNext = () => {
+    if (currentOrderIndex < orderData.length - 1) {
+      const nextIndex = currentOrderIndex + 1;
+      setCurrentOrderIndex(nextIndex);
+      setSelectedOrderId(orderData[nextIndex].id);
+    }
   };
 
   return (
-    <Layout>
-      {/* Dashboard Header */}
-      <DashboardHeader
-        title="Summary Dashboard"
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
+    <Fragment>
+      <Layout>
+        {/* Dashboard Header */}
+        <DashboardHeader
+          title="Summary Dashboard"
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
 
-      {/* Status Filters */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: '0px 20px',
-          gap: '20px',
-          width: '100%',
-          height: '40px',
-          mt: 2,
-        }}
-      >
+        {/* Status Filters */}
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            padding: '0px 20px',
             gap: '20px',
-          }}
-        >
-          <Chip
-            label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px' }}>121</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>FTL</Typography></>}
-            sx={{
-              height: '40px',
-              borderRadius: '8px',
-              border: '1px solid #CED1D7',
-              bgcolor: '#FFFFFF',
-              px: 1.5,
-            }}
-          />
-          <Chip
-            label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px' }}>76</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>PTL</Typography></>}
-            sx={{
-              height: '40px',
-              borderRadius: '8px',
-              border: '1px solid #CED1D7',
-              bgcolor: '#FFFFFF',
-              px: 1.5,
-            }}
-          />
-          <Chip
-            label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px', color: '#FF3533' }}>76</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>Delivery delayed</Typography></>}
-            sx={{
-              height: '40px',
-              borderRadius: '8px',
-              border: '1px solid #CED1D7',
-              bgcolor: '#FFFFFF',
-              px: 1.5,
-            }}
-          />
-          <FormControl sx={{ minWidth: 200 }}>
-            <Select
-              value={selectedStage}
-              onChange={handleStageChange}
-              displayEmpty
-              sx={{
-                height: '40px',
-                borderRadius: '8px',
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: '#CED1D7',
-                },
-              }}
-            >
-              <MenuItem value="All Stages">All Stages</MenuItem>
-              <MenuItem value="Planning">Planning</MenuItem>
-              <MenuItem value="Indent">Indent</MenuItem>
-              <MenuItem value="Tracking">Tracking</MenuItem>
-              <MenuItem value="ePOD">ePOD</MenuItem>
-              <MenuItem value="Freight Invoicing">Freight Invoicing</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-
-      {/* Main Content */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: '0px 20px',
-          gap: '20px',
-          width: '100%',
-          mt: 2,
-        }}
-      >
-        {/* Order Count and Actions */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
             width: '100%',
             height: '40px',
+            mt: 2,
           }}
         >
-          <Typography
-            sx={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 600,
-              fontSize: '16px',
-              lineHeight: '140%',
-              color: '#434F64',
-            }}
-          >
-            248 Orders available
-          </Typography>
-
           <Box
             sx={{
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              gap: '18px',
+              gap: '20px',
             }}
           >
-            <IconButton
+            <Chip
+              label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px' }}>121</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>FTL</Typography></>}
               sx={{
-                width: '40px',
                 height: '40px',
                 borderRadius: '8px',
+                border: '1px solid #CED1D7',
+                bgcolor: '#FFFFFF',
+                px: 1.5,
               }}
-            >
-              <SettingsIcon sx={{ color: '#434F64' }} />
-            </IconButton>
-            <IconButton
+            />
+            <Chip
+              label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px' }}>76</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>PTL</Typography></>}
               sx={{
-                width: '40px',
                 height: '40px',
                 borderRadius: '8px',
+                border: '1px solid #CED1D7',
+                bgcolor: '#FFFFFF',
+                px: 1.5,
               }}
-            >
-              <FilterIcon sx={{ color: '#434343' }} />
-            </IconButton>
-            <IconButton
+            />
+            <Chip
+              label={<><Typography component="span" sx={{ fontWeight: 600, fontSize: '16px', color: '#FF3533' }}>76</Typography><Typography component="span" sx={{ fontWeight: 600, fontSize: '14px', ml: 0.5 }}>Delivery delayed</Typography></>}
               sx={{
-                width: '40px',
                 height: '40px',
                 borderRadius: '8px',
+                border: '1px solid #CED1D7',
+                bgcolor: '#FFFFFF',
+                px: 1.5,
               }}
-            >
-              <SortIcon sx={{ color: '#434343' }} />
-            </IconButton>
-            <IconButton
+            />
+            <FormControl sx={{ minWidth: 200 }}>
+              <Select
+                value={selectedStage}
+                onChange={handleStageChange}
+                displayEmpty
+                sx={{
+                  height: '40px',
+                  borderRadius: '8px',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#CED1D7',
+                  },
+                }}
+              >
+                <MenuItem value="All Stages">All Stages</MenuItem>
+                <MenuItem value="Planning">Planning</MenuItem>
+                <MenuItem value="Indent">Indent</MenuItem>
+                <MenuItem value="Tracking">Tracking</MenuItem>
+                <MenuItem value="ePOD">ePOD</MenuItem>
+                <MenuItem value="Freight Invoicing">Freight Invoicing</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+
+        {/* Main Content */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            padding: '0px 20px',
+            gap: '20px',
+            width: '100%',
+            mt: 2,
+          }}
+        >
+          {/* Order Count and Actions */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              height: '40px',
+            }}
+          >
+            <Typography
               sx={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '8px',
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 600,
+                fontSize: '16px',
+                lineHeight: '140%',
+                color: '#434F64',
               }}
             >
-              <FileDownloadIcon sx={{ color: '#434F64' }} />
-            </IconButton>
+              248 Orders available
+            </Typography>
 
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'flex-end',
                 alignItems: 'center',
-                gap: '8px',
+                gap: '18px',
               }}
             >
               <IconButton
-                onClick={() => handlePageChange(Math.max(1, page - 1))}
                 sx={{
-                  width: '39px',
-                  height: '39px',
-                  bgcolor: '#FFFFFF',
-                  borderRadius: '100px',
-                }}
-              >
-                <ChevronLeftIcon sx={{ color: '#434F64' }} />
-              </IconButton>
-              <Paper
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '54px',
+                  width: '40px',
                   height: '40px',
-                  border: '1px solid #CED1D7',
                   borderRadius: '8px',
                 }}
               >
-                <Typography sx={{ color: '#434F64' }}>{page}</Typography>
-              </Paper>
+                <SettingsIcon sx={{ color: '#434F64' }} />
+              </IconButton>
               <IconButton
-                onClick={() => handlePageChange(page + 1)}
                 sx={{
-                  width: '39px',
-                  height: '39px',
-                  bgcolor: '#FFFFFF',
-                  borderRadius: '100px',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
                 }}
               >
-                <ChevronRightIcon sx={{ color: '#434F64' }} />
+                <FilterIcon sx={{ color: '#434343' }} />
               </IconButton>
+              <IconButton
+                sx={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                }}
+              >
+                <SortIcon sx={{ color: '#434343' }} />
+              </IconButton>
+              <IconButton
+                sx={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                }}
+              >
+                <FileDownloadIcon sx={{ color: '#434F64' }} />
+              </IconButton>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <IconButton
+                  onClick={() => handlePageChange(Math.max(1, page - 1))}
+                  sx={{
+                    width: '39px',
+                    height: '39px',
+                    bgcolor: '#FFFFFF',
+                    borderRadius: '100px',
+                  }}
+                >
+                  <ChevronLeftIcon sx={{ color: '#434F64' }} />
+                </IconButton>
+                <Paper
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '54px',
+                    height: '40px',
+                    border: '1px solid #CED1D7',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <Typography sx={{ color: '#434F64' }}>{page}</Typography>
+                </Paper>
+                <IconButton
+                  onClick={() => handlePageChange(page + 1)}
+                  sx={{
+                    width: '39px',
+                    height: '39px',
+                    bgcolor: '#FFFFFF',
+                    borderRadius: '100px',
+                  }}
+                >
+                  <ChevronRightIcon sx={{ color: '#434F64' }} />
+                </IconButton>
+              </Box>
             </Box>
           </Box>
-        </Box>
 
-        {/* Orders Table */}
-        <TableContainer
-          component={Paper}
-          sx={{
-            width: '100%',
-            borderRadius: '8px 8px 0 0',
-            boxShadow: 'none',
-          }}
-        >
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead sx={{ bgcolor: '#838C9D' }}>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Order ID
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Consignor
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Consignee
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Route
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Trip Type
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Stage
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Status
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  ID
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Delivery status
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    padding: '15px 8px',
-                  }}
-                >
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {orderData.map((order, index) => (
-                <TableRow
-                  key={index}
-                  onClick={() => handleOrderClick(order.id)}
-                  sx={{
-                    '&:nth-of-type(odd)': {
-                      bgcolor: '#F8F8F9',
-                    },
-                    height: order.statusColor === 'default' ? '80px' : '94px',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      bgcolor: '#f0f7ff',
-                    },
-                  }}
-                >
+          {/* Orders Table */}
+          <TableContainer
+            component={Paper}
+            sx={{
+              width: '100%',
+              borderRadius: '8px 8px 0 0',
+              boxShadow: 'none',
+            }}
+          >
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead sx={{ bgcolor: '#838C9D' }}>
+                <TableRow>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#434F64',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.id}
+                    Order ID
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#434F64',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.consignor}
+                    Consignor
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#434F64',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.consignee}
+                    Consignee
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#434F64',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.route}
+                    Route
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#434F64',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.tripType}
+                    Trip Type
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#434F64',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.stage}
+                    Stage
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    <Chip
-                      label={order.status}
-                      size="small"
-                      sx={{
-                        bgcolor: '#F0F1F7',
-                        color: '#434F64',
-                        fontWeight: 600,
-                        fontSize: '14px',
-                        borderRadius: '4px',
-                        height: '24px',
-                      }}
-                    />
+                    Status
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#1890FF',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.trackingId}
+                    ID
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '20px 8px',
-                      color: '#434F64',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    {order.deliveryStatus}
+                    Delivery status
                   </TableCell>
                   <TableCell
                     sx={{
-                      padding: '0px 8px',
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      padding: '15px 8px',
                     }}
                   >
-                    <IconButton
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOrderClick(order.id);
-                      }}
-                      sx={{
-                        width: '40px',
-                        height: '40px',
-                        border: '1px solid #CED1D7',
-                        borderRadius: '100px',
-                      }}
-                    >
-                      <ChevronRightIcon sx={{ color: '#434343' }} />
-                    </IconButton>
+                    Actions
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </Layout>
+              </TableHead>
+              <TableBody>
+                {orderData.map((order, index) => (
+                  <TableRow
+                    key={index}
+                    onClick={() => handleOrderClick(order.id, index)}
+                    sx={{
+                      '&:nth-of-type(odd)': {
+                        bgcolor: '#F8F8F9',
+                      },
+                      height: order.statusColor === 'default' ? '80px' : '94px',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        bgcolor: '#f0f7ff',
+                      },
+                    }}
+                  >
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#434F64',
+                      }}
+                    >
+                      {order.id}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#434F64',
+                      }}
+                    >
+                      {order.consignor}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#434F64',
+                      }}
+                    >
+                      {order.consignee}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#434F64',
+                      }}
+                    >
+                      {order.route}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#434F64',
+                      }}
+                    >
+                      {order.tripType}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#434F64',
+                      }}
+                    >
+                      {order.stage}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                      }}
+                    >
+                      <Chip
+                        label={order.status}
+                        size="small"
+                        sx={{
+                          bgcolor: '#F0F1F7',
+                          color: '#434F64',
+                          fontWeight: 600,
+                          fontSize: '14px',
+                          borderRadius: '4px',
+                          height: '24px',
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#1890FF',
+                      }}
+                    >
+                      {order.trackingId}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '20px 8px',
+                        color: '#434F64',
+                      }}
+                    >
+                      {order.deliveryStatus}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        padding: '0px 8px',
+                      }}
+                    >
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOrderClick(order.id, index);
+                        }}
+                        sx={{
+                          width: '40px',
+                          height: '40px',
+                          border: '1px solid #CED1D7',
+                          borderRadius: '100px',
+                        }}
+                      >
+                        <ChevronRightIcon sx={{ color: '#434343' }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Layout>
+
+      {/* Order Details Drawer */}
+      <OrderDetailsDrawer
+        open={drawerOpen}
+        onClose={handleCloseDrawer}
+        orderId={selectedOrderId}
+        onNavigatePrevious={handleNavigatePrevious}
+        onNavigateNext={handleNavigateNext}
+      />
+    </Fragment>
   );
 };
 
