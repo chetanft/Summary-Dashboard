@@ -90,6 +90,8 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
       return `${value}%`;
     } else if (unit === 'INR/km') {
       return `₹${value}/km`;
+    } else if (unit === 'days') {
+      return `${value} days`;
     }
 
     return value;
@@ -128,6 +130,32 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
     return performance === 'good' ?
       <TrendingUpIcon sx={{ color: '#4CAF50', fontSize: 16 }} /> :
       <TrendingDownIcon sx={{ color: '#FF3533', fontSize: 16 }} />;
+  };
+
+  // Get KPI description based on KPI ID
+  const getKPIDescription = (kpiId) => {
+    switch(kpiId) {
+      case 'budgeted_vs_actual_freight':
+        return 'Comparison of budgeted, actual, and projected freight costs across regions. Lower actual costs compared to budget indicate better performance.';
+      case 'vehicle_utilization':
+        return 'Percentage of vehicle capacity utilized during transport. Higher utilization rates indicate better efficiency and cost management.';
+      case 'freight_cost_per_km':
+        return 'Average cost incurred per kilometer of freight transport. Lower costs indicate better operational efficiency.';
+      case 'placement_efficiency':
+        return 'Percentage of indent requests that were successfully placed with transporters. Higher placement efficiency indicates better operational performance.';
+      case 'order_delivery_time':
+        return 'Average time from order creation to delivery completion. Lower delivery times indicate better operational efficiency.';
+      case 'otif_percentage':
+        return 'On Time In Full - Percentage of deliveries that were completed on time and with full order quantity. Higher OTIF indicates better service quality.';
+      case 'delayed_delivery':
+        return 'Percentage of deliveries that were delayed beyond the promised delivery date. Lower delayed delivery percentage indicates better service quality.';
+      case 'pending_dispatched':
+        return 'Percentage of orders that are pending dispatch. Lower pending dispatch percentage indicates better operational efficiency.';
+      case 'delivered_vs_running_delayed':
+        return 'Comparison of delivered orders versus currently delayed orders. Higher delivered percentage and lower delayed percentage indicate better operational performance.';
+      default:
+        return 'Detailed performance metrics across regions and branches.';
+    }
   };
 
   // Render region level view
@@ -171,7 +199,7 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
                   <TableCell>{region.name}</TableCell>
                   <TableCell align="right">{formatValue(region.value, kpi?.unit)}</TableCell>
                   <TableCell align="right">
-                    {formatValue(kpi?.id === 'freight_budget_actual' ? region.budget : region.target, kpi?.unit)}
+                    {formatValue(kpi?.id === 'budgeted_vs_actual_freight' ? region.budget : region.target, kpi?.unit)}
                   </TableCell>
                   <TableCell align="right">
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -240,7 +268,7 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
                   <TableCell>{branch.name}</TableCell>
                   <TableCell align="right">{formatValue(branch.value, kpi?.unit)}</TableCell>
                   <TableCell align="right">
-                    {formatValue(kpi?.id === 'freight_budget_actual' ? branch.budget : branch.target, kpi?.unit)}
+                    {formatValue(kpi?.id === 'budgeted_vs_actual_freight' ? branch.budget : branch.target, kpi?.unit)}
                   </TableCell>
                   <TableCell align="right">
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -287,6 +315,12 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
+
+      <Box sx={{ px: 3, py: 2, backgroundColor: '#f5f5f5' }}>
+        <Typography variant="body2" color="text.secondary">
+          {getKPIDescription(kpi?.id)}
+        </Typography>
+      </Box>
 
       <Divider />
 

@@ -4,8 +4,8 @@
  */
 
 export const regionalData = {
-  // Freight Budget vs Actual regional data
-  freight_budget_actual: {
+  // Budgeted vs Actual vs Projected Freight regional data
+  budgeted_vs_actual_freight: {
     regions: [
       {
         id: 'north',
@@ -57,7 +57,7 @@ export const regionalData = {
       }
     ]
   },
-  
+
   // Freight Cost per KM regional data
   freight_cost_per_km: {
     regions: [
@@ -111,7 +111,7 @@ export const regionalData = {
       }
     ]
   },
-  
+
   // Vehicle Utilization regional data
   vehicle_utilization: {
     regions: [
@@ -165,7 +165,7 @@ export const regionalData = {
       }
     ]
   },
-  
+
   // OTIF % regional data
   otif_percentage: {
     regions: [
@@ -219,7 +219,7 @@ export const regionalData = {
       }
     ]
   },
-  
+
   // Placement Efficiency regional data
   placement_efficiency: {
     regions: [
@@ -272,6 +272,222 @@ export const regionalData = {
         ]
       }
     ]
+  },
+
+  // Order to Delivery Time regional data
+  order_delivery_time: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 4.2,
+        target: 3.0,
+        performance: 'poor',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 4.5, target: 3.0, performance: 'poor' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 4.1, target: 3.0, performance: 'poor' },
+          { id: 'jaipur', name: 'Jaipur', value: 4.0, target: 3.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 3.8,
+        target: 3.0,
+        performance: 'average',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 3.9, target: 3.0, performance: 'average' },
+          { id: 'chennai', name: 'Chennai', value: 3.7, target: 3.0, performance: 'average' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 3.8, target: 3.0, performance: 'average' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 4.5,
+        target: 3.0,
+        performance: 'poor',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 4.7, target: 3.0, performance: 'poor' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 4.4, target: 3.0, performance: 'poor' },
+          { id: 'patna', name: 'Patna', value: 4.4, target: 3.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 3.5,
+        target: 3.0,
+        performance: 'average',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 3.3, target: 3.0, performance: 'average' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 3.6, target: 3.0, performance: 'average' },
+          { id: 'pune', name: 'Pune', value: 3.6, target: 3.0, performance: 'average' }
+        ]
+      }
+    ]
+  },
+
+  // Delayed Delivery % regional data
+  delayed_delivery: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 12.5,
+        target: 2.0,
+        performance: 'poor',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 11.8, target: 2.0, performance: 'poor' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 13.2, target: 2.0, performance: 'poor' },
+          { id: 'jaipur', name: 'Jaipur', value: 12.5, target: 2.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 9.8,
+        target: 2.0,
+        performance: 'poor',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 8.5, target: 2.0, performance: 'poor' },
+          { id: 'chennai', name: 'Chennai', value: 10.2, target: 2.0, performance: 'poor' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 10.7, target: 2.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 14.2,
+        target: 2.0,
+        performance: 'poor',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 13.5, target: 2.0, performance: 'poor' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 14.8, target: 2.0, performance: 'poor' },
+          { id: 'patna', name: 'Patna', value: 14.3, target: 2.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 8.2,
+        target: 2.0,
+        performance: 'poor',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 7.5, target: 2.0, performance: 'poor' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 8.7, target: 2.0, performance: 'poor' },
+          { id: 'pune', name: 'Pune', value: 8.4, target: 2.0, performance: 'poor' }
+        ]
+      }
+    ]
+  },
+
+  // Pending Dispatched regional data
+  pending_dispatched: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 22.5,
+        target: 10.0,
+        performance: 'poor',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 21.8, target: 10.0, performance: 'poor' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 23.2, target: 10.0, performance: 'poor' },
+          { id: 'jaipur', name: 'Jaipur', value: 22.5, target: 10.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 25.8,
+        target: 10.0,
+        performance: 'poor',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 24.5, target: 10.0, performance: 'poor' },
+          { id: 'chennai', name: 'Chennai', value: 26.2, target: 10.0, performance: 'poor' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 26.7, target: 10.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 27.2,
+        target: 10.0,
+        performance: 'poor',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 26.5, target: 10.0, performance: 'poor' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 27.8, target: 10.0, performance: 'poor' },
+          { id: 'patna', name: 'Patna', value: 27.3, target: 10.0, performance: 'poor' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 20.2,
+        target: 10.0,
+        performance: 'poor',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 19.5, target: 10.0, performance: 'poor' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 20.7, target: 10.0, performance: 'poor' },
+          { id: 'pune', name: 'Pune', value: 20.4, target: 10.0, performance: 'poor' }
+        ]
+      }
+    ]
+  },
+
+  // Delivered vs Running Delayed regional data
+  delivered_vs_running_delayed: {
+    regions: [
+      {
+        id: 'north',
+        name: 'North',
+        value: 45.5,
+        target: 10.0,
+        performance: 'good',
+        branches: [
+          { id: 'delhi', name: 'Delhi', value: 46.8, target: 10.0, performance: 'good' },
+          { id: 'chandigarh', name: 'Chandigarh', value: 44.2, target: 10.0, performance: 'good' },
+          { id: 'jaipur', name: 'Jaipur', value: 45.5, target: 10.0, performance: 'good' }
+        ]
+      },
+      {
+        id: 'south',
+        name: 'South',
+        value: 42.8,
+        target: 10.0,
+        performance: 'good',
+        branches: [
+          { id: 'bangalore', name: 'Bangalore', value: 43.5, target: 10.0, performance: 'good' },
+          { id: 'chennai', name: 'Chennai', value: 42.2, target: 10.0, performance: 'good' },
+          { id: 'hyderabad', name: 'Hyderabad', value: 42.7, target: 10.0, performance: 'good' }
+        ]
+      },
+      {
+        id: 'east',
+        name: 'East',
+        value: 40.2,
+        target: 10.0,
+        performance: 'good',
+        branches: [
+          { id: 'kolkata', name: 'Kolkata', value: 41.5, target: 10.0, performance: 'good' },
+          { id: 'bhubaneswar', name: 'Bhubaneswar', value: 39.8, target: 10.0, performance: 'good' },
+          { id: 'patna', name: 'Patna', value: 39.3, target: 10.0, performance: 'good' }
+        ]
+      },
+      {
+        id: 'west',
+        name: 'West',
+        value: 48.2,
+        target: 10.0,
+        performance: 'good',
+        branches: [
+          { id: 'mumbai', name: 'Mumbai', value: 49.5, target: 10.0, performance: 'good' },
+          { id: 'ahmedabad', name: 'Ahmedabad', value: 47.7, target: 10.0, performance: 'good' },
+          { id: 'pune', name: 'Pune', value: 47.4, target: 10.0, performance: 'good' }
+        ]
+      }
+    ]
   }
 };
 
@@ -297,19 +513,17 @@ export const getPerformanceData = (kpiId) => {
 
   // Sort regions by performance
   const sortedRegions = [...data.regions].sort((a, b) => {
-    // For budget vs actual, lower is better (under budget)
-    if (kpiId === 'freight_budget_actual') {
-      const aRatio = a.value / a.budget;
-      const bRatio = b.value / b.budget;
-      return aRatio - bRatio;
-    }
-    
-    // For cost per km, lower is better
-    if (kpiId === 'freight_cost_per_km') {
+    // For metrics where lower is better
+    if (
+      kpiId === 'budgeted_vs_actual_freight' ||
+      kpiId === 'freight_cost_per_km' ||
+      kpiId === 'order_delivery_time' ||
+      kpiId === 'delayed_delivery'
+    ) {
       return a.value - b.value;
     }
-    
-    // For others (utilization, OTIF, placement), higher is better
+
+    // For metrics where higher is better (utilization, OTIF, placement, delivered vs running)
     return b.value - a.value;
   });
 
@@ -350,19 +564,17 @@ export const getBranchPerformanceData = (kpiId, regionId) => {
 
   // Sort branches by performance
   const sortedBranches = [...branches].sort((a, b) => {
-    // For budget vs actual, lower is better (under budget)
-    if (kpiId === 'freight_budget_actual') {
-      const aRatio = a.value / a.budget;
-      const bRatio = b.value / b.budget;
-      return aRatio - bRatio;
-    }
-    
-    // For cost per km, lower is better
-    if (kpiId === 'freight_cost_per_km') {
+    // For metrics where lower is better
+    if (
+      kpiId === 'budgeted_vs_actual_freight' ||
+      kpiId === 'freight_cost_per_km' ||
+      kpiId === 'order_delivery_time' ||
+      kpiId === 'delayed_delivery'
+    ) {
       return a.value - b.value;
     }
-    
-    // For others (utilization, OTIF, placement), higher is better
+
+    // For metrics where higher is better (utilization, OTIF, placement, delivered vs running)
     return b.value - a.value;
   });
 
