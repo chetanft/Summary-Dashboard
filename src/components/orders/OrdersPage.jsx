@@ -333,6 +333,7 @@ const OrdersPage = () => {
           title="Orders Dashboard"
           activeTab={activeTab}
           onTabChange={handleTabChange}
+          searchBar={true}
         />
 
         {/* Status Filters */}

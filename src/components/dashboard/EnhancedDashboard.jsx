@@ -291,8 +291,7 @@ const EnhancedDashboard = () => {
           title="Performance Dashboard"
           activeTab={activeTab}
           onTabChange={handleTabChange}
-          searchTerm={searchTerm}
-          onSearchChange={(value) => setSearchTerm(value)}
+          searchBar={true}
         />
 
         {/* Title Bar and Filter Bar removed - now in DashboardHeader */}

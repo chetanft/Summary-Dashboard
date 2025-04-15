@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, IconButton } from '@mui/material';
-import { Dashboard as DashboardIcon } from '@mui/icons-material';
+import { Box, Typography, Paper, IconButton, TextField, InputAdornment } from '@mui/material';
+import { Dashboard as DashboardIcon, Search as SearchIcon } from '@mui/icons-material';
+import BranchSelector from '../common/BranchSelector';
+import { useData } from '../../context/DataContext';
 
-const DashboardHeader = ({ title, activeTab, onTabChange }) => {
+const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, branchSelector = false }) => {
   const navigate = useNavigate();
+  const { handleBranchChange } = useData();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleTabChange = (tab) => {
     onTabChange(tab);
@@ -14,6 +18,17 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
       navigate('/orders');
     } else if (tab === 'operations') {
       navigate('/alerts');
+    }
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    // You can implement search functionality here or pass the search term to a parent component
+  };
+
+  const handleBranchSelect = (branch) => {
+    if (handleBranchChange) {
+      handleBranchChange(branch);
     }
   };
   return (
@@ -46,23 +61,23 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
         </Typography>
       </Box>
 
-      {/* Toggle Buttons */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-
-        {/* Toggle Button Group */}
-        <Paper
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: '8px 9px',
-            gap: '4px',
-            width: '450px',
-            height: '48px',
-            backgroundColor: '#F8F8F9',
-            borderRadius: '8px',
-          }}
-        >
+      {/* Toggle Buttons and Search */}
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          {/* Toggle Button Group */}
+          <Paper
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              padding: '8px 9px',
+              gap: '4px',
+              width: '450px',
+              height: '48px',
+              backgroundColor: '#F8F8F9',
+              borderRadius: '8px',
+            }}
+          >
           <Box
             onClick={() => handleTabChange('performance')}
             sx={{
@@ -151,6 +166,31 @@ const DashboardHeader = ({ title, activeTab, onTabChange }) => {
             </Typography>
           </Box>
         </Paper>
+        </Box>
+
+        {/* Search and Branch Selector */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          {searchBar && (
+            <TextField
+              placeholder="Search..."
+              size="small"
+              value={searchTerm}
+              onChange={handleSearch}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ width: 250 }}
+            />
+          )}
+
+          {branchSelector && (
+            <BranchSelector onBranchChange={handleBranchSelect} />
+          )}
+        </Box>
       </Box>
     </Box>
   );

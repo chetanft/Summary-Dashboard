@@ -20,7 +20,9 @@ export const DataProvider = ({ children }) => {
   const { currentUser } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [realtimeKpiData, setRealtimeKpiData] = useState(null);
+  const [filteredRealtimeKpiData, setFilteredRealtimeKpiData] = useState(null);
   const [userRole, setUserRole] = useState('CXO');
+  const [selectedBranch, setSelectedBranch] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -77,14 +79,75 @@ export const DataProvider = ({ children }) => {
     }
   }, []); // Empty dependency array to prevent re-creation on every render
 
+  // Function to filter data based on selected branch
+  const filterDataByBranch = useCallback((data, branch) => {
+    if (!data || branch === 'all') return data;
+
+    const result = JSON.parse(JSON.stringify(data)); // Deep clone
+
+    // Handle region selection (north, south, east, west)
+    if (['north', 'south', 'east', 'west'].includes(branch)) {
+      const region = branch;
+
+      // Filter data to only include the selected region
+      // For each KPI group, update the count to show only the selected region's data
+      Object.keys(result).forEach(groupKey => {
+        const group = result[groupKey];
+        Object.keys(group).forEach(kpiKey => {
+          const kpi = group[kpiKey];
+          if (kpi.details && kpi.details[region] !== undefined) {
+            kpi.count = kpi.details[region];
+          }
+        });
+      });
+
+      return result;
+    }
+
+    // Handle specific branch selection (e.g., north-delhi)
+    if (branch.includes('-')) {
+      const [region, branchName] = branch.split('-');
+
+      // For a specific branch, we would typically have branch-level data
+      // For this demo, we'll simulate by adjusting the region data
+      Object.keys(result).forEach(groupKey => {
+        const group = result[groupKey];
+        Object.keys(group).forEach(kpiKey => {
+          const kpi = group[kpiKey];
+          if (kpi.details && kpi.details[region] !== undefined) {
+            // Simulate branch data as a fraction of region data
+            kpi.count = Math.round(kpi.details[region] * 0.3); // 30% of region data
+          }
+        });
+      });
+
+      return result;
+    }
+
+    return data;
+  }, []);
+
+  // Function to handle branch change
+  const handleBranchChange = useCallback((branch) => {
+    setSelectedBranch(branch);
+
+    // Update filtered data
+    if (realtimeKpiData) {
+      const filteredData = filterDataByBranch(realtimeKpiData, branch);
+      setFilteredRealtimeKpiData(filteredData);
+      setLastUpdated(new Date());
+    }
+  }, [filterDataByBranch, realtimeKpiData]);
+
   // Function to change user role for real-time KPI data
   const changeUserRole = useCallback((role) => {
     setUserRole(role);
     // Load new data for the selected role
     const data = generateRealtimeKpiData(role);
     setRealtimeKpiData(data);
+    setFilteredRealtimeKpiData(filterDataByBranch(data, selectedBranch));
     setLastUpdated(new Date());
-  }, []); // Empty dependency array is fine here
+  }, [filterDataByBranch, selectedBranch]); // Add dependencies
 
   // Function to refresh all data
   const refreshAllData = useCallback(() => {
@@ -109,6 +172,13 @@ export const DataProvider = ({ children }) => {
     }
   }, [currentUser]); // Only depend on currentUser to prevent infinite loops
 
+  // Initialize filtered data when realtimeKpiData changes
+  useEffect(() => {
+    if (realtimeKpiData) {
+      setFilteredRealtimeKpiData(filterDataByBranch(realtimeKpiData, selectedBranch));
+    }
+  }, [realtimeKpiData, filterDataByBranch, selectedBranch]);
+
   // Format the last updated timestamp
   const formattedLastUpdated = lastUpdated
     ? new Intl.DateTimeFormat('en-US', {
@@ -122,15 +192,17 @@ export const DataProvider = ({ children }) => {
   // Context value
   const value = {
     dashboardData,
-    realtimeKpiData,
+    realtimeKpiData: filteredRealtimeKpiData || realtimeKpiData, // Use filtered data if available
     userRole,
+    selectedBranch,
     loading,
     error,
     lastUpdated: formattedLastUpdated,
     refreshData: loadDashboardData,
     refreshAllData,
     updateRealtimeKpiData,
-    changeUserRole
+    changeUserRole,
+    handleBranchChange
   };
 
   return (
