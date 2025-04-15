@@ -2,19 +2,20 @@
  * Format a number as currency
  * @param {number} value - The value to format
  * @param {string} currency - The currency code (default: 'INR')
+ * @param {boolean} showCr - Whether to show "Cr" suffix
  * @returns {string} - Formatted currency string
  */
-export const formatCurrency = (value, currency = 'INR') => {
+export const formatCurrency = (value, currency = 'INR', showCr = false) => {
   if (value === undefined || value === null) return 'N/A';
 
   const formatter = new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: showCr ? 1 : 0,
+    maximumFractionDigits: showCr ? 1 : 0,
   });
 
-  return formatter.format(value);
+  return `${formatter.format(value)}${showCr ? ' Cr' : ''}`;
 };
 
 /**
@@ -114,4 +115,36 @@ export const getCustomTooltip = ({ active, payload, label, valuePrefix = '', val
   }
 
   return null;
+};
+
+/**
+ * Format date for display in chart
+ * @param {string} dateString - ISO date string
+ * @returns {string} Formatted date string (e.g., "1 Mar")
+ */
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'short' });
+  return `${day} ${month}`;
+};
+
+/**
+ * Get the appropriate color for projected value based on budget comparison
+ * @param {number} projected - Projected value
+ * @param {number} budget - Budget value
+ * @returns {string} Color code
+ */
+export const getProjectedColor = (projected, budget) => {
+  return projected > budget ? '#FF3533' : '#00C638';
+};
+
+/**
+ * Get the appropriate arrow for projected value based on budget comparison
+ * @param {number} projected - Projected value
+ * @param {number} budget - Budget value
+ * @returns {string} Arrow symbol
+ */
+export const getProjectedArrow = (projected, budget) => {
+  return projected > budget ? '↑' : '↓';
 };

@@ -8,6 +8,7 @@ import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
 import OrdersPage from './components/orders/OrdersPage';
 import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
+import FreightKpiDemo from './pages/FreightKpiDemo';
 
 // Create a theme instance
 const theme = createTheme({
@@ -65,6 +66,16 @@ function App() {
                 <ProtectedRoute>
                   <DataProvider>
                     <AlertsWithLayout />
+                  </DataProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/freight-kpi-demo"
+              element={
+                <ProtectedRoute>
+                  <DataProvider>
+                    <FreightKpiDemo />
                   </DataProvider>
                 </ProtectedRoute>
               }

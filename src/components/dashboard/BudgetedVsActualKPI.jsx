@@ -3,7 +3,8 @@ import { Box, Typography, Paper, Tooltip, IconButton } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import CompositeChartComponent from '../charts/CompositeChartComponent';
+import FreightKpiChart from '../charts/FreightKpiChart';
+import { fullMonthData } from '../../data/freightKpiData';
 
 /**
  * BudgetedVsActualKPI component for displaying freight budget vs actual metrics
@@ -179,75 +180,16 @@ const BudgetedVsActualKPI = ({
           position: 'relative'
         }}
       >
-        <CompositeChartComponent
-          data={chartData}
-          areas={[
-            { dataKey: 'actual', color: '#5F697B', fillOpacity: 0.3, strokeWidth: 0, name: 'Actual' }
-          ]}
-          lines={[
-            { dataKey: 'projected', color: '#FF3533', strokeWidth: 2, name: 'Projected' },
-            { dataKey: 'budget', color: '#00C638', strokeWidth: 1, name: 'Budget', strokeDasharray: '3 3' }
-          ]}
-          xAxisKey="date"
-          unit="₹"
-          showGrid={true}
-          showLegend={false}
-          height="100%"
+        <FreightKpiChart
+          data={{
+            actual: chartData.length > 0 ? chartData.map(item => ({
+              date: item.date,
+              value: item.actual
+            })) : fullMonthData.actual,
+            projectedValue: projected,
+            budgetValue: budget
+          }}
         />
-      </Box>
-
-      {/* Legend */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-start',
-          gap: 1.5,
-          flexWrap: 'wrap'
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box
-            sx={{
-              width: 51,
-              height: 0,
-              border: '0.8px dashed #00C638',
-              borderRadius: '10.7px'
-            }}
-          />
-          <Typography
-            sx={{
-              fontSize: '14px',
-              fontWeight: 600,
-              lineHeight: '140%',
-              color: '#5F697B',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            Budget
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box
-            sx={{
-              width: 51,
-              height: 0,
-              border: '0.8px dashed #FF3533',
-              borderRadius: '10.7px'
-            }}
-          />
-          <Typography
-            sx={{
-              fontSize: '14px',
-              fontWeight: 600,
-              lineHeight: '140%',
-              color: '#5F697B',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            Projected
-          </Typography>
-        </Box>
       </Box>
     </Paper>
   );
