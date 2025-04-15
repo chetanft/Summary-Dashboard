@@ -74,6 +74,44 @@ export const DataProvider = ({ children }) => {
       const updatedData = simulateRealtimeUpdate(realtimeKpiData, userRole);
       setRealtimeKpiData(updatedData);
       setLastUpdated(new Date());
+
+      // Also update the new KPI data with random fluctuations
+      // This would normally be part of the backend API response
+      const updateNewKpiData = (data) => {
+        if (!data) return data;
+
+        const newData = JSON.parse(JSON.stringify(data)); // Deep clone
+
+        // Update all KPI groups
+        Object.keys(newData).forEach(groupKey => {
+          const group = newData[groupKey];
+
+          // Update KPIs in each group
+          if (group.kpis && Array.isArray(group.kpis)) {
+            group.kpis.forEach(kpi => {
+              if (typeof kpi.count === 'number') {
+                // Random fluctuation between -5% and +5%
+                const fluctuation = 1 + (Math.random() * 0.1 - 0.05);
+                kpi.count = Math.max(1, Math.round(kpi.count * fluctuation));
+              }
+
+              // Update breakdown if exists
+              if (kpi.breakdown) {
+                Object.keys(kpi.breakdown).forEach(key => {
+                  const fluctuation = 1 + (Math.random() * 0.1 - 0.05);
+                  kpi.breakdown[key] = Math.max(1, Math.round(kpi.breakdown[key] * fluctuation));
+                });
+              }
+            });
+          }
+        });
+
+        return newData;
+      };
+
+      // This would be dispatched to update the new KPI data in the component state
+      // For now, we'll just return the updated data for the component to use
+      return updateNewKpiData;
     } catch (err) {
       console.error('Error updating real-time KPI data:', err);
     }
