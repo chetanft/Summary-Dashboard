@@ -132,6 +132,13 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
       <TrendingDownIcon sx={{ color: '#FF3533', fontSize: 16 }} />;
   };
 
+  // Get performance icon for budgeted vs actual freight
+  const getBudgetPerformanceIcon = (value, budget) => {
+    return value <= budget ?
+      <TrendingUpIcon sx={{ color: '#4CAF50', fontSize: 16 }} /> :
+      <TrendingDownIcon sx={{ color: '#FF3533', fontSize: 16 }} />;
+  };
+
   // Get KPI description based on KPI ID
   const getKPIDescription = (kpiId) => {
     switch(kpiId) {
@@ -203,13 +210,21 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
                   </TableCell>
                   <TableCell align="right">
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                      {getPerformanceIcon(region.performance)}
+                      {kpi?.id === 'budgeted_vs_actual_freight'
+                        ? getBudgetPerformanceIcon(region.value, region.budget)
+                        : getPerformanceIcon(region.performance)
+                      }
                       <Chip
-                        label={region.performance}
+                        label={kpi?.id === 'budgeted_vs_actual_freight'
+                          ? (region.value <= region.budget ? 'good' : 'poor')
+                          : region.performance
+                        }
                         size="small"
                         sx={{
                           ml: 1,
-                          backgroundColor: getPerformanceColor(region.performance),
+                          backgroundColor: kpi?.id === 'budgeted_vs_actual_freight'
+                            ? getPerformanceColor(region.value <= region.budget ? 'good' : 'poor')
+                            : getPerformanceColor(region.performance),
                           color: 'white',
                           textTransform: 'capitalize'
                         }}
@@ -272,13 +287,21 @@ const KPIDrilldownPane = ({ open, onClose, kpi }) => {
                   </TableCell>
                   <TableCell align="right">
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                      {getPerformanceIcon(branch.performance)}
+                      {kpi?.id === 'budgeted_vs_actual_freight'
+                        ? getBudgetPerformanceIcon(branch.value, branch.budget)
+                        : getPerformanceIcon(branch.performance)
+                      }
                       <Chip
-                        label={branch.performance}
+                        label={kpi?.id === 'budgeted_vs_actual_freight'
+                          ? (branch.value <= branch.budget ? 'good' : 'poor')
+                          : branch.performance
+                        }
                         size="small"
                         sx={{
                           ml: 1,
-                          backgroundColor: getPerformanceColor(branch.performance),
+                          backgroundColor: kpi?.id === 'budgeted_vs_actual_freight'
+                            ? getPerformanceColor(branch.value <= branch.budget ? 'good' : 'poor')
+                            : getPerformanceColor(branch.performance),
                           color: 'white',
                           textTransform: 'capitalize'
                         }}

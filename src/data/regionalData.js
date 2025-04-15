@@ -734,9 +734,16 @@ export const getPerformanceData = (kpiId) => {
 
   // Sort regions by performance
   const sortedRegions = [...data.regions].sort((a, b) => {
-    // For metrics where lower is better
-    if (
-      kpiId === 'budgeted_vs_actual_freight' ||
+    // For budgeted vs actual freight, we want to compare against budget
+    if (kpiId === 'budgeted_vs_actual_freight') {
+      // Calculate the difference between actual and budget (negative is good, positive is bad)
+      const aDiff = a.value - a.budget;
+      const bDiff = b.value - b.budget;
+      // Sort by the difference (lower/negative difference is better)
+      return aDiff - bDiff;
+    }
+    // For other metrics where lower is better
+    else if (
       kpiId === 'freight_cost_per_km' ||
       kpiId === 'order_delivery_time' ||
       kpiId === 'delayed_delivery'
@@ -790,9 +797,16 @@ export const getBranchPerformanceData = (kpiId, regionId) => {
 
   // Sort branches by performance
   const sortedBranches = [...branches].sort((a, b) => {
-    // For metrics where lower is better
-    if (
-      kpiId === 'budgeted_vs_actual_freight' ||
+    // For budgeted vs actual freight, we want to compare against budget
+    if (kpiId === 'budgeted_vs_actual_freight') {
+      // Calculate the difference between actual and budget (negative is good, positive is bad)
+      const aDiff = a.value - a.budget;
+      const bDiff = b.value - b.budget;
+      // Sort by the difference (lower/negative difference is better)
+      return aDiff - bDiff;
+    }
+    // For other metrics where lower is better
+    else if (
       kpiId === 'freight_cost_per_km' ||
       kpiId === 'order_delivery_time' ||
       kpiId === 'delayed_delivery'
