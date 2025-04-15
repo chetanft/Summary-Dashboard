@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils/chartUtils';
+import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils/chartUtils.jsx';
 
 /**
  * Area Chart Component for displaying cumulative data
@@ -13,11 +13,11 @@ import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils
  * @param {number} props.height - Height of the chart
  * @returns {JSX.Element} - Area Chart Component
  */
-const AreaChartComponent = ({ 
-  data, 
-  areas = [{ dataKey: 'value', color: '#FF3533', fillOpacity: 0.3 }], 
-  xAxisKey = 'name', 
-  unit = '', 
+const AreaChartComponent = ({
+  data,
+  areas = [{ dataKey: 'value', color: '#FF3533', fillOpacity: 0.3 }],
+  xAxisKey = 'name',
+  unit = '',
   showGrid = false,
   height = 200
 }) => {
@@ -58,7 +58,7 @@ const AreaChartComponent = ({
     return getCustomTooltip({
       ...props,
       valuePrefix: unit === 'INR' || unit === '₹' ? '₹' : '',
-      valueSuffix: unit === '%' ? '%' : ''
+      valueSuffix: unit === '%' ? '%' : unit === 'INR/km' ? '/km' : ''
     });
   };
 
@@ -70,16 +70,16 @@ const AreaChartComponent = ({
           margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-          <XAxis 
-            dataKey={xAxisKey} 
-            axisLine={false} 
-            tickLine={false} 
+          <XAxis
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
             tick={{ fontSize: 10, fill: '#434F64' }}
           />
-          <YAxis 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fontSize: 10, fill: '#434F64' }} 
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 10, fill: '#434F64' }}
             tickFormatter={formatTick}
             width={30}
           />

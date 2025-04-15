@@ -1,17 +1,17 @@
 import { useRef, useEffect, useState } from 'react';
-import { 
-  ComposedChart, 
-  Line, 
-  Bar, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer 
+import {
+  ComposedChart,
+  Line,
+  Bar,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
 } from 'recharts';
-import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils/chartUtils';
+import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils/chartUtils.jsx';
 
 /**
  * Composite Chart Component for displaying multiple chart types
@@ -27,13 +27,13 @@ import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils
  * @param {number} props.height - Height of the chart
  * @returns {JSX.Element} - Composite Chart Component
  */
-const CompositeChartComponent = ({ 
-  data, 
-  bars = [], 
-  lines = [], 
+const CompositeChartComponent = ({
+  data,
+  bars = [],
+  lines = [],
   areas = [],
-  xAxisKey = 'name', 
-  unit = '', 
+  xAxisKey = 'name',
+  unit = '',
   showGrid = false,
   showLegend = false,
   height = 300
@@ -75,7 +75,7 @@ const CompositeChartComponent = ({
     return getCustomTooltip({
       ...props,
       valuePrefix: unit === 'INR' || unit === '₹' ? '₹' : '',
-      valueSuffix: unit === '%' ? '%' : ''
+      valueSuffix: unit === '%' ? '%' : unit === 'INR/km' ? '/km' : ''
     });
   };
 
@@ -87,22 +87,22 @@ const CompositeChartComponent = ({
           margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-          <XAxis 
-            dataKey={xAxisKey} 
-            axisLine={false} 
-            tickLine={false} 
+          <XAxis
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
             tick={{ fontSize: 10, fill: '#434F64' }}
           />
-          <YAxis 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fontSize: 10, fill: '#434F64' }} 
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 10, fill: '#434F64' }}
             tickFormatter={formatTick}
             width={30}
           />
           <Tooltip content={<CustomTooltip />} />
           {showLegend && <Legend wrapperStyle={{ fontSize: 10 }} />}
-          
+
           {/* Render areas */}
           {areas.map((area, index) => (
             <Area
@@ -117,7 +117,7 @@ const CompositeChartComponent = ({
               activeDot={{ r: 5, fill: area.color, strokeWidth: 0 }}
             />
           ))}
-          
+
           {/* Render bars */}
           {bars.map((bar, index) => (
             <Bar
@@ -129,7 +129,7 @@ const CompositeChartComponent = ({
               barSize={containerWidth < 300 ? 10 : 20}
             />
           ))}
-          
+
           {/* Render lines */}
           {lines.map((line, index) => (
             <Line

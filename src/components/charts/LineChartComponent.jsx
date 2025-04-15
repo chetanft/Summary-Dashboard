@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils/chartUtils';
+import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils/chartUtils.jsx';
 
 /**
  * Line Chart Component for displaying trend data
@@ -13,11 +13,11 @@ import { formatLargeNumber, formatCurrency, getCustomTooltip } from '../../utils
  * @param {number} props.height - Height of the chart
  * @returns {JSX.Element} - Line Chart Component
  */
-const LineChartComponent = ({ 
-  data, 
-  lines = [{ dataKey: 'value', color: '#FF3533', strokeWidth: 2 }], 
-  xAxisKey = 'name', 
-  unit = '', 
+const LineChartComponent = ({
+  data,
+  lines = [{ dataKey: 'value', color: '#FF3533', strokeWidth: 2 }],
+  xAxisKey = 'name',
+  unit = '',
   showGrid = false,
   height = 200
 }) => {
@@ -58,7 +58,7 @@ const LineChartComponent = ({
     return getCustomTooltip({
       ...props,
       valuePrefix: unit === 'INR' || unit === '₹' ? '₹' : '',
-      valueSuffix: unit === '%' ? '%' : ''
+      valueSuffix: unit === '%' ? '%' : unit === 'INR/km' ? '/km' : ''
     });
   };
 
@@ -70,16 +70,16 @@ const LineChartComponent = ({
           margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-          <XAxis 
-            dataKey={xAxisKey} 
-            axisLine={false} 
-            tickLine={false} 
+          <XAxis
+            dataKey={xAxisKey}
+            axisLine={false}
+            tickLine={false}
             tick={{ fontSize: 10, fill: '#434F64' }}
           />
-          <YAxis 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fontSize: 10, fill: '#434F64' }} 
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 10, fill: '#434F64' }}
             tickFormatter={formatTick}
             width={30}
           />

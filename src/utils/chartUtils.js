@@ -1,3 +1,6 @@
+// This file is deprecated. Use chartUtils.jsx instead.
+// Keeping this file to avoid breaking imports in other files.
+
 /**
  * Format a number as currency
  * @param {number} value - The value to format
@@ -91,7 +94,7 @@ export const getComparisonColor = (value, target, higherIsBetter = true) => {
  */
 export const getCustomTooltip = ({ active, payload, label, valuePrefix = '', valueSuffix = '' }) => {
   if (active && payload && payload.length) {
-    // Return a simple HTML string that Recharts can render
+    // Return a simple HTML string
     const labelStyle = 'margin:0;font-weight:bold;';
     const itemStyle = 'margin:5px 0;';
 
