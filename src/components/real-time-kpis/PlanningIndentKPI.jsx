@@ -33,10 +33,10 @@ const PlanningIndentKPI = ({ data, onKPIClick }) => {
 
   return (
     <KPIGroupContainer title={data.title}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ display: 'flex', flexDirection: 'column' }}>
         {/* KPI Stats */}
         <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             <StatTile
               title="Planned Orders"
               value={plannedOrders?.count || 0}

@@ -218,7 +218,7 @@ const EnhancedDashboard = () => {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    padding: '20px 20px 0px',
+    padding: '0px 0px 0px',
     gap: '20px',
     width: '100%',
     maxWidth: '100%',

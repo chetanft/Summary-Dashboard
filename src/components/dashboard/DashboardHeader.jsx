@@ -44,7 +44,7 @@ const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, bra
       }}
     >
       {/* Title with Icon */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}>
         <Box sx={{ width: '28px', height: '28px', position: 'relative' }}>
           <DashboardIcon sx={{ color: '#434F64', fontSize: '28px' }} />
         </Box>
@@ -57,12 +57,12 @@ const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, bra
             color: '#434F64',
           }}
         >
-          {title}
+          Summary Dashboard
         </Typography>
       </Box>
 
       {/* Toggle Buttons and Search */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2, width: '100%' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', gap: 2, width: '100%' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           {/* Toggle Button Group */}
           <Paper

@@ -3,6 +3,223 @@ import { fetchDashboardData, transformDashboardData } from '../services/dataServ
 import { useAuth } from './AuthContext';
 import { generateRealtimeKpiData, simulateRealtimeUpdate } from '../data/realtimeKpiData';
 
+// Function to generate new operational KPI data
+const generateOperationalKpiData = (userRole = 'CXO') => {
+  return {
+    planningIndent: {
+      title: 'Planning & Indent Health',
+      kpis: [
+        {
+          name: 'Planned Orders',
+          count: 95,
+          status: 'normal',
+        },
+        {
+          name: 'Pending Planning',
+          count: 28,
+          status: 'pending',
+          breakdown: {
+            'Unplanned': 12,
+            'Partial': 10,
+            'In Progress': 6,
+          }
+        },
+        {
+          name: 'Active Indents',
+          count: 45,
+          status: 'normal',
+          breakdown: {
+            'Acceptance Pending': 15,
+            'Assignment Pending': 18,
+            'Expired/Cancelled': 12,
+          }
+        }
+      ],
+      details: {
+        north: 32,
+        south: 28,
+        east: 25,
+        west: 35,
+      },
+      chartType: 'stackedBar',
+    },
+    plantYard: {
+      title: 'Plant & Yard Operations',
+      kpis: [
+        {
+          name: 'En Route to Loading',
+          count: 32,
+          status: 'normal',
+        },
+        {
+          name: 'Fulfillment Delayed',
+          count: 8,
+          status: 'delayed',
+        },
+        {
+          name: 'At Plant/Dock',
+          count: 42,
+          status: 'normal',
+          breakdown: {
+            'At Plant': 22,
+            'At Dock': 15,
+            'Detained': 5,
+          }
+        },
+        {
+          name: 'TATs',
+          values: {
+            'Plant TAT': '3.5 hrs',
+            'Dock TAT': '2.2 hrs',
+          },
+          status: 'normal',
+        }
+      ],
+      details: {
+        north: 25,
+        south: 30,
+        east: 18,
+        west: 28,
+      },
+      chartType: 'horizontalBar',
+    },
+    tripMonitoring: {
+      title: 'Trips in Transit',
+      kpis: [
+        {
+          name: 'Active Trips',
+          count: 145,
+          percentage: 72,
+          status: 'normal',
+        },
+        {
+          name: 'Delayed Trips',
+          count: 18,
+          percentage: 9,
+          status: 'delayed',
+        },
+        {
+          name: 'Delivering Today',
+          count: 32,
+          percentage: 16,
+          status: 'normal',
+        },
+        {
+          name: 'Untracked Trips',
+          count: 6,
+          percentage: 3,
+          status: 'pending',
+        }
+      ],
+      details: {
+        north: 45,
+        south: 38,
+        east: 32,
+        west: 42,
+      },
+      chartType: 'donut',
+    },
+    ePod: {
+      title: 'ePOD Document Status',
+      kpis: [
+        {
+          name: 'Pending',
+          count: 35,
+          status: 'pending',
+        },
+        {
+          name: 'Approved',
+          count: 142,
+          status: 'normal',
+        },
+        {
+          name: 'Disputed',
+          count: 12,
+          status: 'delayed',
+        },
+        {
+          name: 'Rejected',
+          count: 5,
+          status: 'delayed',
+        }
+      ],
+      details: {
+        north: 48,
+        south: 55,
+        east: 42,
+        west: 49,
+      },
+      chartType: 'stackedColumn',
+    },
+    freightReconciliation: {
+      title: 'Billing & Closure Status',
+      kpis: [
+        {
+          name: 'Invoices',
+          count: 118,
+          status: 'normal',
+          breakdown: {
+            'Generated': 45,
+            'Approved': 52,
+            'Rejected': 12,
+            'Debit Revised': 9,
+          }
+        },
+        {
+          name: 'Reconciliation',
+          count: 78,
+          status: 'pending',
+          breakdown: {
+            'Pending': 32,
+            'Approved': 35,
+            'Disputed': 11,
+          }
+        }
+      ],
+      details: {
+        north: 42,
+        south: 38,
+        east: 35,
+        west: 45,
+      },
+      chartType: 'groupedBar',
+    }
+  };
+};
+
+// Function to simulate updates to operational KPI data
+const simulateOperationalKpiUpdate = (data) => {
+  if (!data) return data;
+
+  const newData = JSON.parse(JSON.stringify(data)); // Deep clone
+
+  // Update all KPI groups
+  Object.keys(newData).forEach(groupKey => {
+    const group = newData[groupKey];
+
+    // Update KPIs in each group
+    if (group.kpis && Array.isArray(group.kpis)) {
+      group.kpis.forEach(kpi => {
+        if (typeof kpi.count === 'number') {
+          // Random fluctuation between -5% and +5%
+          const fluctuation = 1 + (Math.random() * 0.1 - 0.05);
+          kpi.count = Math.max(1, Math.round(kpi.count * fluctuation));
+        }
+
+        // Update breakdown if exists
+        if (kpi.breakdown) {
+          Object.keys(kpi.breakdown).forEach(key => {
+            const fluctuation = 1 + (Math.random() * 0.1 - 0.05);
+            kpi.breakdown[key] = Math.max(1, Math.round(kpi.breakdown[key] * fluctuation));
+          });
+        }
+      });
+    }
+  });
+
+  return newData;
+};
+
 // Create the data context
 const DataContext = createContext();
 
@@ -21,6 +238,8 @@ export const DataProvider = ({ children }) => {
   const [dashboardData, setDashboardData] = useState(null);
   const [realtimeKpiData, setRealtimeKpiData] = useState(null);
   const [filteredRealtimeKpiData, setFilteredRealtimeKpiData] = useState(null);
+  const [operationalKpiData, setOperationalKpiData] = useState(null);
+  const [filteredOperationalKpiData, setFilteredOperationalKpiData] = useState(null);
   const [userRole, setUserRole] = useState('CXO');
   const [selectedBranch, setSelectedBranch] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -66,6 +285,21 @@ export const DataProvider = ({ children }) => {
     }
   }, []); // Empty dependency array to prevent re-creation on every render
 
+  // Function to load operational KPI data
+  const loadOperationalKpiData = useCallback(() => {
+    if (!currentUser) return;
+
+    try {
+      const data = generateOperationalKpiData(userRole);
+      setOperationalKpiData(data);
+      setFilteredOperationalKpiData(filterDataByBranch(data, selectedBranch));
+      setLastUpdated(new Date());
+    } catch (err) {
+      console.error('Error loading operational KPI data:', err);
+      setError('Failed to load operational KPI data');
+    }
+  }, []); // Empty dependency array to prevent re-creation on every render
+
   // Function to update real-time KPI data
   const updateRealtimeKpiData = useCallback(() => {
     if (!realtimeKpiData) return;
@@ -74,46 +308,22 @@ export const DataProvider = ({ children }) => {
       const updatedData = simulateRealtimeUpdate(realtimeKpiData, userRole);
       setRealtimeKpiData(updatedData);
       setLastUpdated(new Date());
-
-      // Also update the new KPI data with random fluctuations
-      // This would normally be part of the backend API response
-      const updateNewKpiData = (data) => {
-        if (!data) return data;
-
-        const newData = JSON.parse(JSON.stringify(data)); // Deep clone
-
-        // Update all KPI groups
-        Object.keys(newData).forEach(groupKey => {
-          const group = newData[groupKey];
-
-          // Update KPIs in each group
-          if (group.kpis && Array.isArray(group.kpis)) {
-            group.kpis.forEach(kpi => {
-              if (typeof kpi.count === 'number') {
-                // Random fluctuation between -5% and +5%
-                const fluctuation = 1 + (Math.random() * 0.1 - 0.05);
-                kpi.count = Math.max(1, Math.round(kpi.count * fluctuation));
-              }
-
-              // Update breakdown if exists
-              if (kpi.breakdown) {
-                Object.keys(kpi.breakdown).forEach(key => {
-                  const fluctuation = 1 + (Math.random() * 0.1 - 0.05);
-                  kpi.breakdown[key] = Math.max(1, Math.round(kpi.breakdown[key] * fluctuation));
-                });
-              }
-            });
-          }
-        });
-
-        return newData;
-      };
-
-      // This would be dispatched to update the new KPI data in the component state
-      // For now, we'll just return the updated data for the component to use
-      return updateNewKpiData;
     } catch (err) {
       console.error('Error updating real-time KPI data:', err);
+    }
+  }, []); // Empty dependency array to prevent re-creation on every render
+
+  // Function to update operational KPI data
+  const updateOperationalKpiData = useCallback(() => {
+    if (!operationalKpiData) return;
+
+    try {
+      const updatedData = simulateOperationalKpiUpdate(operationalKpiData);
+      setOperationalKpiData(updatedData);
+      setFilteredOperationalKpiData(filterDataByBranch(updatedData, selectedBranch));
+      setLastUpdated(new Date());
+    } catch (err) {
+      console.error('Error updating operational KPI data:', err);
     }
   }, []); // Empty dependency array to prevent re-creation on every render
 
@@ -198,11 +408,13 @@ export const DataProvider = ({ children }) => {
     if (currentUser) {
       loadDashboardData();
       loadRealtimeKpiData();
+      loadOperationalKpiData();
 
       // Set up auto-refresh interval (5 minutes)
       const refreshInterval = setInterval(() => {
         loadDashboardData();
         updateRealtimeKpiData();
+        updateOperationalKpiData();
       }, 5 * 60 * 1000);
 
       // Clean up interval on unmount
@@ -216,6 +428,13 @@ export const DataProvider = ({ children }) => {
       setFilteredRealtimeKpiData(filterDataByBranch(realtimeKpiData, selectedBranch));
     }
   }, [realtimeKpiData, filterDataByBranch, selectedBranch]);
+
+  // Initialize filtered data when operationalKpiData changes
+  useEffect(() => {
+    if (operationalKpiData) {
+      setFilteredOperationalKpiData(filterDataByBranch(operationalKpiData, selectedBranch));
+    }
+  }, [operationalKpiData, filterDataByBranch, selectedBranch]);
 
   // Format the last updated timestamp
   const formattedLastUpdated = lastUpdated
@@ -231,6 +450,7 @@ export const DataProvider = ({ children }) => {
   const value = {
     dashboardData,
     realtimeKpiData: filteredRealtimeKpiData || realtimeKpiData, // Use filtered data if available
+    operationalKpiData: filteredOperationalKpiData || operationalKpiData, // Use filtered data if available
     userRole,
     selectedBranch,
     loading,
@@ -239,6 +459,7 @@ export const DataProvider = ({ children }) => {
     refreshData: loadDashboardData,
     refreshAllData,
     updateRealtimeKpiData,
+    updateOperationalKpiData,
     changeUserRole,
     handleBranchChange
   };
