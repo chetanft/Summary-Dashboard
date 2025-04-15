@@ -76,7 +76,7 @@ const BudgetedVsActualKPI = ({
             <span>
               <IconButton
                 size="small"
-                onClick={() => onDrillDown({ id: 'budgeted_vs_actual', title })}
+                onClick={() => onDrillDown({ id: 'budgeted_vs_actual_freight', title })}
                 sx={{ color: '#434F64' }}
               >
                 <OpenInFullIcon sx={{ fontSize: 24 }} />
