@@ -7,20 +7,67 @@ import { styled } from '@mui/material/styles';
 const HeatmapContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   height: '100%',
-  overflow: 'auto'
+  display: 'flex',
+  flexDirection: 'column'
 }));
 
 const HeatmapGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: 'auto repeat(10, minmax(80px, 1fr))',
-  gridAutoRows: 'minmax(40px, auto)',
+  gridTemplateColumns: '100px repeat(10, minmax(80px, 1fr))', // Fixed width for time column
+  gridTemplateRows: 'auto repeat(18, 40px)', // Fixed height for each row
   gap: 2,
-  height: '100%',
+  flex: 1,
   minHeight: '500px',
   border: '1px solid #e0e0e0',
   borderRadius: '4px',
   overflow: 'auto',
   padding: theme.spacing(1)
+}));
+
+// Special styling for time labels
+const TimeCell = styled(Box)(({ theme }) => ({
+  backgroundColor: '#f5f5f5',
+  border: '1px solid #e0e0e0',
+  padding: theme.spacing(1),
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#434F64',
+  fontSize: '0.8rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  position: 'sticky',
+  left: 0,
+  zIndex: 1,
+  minWidth: '100px'
+}));
+
+// Header cell styling
+const HeaderCell = styled(Box)(({ theme }) => ({
+  backgroundColor: '#f5f5f5',
+  border: '1px solid #e0e0e0',
+  padding: theme.spacing(1),
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#434F64',
+  fontSize: '0.8rem',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  position: 'sticky',
+  top: 0,
+  zIndex: 1
+}));
+
+// Corner cell styling (top-left cell)
+const CornerCell = styled(Box)(({ theme }) => ({
+  backgroundColor: '#f5f5f5',
+  border: '1px solid #e0e0e0',
+  padding: theme.spacing(1),
+  position: 'sticky',
+  top: 0,
+  left: 0,
+  zIndex: 2
 }));
 
 const HeatmapCell = styled(Box)(({ bgcolor, theme }) => ({
@@ -45,17 +92,17 @@ const HeatmapCell = styled(Box)(({ bgcolor, theme }) => ({
 const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (Discrete Allocation)" }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  
+
   // Process data for the heatmap - keep this simple
   const processedData = useMemo(() => {
     if (!data?.occupancy) return {};
-    
+
     // Create a grid representation for easy lookup
     const grid = {};
-    
+
     data.occupancy.forEach(item => {
       const { dockIndex, hourIndex, vehicleType, duration } = item;
-      
+
       // Mark the main cell and create spanning info
       for (let h = 0; h < duration; h++) {
         const key = `${dockIndex}-${hourIndex + h}`;
@@ -66,10 +113,10 @@ const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (D
         };
       }
     });
-    
+
     return grid;
   }, [data]);
-  
+
   if (!data) {
     return (
       <Box sx={{ p: 2, textAlign: 'center' }}>
@@ -77,11 +124,11 @@ const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (D
       </Box>
     );
   }
-  
+
   return (
     <HeatmapContainer elevation={2}>
       <Typography variant="h6" gutterBottom>{title}</Typography>
-      
+
       {/* Legend */}
       <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
         {Object.entries(data.vehicleTypes || {}).map(([type, { color }]) => (
@@ -91,27 +138,27 @@ const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (D
           </Box>
         ))}
       </Box>
-      
+
       {/* Heatmap Grid */}
       <HeatmapGrid>
         {/* Header row */}
-        <Box></Box> {/* Empty corner cell */}
+        <CornerCell></CornerCell> {/* Empty corner cell */}
         {data.docks?.map((dock, i) => (
-          <HeatmapCell key={`dock-${i}`} bgcolor="#f5f5f5">
+          <HeaderCell key={`dock-${i}`}>
             {dock}
-          </HeatmapCell>
+          </HeaderCell>
         ))}
-        
+
         {/* Time rows */}
         {data.hours?.map((hour, hourIndex) => (
           <React.Fragment key={`hour-${hourIndex}`}>
-            <HeatmapCell bgcolor="#f5f5f5">
+            <TimeCell>
               {hour}
-            </HeatmapCell>
+            </TimeCell>
             {data.docks?.map((_, dockIndex) => {
               const key = `${dockIndex}-${hourIndex}`;
               const cell = processedData[key];
-              
+
               if (!cell || !cell.isMain) {
                 return (
                   <HeatmapCell
@@ -120,14 +167,14 @@ const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (D
                   />
                 );
               }
-              
+
               return (
                 <Tooltip title={`${cell.vehicleType} (${cell.duration} hours)`} key={key}>
                   <HeatmapCell
                     bgcolor={data.vehicleTypes[cell.vehicleType].color}
                     sx={{
                       gridRow: cell.duration > 1 ? `span ${cell.duration}` : 'auto',
-                      height: cell.duration > 1 ? `${cell.duration * 40}px` : '40px'
+                      height: 'auto'
                     }}
                   >
                     {isMobile ? '' : cell.vehicleType}
