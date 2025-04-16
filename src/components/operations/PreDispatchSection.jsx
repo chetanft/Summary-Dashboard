@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { Grid, Box, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Grid, Box, Typography, CircularProgress, Alert } from '@mui/material';
 import KpiSection from './KpiSection';
 import KpiToggle from './KpiToggle';
 import StatTile from '../realtime-kpis/StatTile';
 import DonutChartComponent from '../charts/DonutChartComponent';
 import BarChartComponent from '../charts/BarChartComponent';
+import DockOccupancyHeatmap from './DockOccupancyHeatmap';
+import { fetchDockOccupancyData } from '../../services/operationsService';
 
 /**
  * Pre Dispatch Section component with FTL/PTL toggle
- * 
+ *
  * @param {Object} props - Component props
  * @param {Object} props.data - Pre Dispatch KPI data
  * @param {Function} props.onKPIClick - Function to handle KPI click
@@ -16,19 +18,41 @@ import BarChartComponent from '../charts/BarChartComponent';
  */
 const PreDispatchSection = ({ data, onKPIClick }) => {
   const [activeType, setActiveType] = useState('ftl');
-  
+  const [dockData, setDockData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch dock occupancy data
+  useEffect(() => {
+    const loadDockData = async () => {
+      try {
+        setLoading(true);
+        const result = await fetchDockOccupancyData();
+        setDockData(result);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading dock occupancy data:', err);
+        setError('Failed to load dock occupancy data. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDockData();
+  }, []);
+
   if (!data) return null;
-  
+
   const handleTypeChange = (event, newType) => {
     if (newType !== null) {
       setActiveType(newType);
     }
   };
-  
+
   // Get the active data based on the selected type
   const activeData = data[activeType];
   if (!activeData || !activeData.kpis) return null;
-  
+
   // Render FTL KPIs
   const renderFtlKpis = () => {
     // Extract KPIs by type
@@ -41,7 +65,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
     const avgLoadingTat = activeData.kpis.find(kpi => kpi.id === 'avg-loading-tat');
     const yardOccupancy = activeData.kpis.find(kpi => kpi.id === 'yard-occupancy');
     const dockUtilisation = activeData.kpis.find(kpi => kpi.id === 'dock-utilisation');
-    
+
     return (
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -49,7 +73,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             Indent & Pre Transit
           </Typography>
         </Grid>
-        
+
         {/* First row */}
         <Grid item xs={12} md={4}>
           {indentStatus && (
@@ -69,7 +93,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             </Box>
           )}
         </Grid>
-        
+
         <Grid item xs={12} md={4}>
           {acceptedSplit && (
             <Box sx={{ height: '250px', mb: 2 }}>
@@ -88,7 +112,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             </Box>
           )}
         </Grid>
-        
+
         <Grid item xs={12} md={4}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {activePreTransits && (
@@ -111,7 +135,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             )}
           </Box>
         </Grid>
-        
+
         {/* Second row */}
         <Grid item xs={12} md={6}>
           {vehicleAssignmentPending && (
@@ -131,7 +155,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             </Box>
           )}
         </Grid>
-        
+
         <Grid item xs={12} md={6}>
           {vehicleReportingPending && (
             <Box sx={{ height: '250px', mb: 2 }}>
@@ -150,13 +174,13 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             </Box>
           )}
         </Grid>
-        
+
         <Grid item xs={12}>
           <Typography variant="subtitle1" sx={{ mt: 2, mb: 2, fontWeight: 600, color: '#434F64' }}>
             At Loading (Yard, Dock, TAT)
           </Typography>
         </Grid>
-        
+
         {/* Third row */}
         <Grid item xs={12} md={6}>
           {avgLoadingTat && (
@@ -176,7 +200,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             </Box>
           )}
         </Grid>
-        
+
         <Grid item xs={12} md={6}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {yardOccupancy && (
@@ -199,10 +223,30 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             )}
           </Box>
         </Grid>
+
+        {/* Dock Occupancy Heatmap */}
+        <Grid item xs={12}>
+          <Typography variant="subtitle1" sx={{ mt: 2, mb: 2, fontWeight: 600, color: '#434F64' }}>
+            Dock Occupancy Heatmap
+          </Typography>
+          <Box sx={{ height: 400, width: '100%' }}>
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+              </Box>
+            ) : error ? (
+              <Alert severity="error">{error}</Alert>
+            ) : dockData ? (
+              <DockOccupancyHeatmap data={dockData} />
+            ) : (
+              <Alert severity="info">No dock occupancy data available</Alert>
+            )}
+          </Box>
+        </Grid>
       </Grid>
     );
   };
-  
+
   // Render PTL KPIs
   const renderPtlKpis = () => {
     // Extract KPIs by type
@@ -211,7 +255,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
     const hubReportingSlaBreach = activeData.kpis.find(kpi => kpi.id === 'hub-reporting-sla-breach');
     const bagsAwaitingPickup = activeData.kpis.find(kpi => kpi.id === 'bags-awaiting-pickup');
     const pickupSlaBreached = activeData.kpis.find(kpi => kpi.id === 'pickup-sla-breached');
-    
+
     return (
       <Grid container spacing={2}>
         {/* First row */}
@@ -233,7 +277,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             </Box>
           )}
         </Grid>
-        
+
         <Grid item xs={12} md={4}>
           {pickupAllocationDelay && (
             <Box sx={{ height: '250px', mb: 2 }}>
@@ -252,7 +296,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
             </Box>
           )}
         </Grid>
-        
+
         <Grid item xs={12} md={4}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {hubReportingSlaBreach && (
@@ -287,11 +331,11 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
       </Grid>
     );
   };
-  
+
   return (
     <KpiSection title={data.title}>
       <KpiToggle activeType={activeType} onChange={handleTypeChange} />
-      
+
       {activeType === 'ftl' ? renderFtlKpis() : renderPtlKpis()}
     </KpiSection>
   );
