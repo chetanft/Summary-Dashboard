@@ -264,6 +264,7 @@ const Header = ({ onRefresh }) => {
               </ListItemIcon>
               <ListItemText primary="Logout" />
             </MenuItem>
+          </Menu>
         </Paper>
       </Box>
     </Box>
