@@ -245,6 +245,8 @@ export const DataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredDashboardData, setFilteredDashboardData] = useState(null);
 
   // Function to load dashboard data
   const loadDashboardData = useCallback(async () => {
@@ -375,6 +377,79 @@ export const DataProvider = ({ children }) => {
     return data;
   }, []);
 
+  // Function to filter dashboard data based on search term
+  const filterDashboardDataBySearch = useCallback((data, term) => {
+    if (!data || !term || term.trim() === '') {
+      return data;
+    }
+
+    const searchLower = term.toLowerCase();
+    const result = JSON.parse(JSON.stringify(data)); // Deep clone
+
+    // Filter KPIs based on search term
+    if (result.kpis) {
+      result.kpis = result.kpis.filter(kpi =>
+        kpi.label.toLowerCase().includes(searchLower) ||
+        kpi.id.toLowerCase().includes(searchLower)
+      );
+    }
+
+    return result;
+  }, []);
+
+  // Function to filter operational KPI data based on search term
+  const filterOperationalKpiDataBySearch = useCallback((data, term) => {
+    if (!data || !term || term.trim() === '') {
+      return data;
+    }
+
+    const searchLower = term.toLowerCase();
+    const result = JSON.parse(JSON.stringify(data)); // Deep clone
+
+    // Filter each KPI group based on search term
+    Object.keys(result).forEach(groupKey => {
+      const group = result[groupKey];
+
+      // Check if the group title matches the search term
+      const groupMatches = group.title.toLowerCase().includes(searchLower);
+
+      // If the group doesn't match, check if any of its KPIs match
+      if (!groupMatches) {
+        // Filter KPIs that match the search term
+        const filteredKpis = group.kpis.filter(kpi =>
+          kpi.name.toLowerCase().includes(searchLower)
+        );
+
+        // If no KPIs match, remove the group from the result
+        if (filteredKpis.length === 0) {
+          delete result[groupKey];
+        } else {
+          // Otherwise, update the group's KPIs
+          group.kpis = filteredKpis;
+        }
+      }
+    });
+
+    return result;
+  }, []);
+
+  // Function to handle search term changes
+  const handleSearchTermChange = useCallback((term) => {
+    setSearchTerm(term);
+
+    // Filter dashboard data
+    if (dashboardData) {
+      const filtered = filterDashboardDataBySearch(dashboardData, term);
+      setFilteredDashboardData(filtered);
+    }
+
+    // Filter operational KPI data
+    if (operationalKpiData) {
+      const filtered = filterOperationalKpiDataBySearch(operationalKpiData, term);
+      setFilteredOperationalKpiData(filtered);
+    }
+  }, [dashboardData, operationalKpiData, filterDashboardDataBySearch, filterOperationalKpiDataBySearch]);
+
   // Function to handle branch change
   const handleBranchChange = useCallback((branch) => {
     setSelectedBranch(branch);
@@ -448,11 +523,12 @@ export const DataProvider = ({ children }) => {
 
   // Context value
   const value = {
-    dashboardData,
+    dashboardData: filteredDashboardData || dashboardData, // Use filtered data if available
     realtimeKpiData: filteredRealtimeKpiData || realtimeKpiData, // Use filtered data if available
     operationalKpiData: filteredOperationalKpiData || operationalKpiData, // Use filtered data if available
     userRole,
     selectedBranch,
+    searchTerm,
     loading,
     error,
     lastUpdated: formattedLastUpdated,
@@ -460,6 +536,7 @@ export const DataProvider = ({ children }) => {
     refreshAllData,
     updateRealtimeKpiData,
     updateOperationalKpiData,
+    handleSearchTermChange,
     changeUserRole,
     handleBranchChange
   };

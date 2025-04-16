@@ -24,7 +24,7 @@ const EnhancedDashboard = () => {
   const [activeTab, setActiveTab] = useState('performance');
   const [drilldownOpen, setDrilldownOpen] = useState(false);
   const [selectedKPI, setSelectedKPI] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { searchTerm, handleSearchTermChange } = useData();
   const { dashboardData, loading, error, lastUpdated, refreshData } = useData();
 
   // Handle manual refresh

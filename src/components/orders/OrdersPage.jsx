@@ -1,6 +1,7 @@
 import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useData } from '../../context/DataContext';
 import OrderDetailsDrawer from './OrderDetailsDrawer';
 import {
   Box,
@@ -225,12 +226,14 @@ const orderData = [
 const OrdersPage = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { searchTerm, handleSearchTermChange } = useData();
   const [activeTab, setActiveTab] = useState('orderData');
   const [page, setPage] = useState(1);
   const [selectedStage, setSelectedStage] = useState('All Stages');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [currentOrderIndex, setCurrentOrderIndex] = useState(-1);
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
 
   // Filter states
   const [filterFTL, setFilterFTL] = useState(false);
@@ -240,6 +243,11 @@ const OrdersPage = () => {
   // Filtered order data
   const [filteredOrders, setFilteredOrders] = useState(orderData);
 
+  // Initialize local search term with global search term
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm || '');
+  }, [searchTerm]);
+
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!currentUser) {
@@ -247,7 +255,7 @@ const OrdersPage = () => {
     }
   }, [currentUser, navigate]);
 
-  // Apply filters when filter states or selected stage changes
+  // Apply filters when filter states, selected stage, or search term changes
   useEffect(() => {
     let result = [...orderData];
 
@@ -268,11 +276,24 @@ const OrdersPage = () => {
       result = result.filter(order => order.stage === selectedStage);
     }
 
+    // Apply search filter
+    if (localSearchTerm) {
+      const searchLower = localSearchTerm.toLowerCase();
+      result = result.filter(order =>
+        order.id.toLowerCase().includes(searchLower) ||
+        order.consignor.toLowerCase().includes(searchLower) ||
+        order.consignee.toLowerCase().includes(searchLower) ||
+        order.route.toLowerCase().includes(searchLower) ||
+        order.stage.toLowerCase().includes(searchLower) ||
+        order.status.toLowerCase().includes(searchLower)
+      );
+    }
+
     setFilteredOrders(result);
 
     // Reset current order index when filters change
     setCurrentOrderIndex(-1);
-  }, [filterFTL, filterPTL, filterDelayed, selectedStage]);
+  }, [filterFTL, filterPTL, filterDelayed, selectedStage, localSearchTerm]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -334,6 +355,12 @@ const OrdersPage = () => {
           activeTab={activeTab}
           onTabChange={handleTabChange}
           searchBar={true}
+          onSearch={(value) => {
+            setLocalSearchTerm(value);
+            if (handleSearchTermChange) {
+              handleSearchTermChange(value);
+            }
+          }}
         />
 
         {/* Status Filters */}

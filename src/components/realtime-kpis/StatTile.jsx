@@ -14,7 +14,8 @@ const StatTile = ({
   trend = 0, 
   status = 'normal', 
   icon = 'default',
-  onClick 
+  onClick,
+  sx = {}
 }) => {
   // Define status colors
   const statusColors = {

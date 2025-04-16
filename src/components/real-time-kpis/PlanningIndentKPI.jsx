@@ -35,15 +35,16 @@ const PlanningIndentKPI = ({ data, onKPIClick }) => {
     <KPIGroupContainer title={data.title}>
       <Grid container spacing={2} sx={{ display: 'flex', flexDirection: 'column' }}>
         {/* KPI Stats */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={12}>
           <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-            <StatTile
+            <StatTile 
               title="Planned Orders"
               value={plannedOrders?.count || 0}
               status={plannedOrders?.status || 'normal'}
               onClick={() => onKPIClick('plannedOrders', plannedOrders)}
+              sx = {{flex:1}}
             />
-            <StatTile
+            <StatTile 
               title="Pending Planning"
               value={pendingPlanning?.count || 0}
               status={pendingPlanning?.status || 'normal'}
@@ -58,6 +59,7 @@ const PlanningIndentKPI = ({ data, onKPIClick }) => {
               subtitle={activeIndents?.breakdown ? 
                 `${activeIndents.breakdown['Acceptance Pending'] || 0} Pending Acceptance` : ''}
               onClick={() => onKPIClick('activeIndents', activeIndents)}
+          
             />
           </Box>
         </Grid>

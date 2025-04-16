@@ -34,22 +34,26 @@ const PlantYardKPI = ({ data, onKPIClick }) => {
 
   return (
     <KPIGroupContainer title={data.title}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {/* KPI Stats */}
-        <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <StatTile
-              title="En Route to Loading"
+        <Grid item xs={12} md={12}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+            <Box sx={{ width: '33%' }}>
+              <StatTile
+                title="En Route to Loading"
               value={enRouteToLoading?.count || 0}
               status={enRouteToLoading?.status || 'normal'}
-              onClick={() => onKPIClick('enRouteToLoading', enRouteToLoading)}
-            />
-            <StatTile
-              title="Fulfillment Delayed"
-              value={fulfillmentDelayed?.count || 0}
-              status={fulfillmentDelayed?.status || 'delayed'}
-              onClick={() => onKPIClick('fulfillmentDelayed', fulfillmentDelayed)}
-            />
+                onClick={() => onKPIClick('enRouteToLoading', enRouteToLoading)}
+              />
+            </Box> 
+            <Box sx={{ width: '33%' }}>
+              <StatTile
+                title="Fulfillment Delayed"
+                value={fulfillmentDelayed?.count || 0}
+                status={fulfillmentDelayed?.status || 'delayed'}
+                onClick={() => onKPIClick('fulfillmentDelayed', fulfillmentDelayed)}
+              />
+            </Box>
             <StatTile
               title="At Plant/Dock"
               value={atPlantDock?.count || 0}

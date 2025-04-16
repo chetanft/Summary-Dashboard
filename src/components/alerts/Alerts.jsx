@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useData } from '../../context/DataContext';
 import {
   Box,
   Typography,
@@ -28,14 +29,26 @@ import { alerts, alertTypes, alertSeverities, alertStatuses } from '../../data/a
 import AlertDetailsPane from './AlertDetailsPane';
 
 const Alerts = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const { searchTerm, handleSearchTermChange } = useData();
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
   const [selectedSeverity, setSelectedSeverity] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedAlertId, setSelectedAlertId] = useState(null);
 
+  // Initialize local search term with global search term
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm || '');
+  }, [searchTerm]);
+
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+    const value = event.target.value;
+    setLocalSearchTerm(value);
+
+    // Update global search term
+    if (handleSearchTermChange) {
+      handleSearchTermChange(value);
+    }
   };
 
   const handleSeverityChange = (event) => {
@@ -73,15 +86,15 @@ const Alerts = () => {
   };
 
   const filteredAlerts = alerts.filter(alert => {
-    const matchesSearch = 
-      alert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      alert.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      alert.id.toLowerCase().includes(searchTerm.toLowerCase());
-    
+    const matchesSearch =
+      alert.title.toLowerCase().includes(localSearchTerm.toLowerCase()) ||
+      alert.description.toLowerCase().includes(localSearchTerm.toLowerCase()) ||
+      alert.id.toLowerCase().includes(localSearchTerm.toLowerCase());
+
     const matchesSeverity = selectedSeverity === 'all' || alert.severity === selectedSeverity;
     const matchesType = selectedType === 'all' || alert.type === selectedType;
     const matchesStatus = selectedStatus === 'all' || alert.status === selectedStatus;
-    
+
     return matchesSearch && matchesSeverity && matchesType && matchesStatus;
   });
 
@@ -112,14 +125,14 @@ const Alerts = () => {
       <Typography variant="h5" sx={{ mb: 3, color: 'primary.main', fontWeight: 'bold' }}>
         Operational Alerts
       </Typography>
-      
+
       {/* Filters */}
       <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
         <TextField
           placeholder="Search alerts..."
           variant="outlined"
           size="small"
-          value={searchTerm}
+          value={localSearchTerm}
           onChange={handleSearch}
           sx={{ minWidth: 250, flex: 1 }}
           InputProps={{
@@ -130,7 +143,7 @@ const Alerts = () => {
             ),
           }}
         />
-        
+
         <FormControl size="small" sx={{ minWidth: 150 }}>
           <InputLabel id="severity-select-label">Severity</InputLabel>
           <Select
@@ -148,7 +161,7 @@ const Alerts = () => {
             ))}
           </Select>
         </FormControl>
-        
+
         <FormControl size="small" sx={{ minWidth: 150 }}>
           <InputLabel id="type-select-label">Type</InputLabel>
           <Select
@@ -166,7 +179,7 @@ const Alerts = () => {
             ))}
           </Select>
         </FormControl>
-        
+
         <FormControl size="small" sx={{ minWidth: 150 }}>
           <InputLabel id="status-select-label">Status</InputLabel>
           <Select
@@ -184,14 +197,14 @@ const Alerts = () => {
             ))}
           </Select>
         </FormControl>
-        
+
         <Tooltip title="Refresh alerts">
           <IconButton color="primary" size="small" sx={{ alignSelf: 'center' }}>
             <RefreshIcon />
           </IconButton>
         </Tooltip>
       </Box>
-      
+
       {/* Alerts Table */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
@@ -216,10 +229,10 @@ const Alerts = () => {
                 <TableCell>{alert.id}</TableCell>
                 <TableCell>{alert.title}</TableCell>
                 <TableCell>
-                  <Chip 
+                  <Chip
                     label={alertSeverities.find(s => s.id === alert.severity)?.label || alert.severity}
                     size="small"
-                    sx={{ 
+                    sx={{
                       bgcolor: getSeverityChipColor(alert.severity),
                       color: 'white',
                       fontWeight: 'bold'
@@ -227,10 +240,10 @@ const Alerts = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  <Chip 
+                  <Chip
                     label={alertTypes.find(t => t.id === alert.type)?.label || alert.type}
                     size="small"
-                    sx={{ 
+                    sx={{
                       bgcolor: getTypeChipColor(alert.type),
                       color: 'white',
                       fontWeight: 'bold'
@@ -238,10 +251,10 @@ const Alerts = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  <Chip 
+                  <Chip
                     label={alertStatuses.find(s => s.id === alert.status)?.label || alert.status}
                     size="small"
-                    sx={{ 
+                    sx={{
                       bgcolor: getStatusChipColor(alert.status),
                       color: 'white',
                       fontWeight: 'bold'
@@ -274,7 +287,7 @@ const Alerts = () => {
       </TableContainer>
 
       {selectedAlertId && (
-        <AlertDetailsPane 
+        <AlertDetailsPane
           alert={selectedAlert}
           onClose={handleClosePane}
           onPrevious={handlePreviousAlert}
