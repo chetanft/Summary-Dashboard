@@ -13,7 +13,11 @@ import CompositeChartComponent from '../charts/CompositeChartComponent';
  * @param {number} props.actual - Actual value
  * @param {number} props.projected - Projected value
  * @param {number} props.budget - Budget value
+ * @param {string} props.formattedActual - Formatted actual value
+ * @param {string} props.formattedProjected - Formatted projected value
+ * @param {string} props.formattedBudget - Formatted budget value
  * @param {Array} props.chartData - Data for the chart
+ * @param {string} props.userRole - User role (CXO, Company User, Branch User)
  * @param {Function} props.onDrillDown - Function to handle drill down
  * @returns {JSX.Element}
  */
@@ -22,12 +26,24 @@ const BudgetedVsActualKPI = ({
   actual = 10,
   projected = 22,
   budget = 20,
+  formattedActual,
+  formattedProjected,
+  formattedBudget,
   chartData = [],
+  userRole,
   onDrillDown
 }) => {
   // Format values as currency in Cr format
   const formatValue = (value) => {
     return `₹ ${value} Cr`;
+  };
+
+  // Get role-specific title suffix
+  const getRoleSuffix = () => {
+    if (userRole === 'Branch User') return " (Branch)";
+    if (userRole === 'Company User') return " (Company)";
+    if (userRole === 'CXO') return " (Pan-India)";
+    return "";
   };
 
   return (
@@ -63,7 +79,7 @@ const BudgetedVsActualKPI = ({
               fontFamily: 'Inter, sans-serif',
             }}
           >
-            {title}
+            {title}{getRoleSuffix()}
           </Typography>
           <Tooltip title="Comparison of budgeted, actual, and projected freight costs">
             <span>
@@ -99,7 +115,7 @@ const BudgetedVsActualKPI = ({
               fontFamily: 'Inter, sans-serif',
             }}
           >
-            ₹ {actual} Cr
+            {formattedActual || formatValue(actual)}
           </Typography>
           <Typography
             sx={{
@@ -126,7 +142,7 @@ const BudgetedVsActualKPI = ({
                 fontFamily: 'Inter, sans-serif',
               }}
             >
-              ₹ {projected} Cr
+              {formattedProjected || formatValue(projected)}
             </Typography>
             <ArrowUpwardIcon sx={{ color: '#FF3533', fontSize: 24, transform: 'rotate(-45deg)' }} />
           </Box>
@@ -154,7 +170,7 @@ const BudgetedVsActualKPI = ({
               fontFamily: 'Inter, sans-serif',
             }}
           >
-            ₹ {budget} Cr
+            {formattedBudget || formatValue(budget)}
           </Typography>
           <Typography
             sx={{

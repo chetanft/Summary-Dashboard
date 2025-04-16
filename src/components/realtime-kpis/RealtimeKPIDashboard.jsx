@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton, Chip } from '@mui/material';
+import { Box, IconButton, Chip, TextField, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useData } from '../../context/DataContext';
@@ -18,8 +19,13 @@ const RealtimeKPIDashboard = () => {
   const {
     operationalKpiData,
     lastUpdated,
-    updateOperationalKpiData
+    updateOperationalKpiData,
+    searchTerm,
+    handleSearchTermChange
   } = useData();
+
+  // Local search state
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
 
   // State for drilldown
   const [drilldownOpen, setDrilldownOpen] = useState(false);
@@ -40,6 +46,22 @@ const RealtimeKPIDashboard = () => {
 
     return () => clearInterval(refreshInterval);
   }, [updateOperationalKpiData]);
+
+  // Initialize local search term with global search term
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm || '');
+  }, [searchTerm]);
+
+  // Handle search
+  const handleSearch = (event) => {
+    const value = event.target.value;
+    setLocalSearchTerm(value);
+
+    // Update global search term
+    if (handleSearchTermChange) {
+      handleSearchTermChange(value);
+    }
+  };
 
   // Handle KPI click for drilldown
   const handleKPIClick = (kpiType, data) => {

@@ -5,7 +5,7 @@ import { enhancedOrderData } from '../data/enhancedOrderData';
 export const fetchDashboardData = async (userRole) => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 800));
-  
+
   // In a real app, this would be an API call
   // For now, return mock data based on user role
   switch (userRole) {
@@ -39,21 +39,139 @@ export const fetchDashboardData = async (userRole) => {
 // Transform dashboard data for components
 export const transformDashboardData = (data) => {
   if (!data) return null;
-  
+
+  // Extract user role if available
+  const userRole = data.userRole || 'unknown';
+
+  // Transform KPI data with formatted values
+  const transformedKpis = transformKpiData(data.kpis, userRole);
+
+  // Create hero KPI data (budgeted vs actual)
+  const heroKPI = {
+    title: 'Budgeted vs Actual vs Projected Freight',
+    actual: data.kpis?.budgetedVsActual?.value || 0,
+    formattedActual: formatCurrency(data.kpis?.budgetedVsActual?.value || 0),
+    projected: (data.kpis?.budgetedVsActual?.value || 0) * 1.1, // Projected is 10% more than actual for demo
+    formattedProjected: formatCurrency((data.kpis?.budgetedVsActual?.value || 0) * 1.1),
+    budget: data.kpis?.budgetedVsActual?.target || 0,
+    formattedBudget: formatCurrency(data.kpis?.budgetedVsActual?.target || 0),
+    chartData: generateChartData(data.kpis?.budgetedVsActual?.value || 0, data.kpis?.budgetedVsActual?.target || 0)
+  };
+
+  // Create secondary KPIs
+  const secondaryKPIs = [
+    {
+      id: 'vehicle_utilization',
+      title: 'Vehicle Utilisation',
+      value: data.kpis?.vehicleUtilization?.value || 0,
+      formattedValue: formatPercentage(data.kpis?.vehicleUtilization?.value || 0),
+      target: data.kpis?.vehicleUtilization?.target || 0,
+      formattedTarget: formatPercentage(data.kpis?.vehicleUtilization?.target || 0),
+      chartData: generateRegionalChartData(data.kpis?.vehicleUtilization?.value || 0)
+    },
+    {
+      id: 'freight_cost_per_km',
+      title: 'Freight cost per KM',
+      value: data.kpis?.freightCost?.value || 0,
+      formattedValue: formatCurrency(data.kpis?.freightCost?.value || 0, 'INR/km'),
+      target: data.kpis?.freightCost?.target || 0,
+      formattedTarget: formatCurrency(data.kpis?.freightCost?.target || 0, 'INR/km'),
+      chartData: generateRegionalChartData(data.kpis?.freightCost?.value || 0)
+    }
+  ];
+
   return {
-    kpis: transformKpiData(data.kpis),
+    kpis: transformedKpis,
     orders: transformOrderData(data.orders),
     alerts: data.alerts,
     summary: generateSummaryData(data),
+    heroKPI,
+    secondaryKPIs,
+    userRole // Include user role in the transformed data
   };
 };
 
+// Format currency values with one decimal point
+const formatCurrency = (value, unit = 'Cr') => {
+  // Format to one decimal place
+  const formattedValue = Number(value).toFixed(1);
+  return `₹ ${formattedValue} ${unit}`;
+};
+
+// Format percentage values with one decimal point
+const formatPercentage = (value) => {
+  // Format to one decimal place
+  const formattedValue = Number(value).toFixed(1);
+  return `${formattedValue}%`;
+};
+
+// Generate chart data for budgeted vs actual
+const generateChartData = (actual, budget) => {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+  return months.map((month, index) => {
+    // Generate some variation in the data
+    const actualValue = actual * (0.9 + (index * 0.02));
+    const budgetValue = budget * (0.95 + (index * 0.01));
+
+    return {
+      month,
+      actual: Math.round(actualValue),
+      budget: Math.round(budgetValue)
+    };
+  });
+};
+
+// Generate regional chart data
+const generateRegionalChartData = (baseValue) => {
+  const regions = ['North', 'South', 'East', 'West', 'Central'];
+  return regions.map((region, index) => {
+    // Generate some variation in the data
+    const value = baseValue * (0.9 + (index * 0.05));
+
+    return {
+      region,
+      value: Math.round(value),
+      color: value < baseValue ? '#FF3533' : '#4CAF50'
+    };
+  });
+};
+
 // Transform KPI data
-const transformKpiData = (kpis) => {
-  return {
-    ...kpis,
-    // Add any additional transformations here
-  };
+const transformKpiData = (kpis, userRole) => {
+  if (!kpis) return {};
+
+  // Create a new object with the transformed data
+  const transformedKpis = { ...kpis };
+
+  // Add user role
+  transformedKpis.userRole = userRole;
+
+  // Format values for display if they exist
+  if (transformedKpis.budgetedVsActual) {
+    transformedKpis.budgetedVsActual = {
+      ...transformedKpis.budgetedVsActual,
+      formattedValue: formatCurrency(transformedKpis.budgetedVsActual.value || 0),
+      formattedTarget: formatCurrency(transformedKpis.budgetedVsActual.target || 0)
+    };
+  }
+
+  if (transformedKpis.vehicleUtilization) {
+    transformedKpis.vehicleUtilization = {
+      ...transformedKpis.vehicleUtilization,
+      formattedValue: formatPercentage(transformedKpis.vehicleUtilization.value || 0),
+      formattedTarget: formatPercentage(transformedKpis.vehicleUtilization.target || 0)
+    };
+  }
+
+  if (transformedKpis.freightCost) {
+    transformedKpis.freightCost = {
+      ...transformedKpis.freightCost,
+      formattedValue: formatCurrency(transformedKpis.freightCost.value || 0, 'INR/km'),
+      formattedTarget: formatCurrency(transformedKpis.freightCost.target || 0, 'INR/km')
+    };
+  }
+
+  return transformedKpis;
 };
 
 // Transform order data
@@ -68,7 +186,7 @@ const transformOrderData = (orders) => {
 // Generate summary data
 const generateSummaryData = (data) => {
   const { kpis, orders } = data;
-  
+
   return {
     totalOrders: orders.length,
     onTimeDelivery: kpis.otif?.value || 0,
@@ -104,9 +222,9 @@ const generateMockAlerts = (count) => {
     'Payment pending',
     'Delivery exception',
   ];
-  
+
   const alerts = [];
-  
+
   for (let i = 0; i < count; i++) {
     alerts.push({
       id: `alert-${i + 1}`,
@@ -117,7 +235,7 @@ const generateMockAlerts = (count) => {
       isRead: Math.random() > 0.7,
     });
   }
-  
+
   return alerts;
 };
 
@@ -125,14 +243,14 @@ const generateMockAlerts = (count) => {
 export const fetchOrderDetails = async (orderId) => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
-  
+
   // Find the order in our mock data
   const order = enhancedOrderData.find(o => o.id === orderId);
-  
+
   if (!order) {
     throw new Error(`Order with ID ${orderId} not found`);
   }
-  
+
   return {
     ...order,
     // Add additional details that might not be in the list view
@@ -147,7 +265,7 @@ const generateOrderTimeline = (order) => {
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
-  
+
   return [
     {
       id: 'day-1',
@@ -228,10 +346,10 @@ const generateOrderComments = (order) => {
 export const fetchKpiDrilldownData = async (kpiId, level, parentId = null) => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 600));
-  
+
   // In a real app, this would fetch data from an API
   // For now, return mock data based on the KPI and level
-  
+
   // Level can be 'region', 'branch', or 'order'
   switch (level) {
     case 'region':
@@ -248,12 +366,12 @@ export const fetchKpiDrilldownData = async (kpiId, level, parentId = null) => {
 // Generate mock regional data for KPI drill-down
 const generateRegionalData = (kpiId) => {
   const regions = ['North', 'South', 'East', 'West', 'Central'];
-  
+
   return regions.map(region => {
     const value = Math.round(Math.random() * 100);
     const target = 75;
     const variance = value - target;
-    
+
     return {
       id: `region-${region.toLowerCase()}`,
       name: `${region} Region`,
@@ -276,12 +394,12 @@ const generateBranchData = (kpiId, regionId) => {
     `${region} Industrial`,
     `${region} Downtown`,
   ];
-  
+
   return branches.map(branch => {
     const value = Math.round(Math.random() * 100);
     const target = 75;
     const variance = value - target;
-    
+
     return {
       id: `branch-${branch.toLowerCase().replace(' ', '-')}`,
       name: branch,

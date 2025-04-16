@@ -7,13 +7,23 @@ const SecondaryKPI = ({
   title,
   value,
   target,
+  formattedValue,
+  formattedTarget,
   chartData,
   color = 'primary',
   chartType = 'bar',
   note,
   additionalInfo,
+  userRole,
   onDrillDown
 }) => {
+  // Get role-specific title suffix
+  const getRoleSuffix = () => {
+    if (userRole === 'Branch User') return " (Branch)";
+    if (userRole === 'Company User') return " (Company)";
+    if (userRole === 'CXO') return " (Pan-India)";
+    return "";
+  };
   // Default chart data if none provided
   const defaultLineChartData = [
     { day: '1', value: 86 },
@@ -77,7 +87,10 @@ const SecondaryKPI = ({
         // Map title to appropriate KPI ID and unit
         let kpiId, unit;
 
-        switch(title) {
+        // Remove role suffix from title for KPI ID mapping
+        const baseTitle = title.replace(/ \(Branch\)| \(Company\)| \(Pan-India\)/, '');
+
+        switch(baseTitle) {
           case 'Vehicle Utilisation':
             kpiId = 'vehicle_utilization';
             unit = '%';
@@ -130,7 +143,7 @@ const SecondaryKPI = ({
               color: '#434F64',
             }}
           >
-            {title}
+            {title}{getRoleSuffix()}
           </Typography>
           <Tooltip title={getTooltipText(title)}>
             <InfoOutlinedIcon sx={{ fontSize: 16, color: '#838C9D', cursor: 'pointer' }} />
@@ -174,7 +187,7 @@ const SecondaryKPI = ({
             color: color === 'green' ? '#4CAF50' : color === 'yellow' ? '#FFC107' : color === 'red' ? '#FF3533' : '#434F64',
           }}
         >
-          {value || 'Value'}
+          {formattedValue || value || 'Value'}
         </Typography>
 
         {/* Target */}
@@ -209,7 +222,7 @@ const SecondaryKPI = ({
               color: '#434F64',
             }}
           >
-            {target || 'Value'}
+            {formattedTarget || target || 'Value'}
           </Typography>
         </Box>
       </Box>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useData } from '../../context/DataContext';
 import Layout from '../layout/Layout';
 import DashboardHeader from './DashboardHeader';
@@ -13,10 +13,15 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('summary');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [localSearchTerm, setLocalSearchTerm] = useState('');
   const [drilldownOpen, setDrilldownOpen] = useState(false);
   const [selectedKPI, setSelectedKPI] = useState(null);
-  const { dashboardData, loading, error, lastUpdated, refreshData } = useData();
+  const { dashboardData, loading, error, lastUpdated, refreshData, searchTerm, handleSearchTermChange } = useData();
+
+  // Initialize local search term with global search term
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm || '');
+  }, [searchTerm]);
 
   // Handle manual refresh
   const handleRefresh = () => {
@@ -30,7 +35,13 @@ const Dashboard = () => {
 
   // Handle search term change
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+    const value = event.target.value;
+    setLocalSearchTerm(value);
+
+    // Update global search term
+    if (handleSearchTermChange) {
+      handleSearchTermChange(value);
+    }
   };
 
   // Handle KPI drill-down
@@ -101,21 +112,17 @@ const Dashboard = () => {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
-            <TextField
-              placeholder="Search KPIs..."
-              variant="outlined"
-              size="small"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              sx={{ minWidth: 250, maxWidth: 400 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <Box sx={{ position: 'relative', minWidth: 250, maxWidth: 400 }}>
+              <TextField
+                placeholder="Search KPIs..."
+                variant="outlined"
+                size="small"
+                value={localSearchTerm}
+                onChange={handleSearchChange}
+                fullWidth
+              />
+              <SearchIcon sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: 'action.active' }} />
+            </Box>
             <Typography variant="body2" color="text.secondary">
               {lastUpdated ? `Last updated: ${lastUpdated}` : ''}
             </Typography>

@@ -2,7 +2,9 @@ import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
+import { useSearch } from '../../context/SearchContext';
 import OrderDetailsDrawer from './OrderDetailsDrawer';
+import EnhancedSearchDropdown from '../common/EnhancedSearchDropdown';
 import {
   Box,
   Typography,
@@ -150,7 +152,7 @@ const orderData = [
     statusColor: 'success',
   },
   {
-    id: 'SO: 21425',
+    id: 'SO: 21428',
     consignor: 'JSW- AMRIT',
     consignee: 'Star Retailers',
     route: 'AMRIT-MUM',
@@ -162,7 +164,7 @@ const orderData = [
     statusColor: 'default',
   },
   {
-    id: 'SO: 21426',
+    id: 'SO: 21429',
     consignor: 'JSW- AMRIT',
     consignee: 'Star Retailers',
     route: 'AMRIT-HYD',
@@ -227,6 +229,7 @@ const OrdersPage = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { searchTerm, handleSearchTermChange } = useData();
+  const { recentSearches, addRecentSearch } = useSearch();
   const [activeTab, setActiveTab] = useState('orderData');
   const [page, setPage] = useState(1);
   const [selectedStage, setSelectedStage] = useState('All Stages');
@@ -234,6 +237,7 @@ const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [currentOrderIndex, setCurrentOrderIndex] = useState(-1);
   const [localSearchTerm, setLocalSearchTerm] = useState('');
+  const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
 
   // Filter states
   const [filterFTL, setFilterFTL] = useState(false);
@@ -311,6 +315,13 @@ const OrdersPage = () => {
     setSelectedOrder(order);
     setCurrentOrderIndex(index);
     setDrawerOpen(true);
+
+    // Add to recent searches with current stage ID
+    addRecentSearch({
+      type: 'Order ID',
+      value: order.id,
+      tripId: order.stage // Use the current stage as the Trip ID
+    });
   };
 
   const handleCloseDrawer = () => {
@@ -346,6 +357,70 @@ const OrdersPage = () => {
     setFilterDelayed(!filterDelayed);
   };
 
+  // Handle search selection
+  const handleSearchSelect = (item) => {
+    // Find the order that matches the selected search item
+    let matchingOrder;
+
+    switch (item.type) {
+      case 'Order ID':
+        matchingOrder = orderData.find(order => order.id === item.value);
+        break;
+      case 'Consignor':
+        matchingOrder = orderData.find(order => order.consignor === item.value);
+        break;
+      case 'Consignee':
+        matchingOrder = orderData.find(order => order.consignee === item.value);
+        break;
+      case 'Route':
+        matchingOrder = orderData.find(order => order.route === item.value);
+        break;
+      case 'Trip Type':
+        matchingOrder = orderData.find(order => order.tripType === item.value);
+        break;
+      case 'Stage':
+        matchingOrder = orderData.find(order => order.stage === item.value);
+        break;
+      case 'Status':
+        matchingOrder = orderData.find(order => order.status === item.value);
+        break;
+      case 'Tracking ID':
+        matchingOrder = orderData.find(order => order.trackingId === item.value);
+        break;
+      default:
+        // If type is not recognized, try to find a match in any field
+        matchingOrder = orderData.find(order =>
+          order.id === item.value ||
+          order.consignor === item.value ||
+          order.consignee === item.value ||
+          order.route === item.value ||
+          order.tripType === item.value ||
+          order.stage === item.value ||
+          order.status === item.value ||
+          order.trackingId === item.value
+        );
+    }
+
+    if (matchingOrder) {
+      const index = orderData.indexOf(matchingOrder);
+      handleOrderClick(matchingOrder, index);
+    }
+
+    // Update search term
+    setLocalSearchTerm(item.value);
+    if (handleSearchTermChange) {
+      handleSearchTermChange(item.value);
+    }
+  };
+
+  // Handle search clear
+  const handleClearSearch = () => {
+    setLocalSearchTerm('');
+    if (handleSearchTermChange) {
+      handleSearchTermChange('');
+    }
+  };
+
   return (
     <Fragment>
       <Layout>
@@ -355,6 +430,56 @@ const OrdersPage = () => {
           activeTab={activeTab}
           onTabChange={handleTabChange}
           searchBar={true}
+          searchData={[
+            // Order IDs
+            ...orderData.map(order => ({
+              type: 'Order ID',
+              value: order.id,
+              tripId: order.stage // Use the current stage as the Trip ID
+            })),
+            // Consignors
+            ...orderData.map(order => ({
+              type: 'Consignor',
+              value: order.consignor,
+              tripId: order.stage // Use the current stage as the Trip ID
+            })),
+            // Consignees
+            ...orderData.map(order => ({
+              type: 'Consignee',
+              value: order.consignee,
+              tripId: order.stage // Use the current stage as the Trip ID
+            })),
+            // Routes
+            ...orderData.map(order => ({
+              type: 'Route',
+              value: order.route,
+              tripId: order.stage // Use the current stage as the Trip ID
+            })),
+            // Trip Types
+            ...orderData.map(order => ({
+              type: 'Trip Type',
+              value: order.tripType,
+              tripId: order.stage // Use the current stage as the Trip ID
+            })),
+            // Stages
+            ...orderData.map(order => ({
+              type: 'Stage',
+              value: order.stage,
+              tripId: order.stage // Use the current stage as the Trip ID
+            })),
+            // Statuses
+            ...orderData.map(order => ({
+              type: 'Status',
+              value: order.status,
+              tripId: order.stage // Use the current stage as the Trip ID
+            })),
+            // Tracking IDs
+            ...orderData.filter(order => order.trackingId).map(order => ({
+              type: 'Tracking ID',
+              value: order.trackingId,
+              tripId: order.stage // Use the current stage as the Trip ID
+            }))
+          ]}
           onSearch={(value) => {
             setLocalSearchTerm(value);
             if (handleSearchTermChange) {

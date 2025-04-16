@@ -17,32 +17,47 @@ import {
   Switch,
   Link,
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import freightTigerLogo from '../../assets/freight-tiger-logo.svg';
+import IconBundle from '../common/IconBundle';
+import freightTigerLogo from '../../assets/freight-tiger-logo-new.svg';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
+    console.log('Login attempt with:', { username, password });
 
     if (!username || !password) {
       setError('Please enter both username and password');
+      setLoading(false);
       return;
     }
 
-    const user = login(username, password);
-    if (user) {
-      navigate('/dashboard');
-    } else {
-      setError('Invalid username or password');
+    try {
+      // Properly await the async login function
+      const user = await login(username, password);
+      console.log('Login result:', user);
+      if (user) {
+        console.log('Login successful, navigating to dashboard');
+        navigate('/dashboard');
+      } else {
+        console.log('Login failed');
+        setError('Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(error.message || 'An error occurred during login');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +86,7 @@ const Login = () => {
               component="img"
               src={freightTigerLogo}
               alt="Freight Tiger Logo"
-              sx={{ height: '45px' }}
+              sx={{ height: '45px', width: 'auto', maxWidth: '250px' }}
             />
           </Box>
 
@@ -163,7 +178,7 @@ const Login = () => {
                         onClick={handleTogglePasswordVisibility}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showPassword ? <IconBundle name="VisibilityOff" /> : <IconBundle name="Visibility" />}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -233,19 +248,19 @@ const Login = () => {
               type="submit"
               fullWidth
               variant="contained"
+              disabled={loading}
               sx={{
                 mt: 2,
                 mb: 3,
                 backgroundColor: '#434F64',
                 borderRadius: '8px',
                 height: '40px',
-                textTransform: 'none',
-                fontFamily: '"Inter", sans-serif',
-                fontWeight: 500,
-                fontSize: '16px',
+                '&:hover': {
+                  backgroundColor: '#323c4d',
+                },
               }}
             >
-              Sign In
+              {loading ? 'Logging in...' : 'Log In'}
             </Button>
 
             <Divider sx={{ width: '100%', my: 2 }} />

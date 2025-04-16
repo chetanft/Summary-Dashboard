@@ -1,63 +1,85 @@
-import { createContext, useState, useContext, useEffect } from 'react';
-import { users } from '../data/users';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import authService from '../services/authService';
 
 // Create the authentication context
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 // Custom hook to use the auth context
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
 
 // Auth provider component
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Check for existing user session on component mount
   useEffect(() => {
-    const storedUser = localStorage.getItem('tmsUser');
-    if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const initializeAuth = async () => {
+      try {
+        const user = await authService.getCurrentUser();
+        setCurrentUser(user);
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        setError('Failed to initialize authentication');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   // Login function
-  const login = (username, password) => {
-    const user = users.find(
-      (user) => user.username === username && user.password === password
-    );
-    
-    if (user) {
-      // Create a user object without the password
-      const authenticatedUser = { ...user };
-      delete authenticatedUser.password;
-      
-      // Store user in state and localStorage
-      setCurrentUser(authenticatedUser);
-      localStorage.setItem('tmsUser', JSON.stringify(authenticatedUser));
-      return authenticatedUser;
+  const login = async (username, password) => {
+    try {
+      setError(null);
+      const user = await authService.login(username, password);
+      setCurrentUser(user);
+      return user;
+    } catch (error) {
+      setError(error.message);
+      throw error;
     }
-    return null;
   };
 
   // Logout function
-  const logout = () => {
-    setCurrentUser(null);
-    localStorage.removeItem('tmsUser');
+  const logout = async () => {
+    try {
+      await authService.logout();
+      setCurrentUser(null);
+      setError(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+      setError('Failed to logout');
+    }
   };
 
   // Context value
   const value = {
     currentUser,
+    loading,
+    error,
     login,
     logout,
+    isAuthenticated: () => authService.isAuthenticated(),
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // Or a proper loading component
+  }
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };
+
+export default AuthContext;

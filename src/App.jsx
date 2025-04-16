@@ -2,12 +2,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
+import { SearchProvider } from './context/SearchContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
 import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
 import OrdersPage from './components/orders/OrdersPage';
 import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
+import SearchDropdownDemo from './pages/SearchDropdownDemo';
+import EnhancedSearchDemo from './pages/EnhancedSearchDemo';
 
 // Create a theme instance
 const theme = createTheme({
@@ -26,7 +29,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <Router>
+        <SearchProvider>
+          <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route
@@ -69,9 +73,26 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/search-dropdown-demo"
+              element={
+                <DataProvider>
+                  <SearchDropdownDemo />
+                </DataProvider>
+              }
+            />
+            <Route
+              path="/enhanced-search-demo"
+              element={
+                <DataProvider>
+                  <EnhancedSearchDemo />
+                </DataProvider>
+              }
+            />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
-        </Router>
+          </Router>
+        </SearchProvider>
       </AuthProvider>
     </ThemeProvider>
   );

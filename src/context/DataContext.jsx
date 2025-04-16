@@ -256,11 +256,20 @@ export const DataProvider = ({ children }) => {
     setError(null);
 
     try {
+      // Map user role to the expected format for the data service
+      const roleForData = currentUser.role === 'CXO' ? 'cxo' :
+                          currentUser.role === 'Company User' ? 'company' : 'branch';
+
+      console.log('Fetching dashboard data for role:', roleForData);
+
       // Fetch data based on user role
-      const data = await fetchDashboardData(currentUser.role);
+      const data = await fetchDashboardData(roleForData);
 
       // Transform data for dashboard components
       const transformedData = transformDashboardData(data);
+
+      // Add user role to the transformed data for components to use
+      transformedData.userRole = currentUser.role;
 
       // Update state
       setDashboardData(transformedData);
@@ -271,63 +280,31 @@ export const DataProvider = ({ children }) => {
       setError('Failed to load dashboard data. Please try again.');
       setLoading(false);
     }
-  }, []); // Empty dependency array to prevent re-creation on every render
+  }, [currentUser]); // Depend on currentUser to reload when user changes
 
   // Function to load real-time KPI data
   const loadRealtimeKpiData = useCallback(() => {
     if (!currentUser) return;
 
     try {
-      const data = generateRealtimeKpiData(userRole);
+      // Map user role to the expected format
+      const roleForData = currentUser.role === 'CXO' ? 'CXO' :
+                          currentUser.role === 'Company User' ? 'Company' : 'Branch';
+
+      console.log('Generating realtime KPI data for role:', roleForData);
+
+      const data = generateRealtimeKpiData(roleForData);
+
+      // Add user role to the data for components to use
+      data.userRole = currentUser.role;
+
       setRealtimeKpiData(data);
       setLastUpdated(new Date());
     } catch (err) {
       console.error('Error loading real-time KPI data:', err);
       setError('Failed to load real-time KPI data');
     }
-  }, []); // Empty dependency array to prevent re-creation on every render
-
-  // Function to load operational KPI data
-  const loadOperationalKpiData = useCallback(() => {
-    if (!currentUser) return;
-
-    try {
-      const data = generateOperationalKpiData(userRole);
-      setOperationalKpiData(data);
-      setFilteredOperationalKpiData(filterDataByBranch(data, selectedBranch));
-      setLastUpdated(new Date());
-    } catch (err) {
-      console.error('Error loading operational KPI data:', err);
-      setError('Failed to load operational KPI data');
-    }
-  }, []); // Empty dependency array to prevent re-creation on every render
-
-  // Function to update real-time KPI data
-  const updateRealtimeKpiData = useCallback(() => {
-    if (!realtimeKpiData) return;
-
-    try {
-      const updatedData = simulateRealtimeUpdate(realtimeKpiData, userRole);
-      setRealtimeKpiData(updatedData);
-      setLastUpdated(new Date());
-    } catch (err) {
-      console.error('Error updating real-time KPI data:', err);
-    }
-  }, []); // Empty dependency array to prevent re-creation on every render
-
-  // Function to update operational KPI data
-  const updateOperationalKpiData = useCallback(() => {
-    if (!operationalKpiData) return;
-
-    try {
-      const updatedData = simulateOperationalKpiUpdate(operationalKpiData);
-      setOperationalKpiData(updatedData);
-      setFilteredOperationalKpiData(filterDataByBranch(updatedData, selectedBranch));
-      setLastUpdated(new Date());
-    } catch (err) {
-      console.error('Error updating operational KPI data:', err);
-    }
-  }, []); // Empty dependency array to prevent re-creation on every render
+  }, [currentUser]); // Depend on currentUser to reload when user changes
 
   // Function to filter data based on selected branch
   const filterDataByBranch = useCallback((data, branch) => {
@@ -376,6 +353,76 @@ export const DataProvider = ({ children }) => {
 
     return data;
   }, []);
+
+  // Function to load operational KPI data
+  const loadOperationalKpiData = useCallback(() => {
+    if (!currentUser) return;
+
+    try {
+      // Map user role to the expected format
+      const roleForData = currentUser.role === 'CXO' ? 'CXO' :
+                          currentUser.role === 'Company User' ? 'Company' : 'Branch';
+
+      console.log('Generating operational KPI data for role:', roleForData);
+
+      const data = generateOperationalKpiData(roleForData);
+
+      // Add user role to the data for components to use
+      data.userRole = currentUser.role;
+
+      setOperationalKpiData(data);
+      setFilteredOperationalKpiData(filterDataByBranch(data, selectedBranch));
+      setLastUpdated(new Date());
+    } catch (err) {
+      console.error('Error loading operational KPI data:', err);
+      setError('Failed to load operational KPI data');
+    }
+  }, [currentUser, selectedBranch, filterDataByBranch]); // Include dependencies
+
+  // Function to update real-time KPI data
+  const updateRealtimeKpiData = useCallback(() => {
+    if (!realtimeKpiData) return;
+
+    try {
+      // Map user role to the expected format
+      const roleForData = currentUser?.role === 'CXO' ? 'CXO' :
+                          currentUser?.role === 'Company User' ? 'Company' : 'Branch';
+
+      const updatedData = simulateRealtimeUpdate(realtimeKpiData, roleForData);
+
+      // Preserve user role in the updated data
+      updatedData.userRole = currentUser?.role;
+
+      setRealtimeKpiData(updatedData);
+      setLastUpdated(new Date());
+    } catch (err) {
+      console.error('Error updating real-time KPI data:', err);
+    }
+  }, [realtimeKpiData, currentUser]); // Include dependencies
+
+  // Function to update operational KPI data
+  const updateOperationalKpiData = useCallback(() => {
+    if (!operationalKpiData) return;
+
+    try {
+      // Map user role to the expected format
+      const roleForData = currentUser?.role === 'CXO' ? 'CXO' :
+                          currentUser?.role === 'Company User' ? 'Company' : 'Branch';
+
+      // Simulate update with role-specific data
+      const updatedData = simulateOperationalKpiUpdate(operationalKpiData, roleForData);
+
+      // Preserve user role in the updated data
+      updatedData.userRole = currentUser?.role;
+
+      setOperationalKpiData(updatedData);
+      setFilteredOperationalKpiData(filterDataByBranch(updatedData, selectedBranch));
+      setLastUpdated(new Date());
+    } catch (err) {
+      console.error('Error updating operational KPI data:', err);
+    }
+  }, [operationalKpiData, currentUser, selectedBranch, filterDataByBranch]); // Include dependencies
+
 
   // Function to filter dashboard data based on search term
   const filterDashboardDataBySearch = useCallback((data, term) => {
@@ -465,10 +512,22 @@ export const DataProvider = ({ children }) => {
   // Function to change user role for real-time KPI data
   const changeUserRole = useCallback((role) => {
     setUserRole(role);
+
     // Load new data for the selected role
     const data = generateRealtimeKpiData(role);
+
+    // Add user role to the data for components to use
+    data.userRole = role;
+
     setRealtimeKpiData(data);
     setFilteredRealtimeKpiData(filterDataByBranch(data, selectedBranch));
+
+    // Also update operational KPI data with the new role
+    const operationalData = generateOperationalKpiData(role);
+    operationalData.userRole = role;
+    setOperationalKpiData(operationalData);
+    setFilteredOperationalKpiData(filterDataByBranch(operationalData, selectedBranch));
+
     setLastUpdated(new Date());
   }, [filterDataByBranch, selectedBranch]); // Add dependencies
 
