@@ -1,10 +1,62 @@
-import React from 'react';
-import { Box, Typography, Grid, Paper, Chip } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Grid, Paper, Chip, FormControl, InputLabel, Select, MenuItem, CircularProgress, Alert } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import KPIGroupContainer from '../realtime-kpis/KPIGroupContainer';
 import StatTile from '../realtime-kpis/StatTile';
+import DockOccupancyHeatmap from '../operations/DockOccupancyHeatmap';
+import { fetchDockOccupancyData } from '../../services/operationsService';
 
 const PlantYardKPI = ({ data, onKPIClick }) => {
+  const [dockData, setDockData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [shift, setShift] = useState('all');
+  
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const result = await fetchDockOccupancyData();
+        setDockData(result);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading dock occupancy data:', err);
+        setError('Failed to load dock occupancy data. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadData();
+  }, []);
+  
+  const handleShiftChange = (event) => {
+    setShift(event.target.value);
+  };
+  
+  // Filter data based on selected shift - keep this simple
+  const filteredData = React.useMemo(() => {
+    if (!dockData) return null;
+    
+    if (shift === 'all') return dockData;
+    
+    const shiftRanges = {
+      'morning': [0, 8], // 6 AM - 2 PM
+      'evening': [8, 16], // 2 PM - 10 PM
+      'night': [16, 18] // 10 PM - 11 PM (partial)
+    };
+    
+    const [start, end] = shiftRanges[shift];
+    
+    return {
+      ...dockData,
+      hours: dockData.hours.slice(start, end),
+      occupancy: dockData.occupancy.filter(item => 
+        item.hourIndex >= start && item.hourIndex < end
+      )
+    };
+  }, [dockData, shift]);
+
   if (!data) return null;
 
   // Prepare chart data
@@ -41,8 +93,8 @@ const PlantYardKPI = ({ data, onKPIClick }) => {
             <Box sx={{ width: '33%' }}>
               <StatTile
                 title="En Route to Loading"
-              value={enRouteToLoading?.count || 0}
-              status={enRouteToLoading?.status || 'normal'}
+                value={enRouteToLoading?.count || 0}
+                status={enRouteToLoading?.status || 'normal'}
                 onClick={() => onKPIClick('enRouteToLoading', enRouteToLoading)}
               />
             </Box> 
@@ -108,6 +160,44 @@ const PlantYardKPI = ({ data, onKPIClick }) => {
               </Paper>
             </Grid>
           </Grid>
+        </Grid>
+        
+        {/* Dock Occupancy Heatmap */}
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, mt: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="subtitle2">Dock Occupancy by Vehicle Type</Typography>
+              <FormControl size="small" sx={{ minWidth: 120 }}>
+                <InputLabel id="shift-select-label">Shift</InputLabel>
+                <Select
+                  labelId="shift-select-label"
+                  id="shift-select"
+                  value={shift}
+                  label="Shift"
+                  onChange={handleShiftChange}
+                >
+                  <MenuItem value="all">All Shifts</MenuItem>
+                  <MenuItem value="morning">Morning (6 AM - 2 PM)</MenuItem>
+                  <MenuItem value="evening">Evening (2 PM - 10 PM)</MenuItem>
+                  <MenuItem value="night">Night (10 PM - 11 PM)</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            
+            <Box sx={{ height: 400, width: '100%' }}>
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                  <CircularProgress />
+                </Box>
+              ) : error ? (
+                <Alert severity="error">{error}</Alert>
+              ) : filteredData ? (
+                <DockOccupancyHeatmap data={filteredData} />
+              ) : (
+                <Alert severity="info">No dock occupancy data available</Alert>
+              )}
+            </Box>
+          </Paper>
         </Grid>
       </Grid>
     </KPIGroupContainer>
