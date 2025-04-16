@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 
-const DockOccupancyHeatmap = () => {
+const DockOccupancyHeatmap = ({ data }) => {
   // Generate all 24 hours
   const hours = Array.from({ length: 24 }, (_, i) => 
     `${i.toString().padStart(2, '0')}:00`
@@ -20,7 +20,7 @@ const DockOccupancyHeatmap = () => {
   };
   
   // Sample occupancy data spread across 24 hours
-  const occupancyData = [
+  const defaultOccupancyData = [
     // Early morning
     { dock: 0, hour: 0, type: 'Container', duration: 2 },
     { dock: 3, hour: 1, type: 'Mini Truck', duration: 1 },
@@ -55,10 +55,21 @@ const DockOccupancyHeatmap = () => {
     { dock: 9, hour: 23, type: '14-ft Truck', duration: 1 }
   ];
   
+  // Use provided data if available, otherwise use default data
+  const occupancyData = data?.occupancy || defaultOccupancyData;
+  
   // Create a grid for easy lookup
   const grid = {};
   occupancyData.forEach(item => {
-    const { dock, hour, type, duration } = item;
+    // Handle both data formats (dockIndex/hourIndex or dock/hour)
+    const dock = item.dock !== undefined ? item.dock : item.dockIndex;
+    const hour = item.hour !== undefined ? item.hour : item.hourIndex;
+    const type = item.type !== undefined ? item.type : item.vehicleType;
+    const duration = item.duration || 1;
+    
+    if (dock === undefined || hour === undefined || !type) {
+      return; // Skip invalid data
+    }
     
     // Mark cells for this vehicle
     for (let h = 0; h < duration; h++) {
@@ -70,13 +81,16 @@ const DockOccupancyHeatmap = () => {
     }
   });
   
+  // Use provided vehicle types if available, otherwise use default
+  const displayVehicleTypes = data?.vehicleTypes || vehicleTypes;
+  
   return (
     <Paper sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Typography variant="h6" gutterBottom>Dock Occupancy by Vehicle Type</Typography>
       
       {/* Legend */}
       <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-        {Object.entries(vehicleTypes).map(([type, { color }]) => (
+        {Object.entries(displayVehicleTypes).map(([type, { color }]) => (
           <Box key={type} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <Box sx={{ width: 16, height: 16, bgcolor: color, borderRadius: '2px' }} />
             <Typography variant="caption">{type}</Typography>
@@ -183,7 +197,7 @@ const DockOccupancyHeatmap = () => {
                       style={{ 
                         border: '1px solid #e0e0e0',
                         padding: '8px',
-                        backgroundColor: vehicleTypes[cell.type].color,
+                        backgroundColor: displayVehicleTypes[cell.type]?.color || '#cccccc',
                         color: '#ffffff',
                         fontWeight: 'bold',
                         textAlign: 'center',
