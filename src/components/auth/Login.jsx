@@ -3,13 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   Box,
-  Container,
   TextField,
   Button,
   Typography,
-  Paper,
   Alert,
-  Grid,
   Divider,
   InputAdornment,
   IconButton,
@@ -18,7 +15,9 @@ import {
   Link,
 } from '@mui/material';
 import IconBundle from '../common/IconBundle';
-import freightTigerLogo from '../../assets/freight-tiger-logo-new.svg';
+import ReleaseCarousel from '../common/ReleaseCarousel';
+import releaseNotes from '../../data/releaseNotes';
+import freightTigerLogo from '../../assets/freight-tiger-logo-correct.svg';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -74,7 +73,7 @@ const Login = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          padding: '48px',
+          padding: '48px 48px 24px',
           boxShadow: '12px 0px 24px #EFEFEF',
           backgroundColor: '#FFFFFF',
         }}
@@ -85,7 +84,7 @@ const Login = () => {
             <Box
               component="img"
               src={freightTigerLogo}
-              alt="Freight Tiger Logo"
+              alt="FREIGHT TIGER"
               sx={{ height: '45px', width: 'auto', maxWidth: '250px' }}
             />
           </Box>
@@ -99,6 +98,8 @@ const Login = () => {
               color: '#434F64',
               mb: 4,
               fontFamily: '"Inter", sans-serif',
+              fontSize: '20px',
+              lineHeight: '140%',
             }}
           >
             Log In
@@ -121,6 +122,8 @@ const Login = () => {
                   color: '#5F697B',
                   mb: 1,
                   fontFamily: '"Inter", sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '140%',
                 }}
               >
                 Email or Phone Number
@@ -137,6 +140,7 @@ const Login = () => {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     height: '52px',
+                    minHeight: '52px',
                     borderRadius: '8px',
                     '& fieldset': {
                       borderColor: '#CED1D7',
@@ -144,6 +148,12 @@ const Login = () => {
                     '&:hover fieldset': {
                       borderColor: '#CED1D7',
                     },
+                  },
+                  '& .MuiInputBase-input': {
+                    fontFamily: '"Inter", sans-serif',
+                    fontSize: '16px',
+                    lineHeight: '140%',
+                    color: '#838C9D',
                   },
                 }}
               />
@@ -157,35 +167,40 @@ const Login = () => {
                   color: '#5F697B',
                   mb: 1,
                   fontFamily: '"Inter", sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '140%',
                 }}
               >
                 Password
               </Typography>
-              <TextField
-                fullWidth
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="***************"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleTogglePasswordVisibility}
-                        edge="end"
-                      >
-                        {showPassword ? <IconBundle name="VisibilityOff" /> : <IconBundle name="Visibility" />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
+              <Box sx={{ position: 'relative', width: '100%' }}>
+                <TextField
+                  fullWidth
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="***************"
+                />
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleTogglePasswordVisibility}
+                  sx={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                  }}
+                >
+                  {showPassword ? <IconBundle name="VisibilityOff" /> : <IconBundle name="Visibility" />}
+                </IconButton>
+              </Box>
+              <Box sx={{
                   '& .MuiOutlinedInput-root': {
                     height: '52px',
+                    minHeight: '52px',
                     borderRadius: '8px',
                     '& fieldset': {
                       borderColor: '#CED1D7',
@@ -193,6 +208,12 @@ const Login = () => {
                     '&:hover fieldset': {
                       borderColor: '#CED1D7',
                     },
+                  },
+                  '& .MuiInputBase-input': {
+                    fontFamily: '"Inter", sans-serif',
+                    fontSize: '16px',
+                    lineHeight: '140%',
+                    color: '#838C9D',
                   },
                 }}
               />
@@ -244,6 +265,73 @@ const Login = () => {
               </Link>
             </Box>
 
+            {/* Remember me toggle and Forgot password */}
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 2,
+              height: '20px'
+            }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Switch
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  size="small"
+                  sx={{
+                    width: '40px',
+                    height: '20px',
+                    '& .MuiSwitch-switchBase': {
+                      '&.Mui-checked': {
+                        color: '#FFFFFF',
+                        '& + .MuiSwitch-track': {
+                          backgroundColor: '#434F64',
+                          opacity: 1,
+                        },
+                      },
+                    },
+                    '& .MuiSwitch-thumb': {
+                      width: '16px',
+                      height: '16px',
+                    },
+                    '& .MuiSwitch-track': {
+                      borderRadius: '36.5px',
+                    },
+                  }}
+                />
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 500,
+                    color: '#1A1A1A',
+                    fontFamily: '"Inter", sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '140%',
+                  }}
+                >
+                  Remember me
+                </Typography>
+              </Box>
+              <Link
+                href="#"
+                underline="none"
+                onClick={(e) => {
+                  e.preventDefault();
+                  // Handle forgot password
+                }}
+                sx={{
+                  color: '#1890FF',
+                  fontFamily: '"Inter", sans-serif',
+                  fontWeight: 500,
+                  fontSize: '14px',
+                  lineHeight: '140%',
+                  textAlign: 'right',
+                }}
+              >
+                Forgot password?
+              </Link>
+            </Box>
+
             <Button
               type="submit"
               fullWidth
@@ -255,12 +343,17 @@ const Login = () => {
                 backgroundColor: '#434F64',
                 borderRadius: '8px',
                 height: '40px',
+                fontFamily: '"Inter", sans-serif',
+                fontWeight: 500,
+                fontSize: '16px',
+                lineHeight: '140%',
+                textTransform: 'none',
                 '&:hover': {
                   backgroundColor: '#323c4d',
                 },
               }}
             >
-              {loading ? 'Logging in...' : 'Log In'}
+              {loading ? 'Logging in...' : 'Sign In'}
             </Button>
 
             <Divider sx={{ width: '100%', my: 2 }} />
@@ -277,6 +370,7 @@ const Login = () => {
                 fontFamily: '"Inter", sans-serif',
                 fontWeight: 500,
                 fontSize: '16px',
+                lineHeight: '140%',
                 height: '40px',
               }}
             >
@@ -329,11 +423,42 @@ const Login = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Box
                   component="img"
+                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                  alt="Google Logo"
+                  sx={{ height: '20px', width: '20px' }}
+                />
+                <Typography sx={{ fontFamily: '"Inter", sans-serif', fontWeight: 500, fontSize: '16px', lineHeight: '140%' }}>
+                  Sign in with Google
+                </Typography>
+              </Box>
+            </Button>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{
+                mb: 2,
+                color: '#434F64',
+                borderColor: 'transparent',
+                backgroundColor: '#F0F1F7',
+                textTransform: 'none',
+                fontFamily: '"Inter", sans-serif',
+                fontWeight: 500,
+                fontSize: '16px',
+                height: '40px',
+                borderRadius: '6px',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box
+                  component="img"
                   src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
                   alt="Microsoft Logo"
                   sx={{ height: '20px', width: '20px' }}
                 />
-                <Typography>Sign in with Microsoft</Typography>
+                <Typography sx={{ fontFamily: '"Inter", sans-serif', fontWeight: 500, fontSize: '16px', lineHeight: '140%' }}>
+                  Sign in with Microsoft
+                </Typography>
               </Box>
             </Button>
           </Box>
@@ -348,6 +473,8 @@ const Login = () => {
               color: '#1890FF',
               fontFamily: '"Inter", sans-serif',
               fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '140%',
               display: 'block',
               textAlign: 'center',
               mb: 2,
@@ -361,6 +488,7 @@ const Login = () => {
               color: '#666666',
               fontFamily: '"Inter", sans-serif',
               fontSize: '13px',
+              lineHeight: '16px',
               textAlign: 'center',
             }}
           >
@@ -369,52 +497,88 @@ const Login = () => {
         </Box>
       </Box>
 
-      {/* Right Content Area - Placeholder for now */}
+      {/* Right Content Area - Release Notes Carousel */}
       <Box
         sx={{
           flex: 1,
-          backgroundColor: '#f5f5f5',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          flexDirection: 'column',
+          padding: '16px 0px',
+          gap: '24px',
         }}
       >
-        <Box sx={{ p: 4, maxWidth: '600px' }}>
-          <Typography variant="h4" component="h2" gutterBottom sx={{ color: '#434F64' }}>
-            TMS Dashboard Demo
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Please use one of the following demo credentials to log in:
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
-              <Paper elevation={1} sx={{ p: 2 }}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  CXO
-                </Typography>
-                <Typography variant="body2">Username: cxo</Typography>
-                <Typography variant="body2">Password: cxo123</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper elevation={1} sx={{ p: 2 }}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  Company User
-                </Typography>
-                <Typography variant="body2">Username: company</Typography>
-                <Typography variant="body2">Password: company123</Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper elevation={1} sx={{ p: 2 }}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  Branch User
-                </Typography>
-                <Typography variant="body2">Username: branch</Typography>
-                <Typography variant="body2">Password: branch123</Typography>
-              </Paper>
-            </Grid>
-          </Grid>
+        {/* Header */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0px 20px',
+            height: '40px',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '3px',
+            }}
+          >
+            <Box
+              sx={{
+                width: '7px',
+                height: '7px',
+                backgroundColor: '#5F697B',
+                borderRadius: '50%',
+              }}
+            />
+            <Typography
+              sx={{
+                fontFamily: '"Inter", sans-serif',
+                fontWeight: 600,
+                fontSize: '14px',
+                lineHeight: '140%',
+                color: '#5F697B',
+              }}
+            >
+              What's New?
+            </Typography>
+          </Box>
+          <Button
+            variant="outlined"
+            sx={{
+              height: '40px',
+              border: '1px solid #CED1D7',
+              borderRadius: '8px',
+              padding: '12px 24px',
+              gap: '8px',
+              color: '#434F64',
+              textTransform: 'none',
+              fontFamily: '"Inter", sans-serif',
+              fontWeight: 500,
+              fontSize: '16px',
+              lineHeight: '19px',
+            }}
+            endIcon={<IconBundle name="ArrowRight" />}
+          >
+            View Release
+          </Button>
+        </Box>
+
+        {/* Carousel */}
+        <Box
+          sx={{
+            flex: 1,
+            padding: '0px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Box sx={{ flex: 1, position: 'relative' }}>
+            <ReleaseCarousel releases={releaseNotes} />
+          </Box>
         </Box>
       </Box>
     </Box>
