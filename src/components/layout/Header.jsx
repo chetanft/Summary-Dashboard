@@ -9,12 +9,21 @@ import {
   MenuItem,
   Paper,
   Divider,
+  Avatar,
+  Chip,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
   Rocket as RocketIcon,
   AccountCircle,
+  Person as PersonIcon,
+  Settings as SettingsIcon,
+  SwapHoriz as SwapHorizIcon,
+  VpnKey as VpnKeyIcon,
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 import freightTigerLogo from '../../assets/freight-tiger-logo-correct.svg';
 
@@ -22,6 +31,27 @@ const Header = ({ onRefresh }) => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+
+  // Placeholder handlers for new menu items
+  const handleViewProfile = () => {
+    console.log('View Profile clicked');
+    handleClose();
+  };
+
+  const handleSettings = () => {
+    console.log('Settings clicked');
+    handleClose();
+  };
+
+  const handleChangeDesk = () => {
+    console.log('Change Desk clicked');
+    handleClose();
+  };
+
+  const handleChangePassword = () => {
+    console.log('Change Password clicked');
+    handleClose();
+  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -137,10 +167,103 @@ const Header = ({ onRefresh }) => {
             }}
             open={Boolean(anchorEl)}
             onClose={handleClose}
+            PaperProps={{
+              elevation: 3,
+              sx: {
+                width: 320,
+                overflow: 'visible',
+                mt: 1.5,
+                borderRadius: '12px',
+                '& .MuiMenuItem-root': {
+                  px: 2,
+                  py: 1.5,
+                },
+              },
+            }}
           >
-            <MenuItem disabled>{currentUser?.name}</MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </Menu>
+            {/* User Profile Header */}
+            <Box sx={{ p: 2, pb: 1.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                {/* User Avatar */}
+                <Avatar
+                  src={currentUser?.avatar || '/static/images/avatar/1.jpg'}
+                  alt={currentUser?.name || 'User'}
+                  sx={{ width: 56, height: 56, mr: 2 }}
+                />
+
+                {/* User Info */}
+                <Box sx={{ flexGrow: 1 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '18px', color: '#434F64' }}>
+                      {currentUser?.name || 'Santosh Kumar'}
+                    </Typography>
+                    <Chip
+                      label={currentUser?.role || 'Admin'}
+                      size="small"
+                      sx={{
+                        bgcolor: '#F0F0F0',
+                        color: '#434F64',
+                        fontWeight: 500,
+                        fontSize: '12px',
+                        height: '24px',
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" sx={{ color: '#5F697B', mb: 0.5 }}>
+                    {currentUser?.jobTitle || 'User'}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#5F697B' }}>
+                    {currentUser?.company || 'Company'}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+
+            <Divider sx={{ my: 1 }} />
+
+            {/* Menu Items */}
+            <MenuItem onClick={handleViewProfile}>
+              <ListItemIcon>
+                <PersonIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="View Profile" />
+            </MenuItem>
+
+            <MenuItem onClick={handleSettings}>
+              <ListItemIcon>
+                <SettingsIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
+            </MenuItem>
+
+            <MenuItem onClick={handleChangeDesk}>
+              <ListItemIcon>
+                <SwapHorizIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Change Desk" />
+            </MenuItem>
+
+            <MenuItem onClick={handleChangePassword}>
+              <ListItemIcon>
+                <VpnKeyIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Change Password" />
+            </MenuItem>
+
+            <Divider sx={{ my: 1 }} />
+
+            {/* Logout Button */}
+            <MenuItem
+              onClick={handleLogout}
+              sx={{
+                color: '#FF4D4F',
+              }}
+            >
+              <ListItemIcon>
+                <LogoutIcon fontSize="small" sx={{ color: '#FF4D4F' }} />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </MenuItem>
         </Paper>
       </Box>
     </Box>
