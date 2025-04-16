@@ -79,7 +79,7 @@ const PlantYardOperations = () => {
       </Box>
       
       {/* Heatmap */}
-      <Paper sx={{ p: 2, height: 'calc(100vh - 200px)', minHeight: '500px' }}>
+      <Paper sx={{ p: 2, height: 'calc(100vh - 200px)', minHeight: '600px', width: '100%', overflow: 'auto' }}>
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <CircularProgress />

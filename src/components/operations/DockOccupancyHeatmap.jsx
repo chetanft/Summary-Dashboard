@@ -12,11 +12,15 @@ const HeatmapContainer = styled(Paper)(({ theme }) => ({
 
 const HeatmapGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: 'auto repeat(10, 1fr)',
-  gridTemplateRows: 'auto repeat(18, 1fr)',
-  gap: 1,
+  gridTemplateColumns: 'auto repeat(10, minmax(80px, 1fr))',
+  gridAutoRows: 'minmax(40px, auto)',
+  gap: 2,
   height: '100%',
-  minHeight: '500px'
+  minHeight: '500px',
+  border: '1px solid #e0e0e0',
+  borderRadius: '4px',
+  overflow: 'auto',
+  padding: theme.spacing(1)
 }));
 
 const HeatmapCell = styled(Box)(({ bgcolor, theme }) => ({
@@ -26,13 +30,16 @@ const HeatmapCell = styled(Box)(({ bgcolor, theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: bgcolor && bgcolor !== '#ffffff' ? '#ffffff' : '#434F64',
-  fontSize: '0.75rem',
+  color: bgcolor && bgcolor !== '#ffffff' && bgcolor !== '#f5f5f5' ? '#ffffff' : '#434F64',
+  fontSize: '0.8rem',
   fontWeight: 'bold',
   textAlign: 'center',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap'
+  whiteSpace: 'nowrap',
+  minHeight: '40px',
+  minWidth: '80px',
+  boxShadow: bgcolor && bgcolor !== '#ffffff' && bgcolor !== '#f5f5f5' ? 'inset 0 0 0 1px rgba(255,255,255,0.2)' : 'none'
 }));
 
 const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (Discrete Allocation)" }) => {
@@ -120,6 +127,7 @@ const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (D
                     bgcolor={data.vehicleTypes[cell.vehicleType].color}
                     sx={{
                       gridRow: cell.duration > 1 ? `span ${cell.duration}` : 'auto',
+                      height: cell.duration > 1 ? `${cell.duration * 40}px` : '40px'
                     }}
                   >
                     {isMobile ? '' : cell.vehicleType}
