@@ -127,16 +127,16 @@ const DockOccupancyHeatmap = ({ data, title = "Dock Occupancy by Vehicle Type (D
           <thead>
             <tr>
               <th style={{ width: '80px' }}></th> {/* Empty corner cell */}
-              {data.docks?.map((dock, i) => (
+              {data.docks?.slice(0, 10).map((dock, i) => (
                 <th key={`dock-${i}`} style={{ width: '100px' }}>{dock}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {data.hours?.map((hour, hourIndex) => (
+            {data.hours?.slice(0, 12).map((hour, hourIndex) => (
               <tr key={`hour-${hourIndex}`}>
                 <td>{hour}</td>
-                {data.docks?.map((_, dockIndex) => {
+                {data.docks?.slice(0, 10).map((_, dockIndex) => {
                   const key = `${dockIndex}-${hourIndex}`;
                   const cell = processedData[key];
                   
