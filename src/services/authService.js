@@ -1,16 +1,20 @@
-import axios from 'axios';
-import jwtDecode from 'jwt-decode';
-import { createHash } from 'crypto-js/sha256';
+// Import users data
 import { users } from '../data/users';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// Constants
 const TOKEN_KEY = 'auth_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
 const USE_MOCK_DATA = true; // Set to false when real API is available
 
-// Hash password before sending to server
+// Simple hash function for passwords (not secure, just for demo)
 const hashPassword = (password) => {
-  return createHash(password).toString();
+  let hash = 0;
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash.toString(16);
 };
 
 // Generate a mock JWT token
@@ -44,26 +48,6 @@ const removeTokens = () => {
   localStorage.removeItem(REFRESH_TOKEN_KEY);
 };
 
-// Axios instance with interceptors
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add token to requests
-api.interceptors.request.use(
-  (config) => {
-    const token = getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
 // Authentication service
 const authService = {
   async login(username, password) {
@@ -93,19 +77,12 @@ const authService = {
     }
 
     try {
-      const hashedPassword = hashPassword(password);
-      const response = await api.post('/auth/login', {
-        username,
-        password: hashedPassword,
-      });
-
-      const { accessToken, refreshToken, user } = response.data;
-      setTokens(accessToken, refreshToken);
-
-      return user;
+      // In a real app, this would be an API call
+      // For now, just throw an error
+      throw new Error('API not implemented');
     } catch (error) {
       console.error('Login error:', error);
-      throw new Error(error.response?.data?.message || 'Login failed');
+      throw new Error(error.message || 'Login failed');
     }
   },
 
@@ -116,7 +93,7 @@ const authService = {
     }
 
     try {
-      await api.post('/auth/logout');
+      // In a real app, this would be an API call
       removeTokens();
     } catch (error) {
       console.error('Logout error:', error);
@@ -155,18 +132,8 @@ const authService = {
     }
 
     try {
-      const token = getToken();
-      if (!token) return null;
-
-      // Use jwt-decode which is now imported as default
-      const decoded = jwtDecode(token);
-      if (decoded.exp * 1000 < Date.now()) {
-        removeTokens();
-        return null;
-      }
-
-      const response = await api.get('/auth/me');
-      return response.data;
+      // In a real app, this would be an API call
+      return null;
     } catch (error) {
       console.error('Get current user error:', error);
       return null;
@@ -182,9 +149,8 @@ const authService = {
         const payload = JSON.parse(atob(token));
         return payload.exp * 1000 > Date.now();
       } else {
-        // Use jwt-decode which is now imported as default
-        const decoded = jwtDecode(token);
-        return decoded.exp * 1000 > Date.now();
+        // In a real app, this would validate the token
+        return false;
       }
     } catch (error) {
       console.error('Authentication check error:', error);
@@ -193,4 +159,4 @@ const authService = {
   },
 };
 
-export default authService; 
+export default authService;
