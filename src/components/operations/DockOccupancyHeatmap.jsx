@@ -112,11 +112,4 @@ const DockOccupancyHeatmap = () => {
   );
 };
 
-// Add some vehicle cells after the component is defined
-const addVehicleCells = () => {
-  // This is just a placeholder to show how we would add vehicle cells
-  // In a real implementation, we would modify the DOM after the component mounts
-  console.log('Adding vehicle cells');
-};
-
 export default React.memo(DockOccupancyHeatmap);
