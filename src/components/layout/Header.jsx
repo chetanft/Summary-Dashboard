@@ -16,7 +16,7 @@ import {
   Rocket as RocketIcon,
   AccountCircle,
 } from '@mui/icons-material';
-import freightTigerLogo from '../../assets/freight-tiger-logo.svg';
+import freightTigerLogo from '../../assets/freight-tiger-logo-correct.svg';
 
 const Header = ({ onRefresh }) => {
   const { currentUser, logout } = useAuth();
