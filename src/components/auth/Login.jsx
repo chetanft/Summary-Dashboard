@@ -219,52 +219,6 @@ const Login = () => {
               />
             </Box>
 
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                mb: 2,
-              }}
-            >
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    sx={{
-                      '& .MuiSwitch-switchBase.Mui-checked': {
-                        color: '#434F64',
-                      },
-                      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                        backgroundColor: '#434F64',
-                      },
-                    }}
-                  />
-                }
-                label={
-                  <Typography
-                    variant="body2"
-                    sx={{ fontFamily: '"Inter", sans-serif', color: '#1A1A1A' }}
-                  >
-                    Remember me
-                  </Typography>
-                }
-              />
-              <Link
-                href="#"
-                underline="none"
-                sx={{
-                  color: '#1890FF',
-                  fontWeight: 500,
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                }}
-              >
-                Forgot password?
-              </Link>
-            </Box>
-
             {/* Remember me toggle and Forgot password */}
             <Box sx={{
               display: 'flex',
@@ -375,33 +329,6 @@ const Login = () => {
               }}
             >
               Sign In with OTP
-            </Button>
-
-            <Button
-              fullWidth
-              variant="outlined"
-              sx={{
-                mb: 2,
-                color: '#434F64',
-                borderColor: 'transparent',
-                backgroundColor: '#F0F1F7',
-                textTransform: 'none',
-                fontFamily: '"Inter", sans-serif',
-                fontWeight: 500,
-                fontSize: '16px',
-                height: '40px',
-                borderRadius: '6px',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Box
-                  component="img"
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                  alt="Google Logo"
-                  sx={{ height: '20px', width: '20px' }}
-                />
-                <Typography>Sign in with Google</Typography>
-              </Box>
             </Button>
 
             <Button
