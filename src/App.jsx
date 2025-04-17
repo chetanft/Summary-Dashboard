@@ -13,7 +13,6 @@ import SearchDropdownDemo from './pages/SearchDropdownDemo';
 import EnhancedSearchDemo from './pages/EnhancedSearchDemo';
 import PlantYardOperations from './components/operations/PlantYardOperations';
 import PTLKpiTestPage from './pages/PTLKpiTestPage';
-import FigmaIntegrationPage from './pages/FigmaIntegrationPage';
 
 // Create a theme instance
 const theme = createTheme({
@@ -108,16 +107,6 @@ function App() {
                 <ProtectedRoute>
                   <DataProvider>
                     <PTLKpiTestPage />
-                  </DataProvider>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/figma"
-              element={
-                <ProtectedRoute>
-                  <DataProvider>
-                    <FigmaIntegrationPage />
                   </DataProvider>
                 </ProtectedRoute>
               }

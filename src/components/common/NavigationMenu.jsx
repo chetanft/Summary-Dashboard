@@ -6,8 +6,7 @@ import {
   Dashboard as DashboardIcon,
   Inventory as InventoryIcon,
   LocalShipping as LocalShippingIcon,
-  Warehouse as WarehouseIcon,
-  DesignServices as DesignServicesIcon
+  Warehouse as WarehouseIcon
 } from '@mui/icons-material';
 
 const NavigationMenu = () => {
@@ -66,12 +65,6 @@ const NavigationMenu = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <InventoryIcon fontSize="small" />
             <Typography>Orders</Typography>
-          </Box>
-        </MenuItem>
-        <MenuItem onClick={() => handleNavigation('/figma')}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <DesignServicesIcon fontSize="small" />
-            <Typography>Figma Integration</Typography>
           </Box>
         </MenuItem>
       </Menu>
