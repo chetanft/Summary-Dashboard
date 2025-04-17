@@ -11,6 +11,7 @@ import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
 import SearchDropdownDemo from './pages/SearchDropdownDemo';
 import EnhancedSearchDemo from './pages/EnhancedSearchDemo';
+import PlantYardOperations from './components/operations/PlantYardOperations';
 
 // Create a theme instance
 const theme = createTheme({
@@ -87,6 +88,16 @@ function App() {
                 <DataProvider>
                   <EnhancedSearchDemo />
                 </DataProvider>
+              }
+            />
+            <Route
+              path="/operations/plant-yard"
+              element={
+                <ProtectedRoute>
+                  <DataProvider>
+                    <PlantYardOperations />
+                  </DataProvider>
+                </ProtectedRoute>
               }
             />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
