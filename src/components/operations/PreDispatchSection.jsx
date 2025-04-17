@@ -67,7 +67,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
     const dockUtilisation = activeData.kpis.find(kpi => kpi.id === 'dock-utilisation');
 
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         <Grid item xs={12}>
           <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: '#434F64' }}>
             Indent & Pre Transit

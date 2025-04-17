@@ -47,7 +47,7 @@ const PostDeliverySection = ({ data, onKPIClick }) => {
     const settledInvoices = activeData.invoicing?.kpis.find(kpi => kpi.id === 'settled-invoices');
     
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         <Grid item xs={12}>
           <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: '#434F64' }}>
             ePOD KPIs
@@ -251,7 +251,7 @@ const PostDeliverySection = ({ data, onKPIClick }) => {
     const ptlRecoCases = activeData.epod?.kpis.find(kpi => kpi.id === 'ptl-reco-cases');
     
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         <Grid item xs={12}>
           <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600, color: '#434F64' }}>
             PTL - ePOD & Invoicing

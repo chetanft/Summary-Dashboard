@@ -40,7 +40,7 @@ const InTransitSection = ({ data, onKPIClick }) => {
     const nightDrivingTrips = activeData.kpis.find(kpi => kpi.id === 'night-driving-trips');
     
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         {/* First column */}
         <Grid item xs={12} md={4}>
           {deliveredVsInTransit && (
@@ -131,7 +131,7 @@ const InTransitSection = ({ data, onKPIClick }) => {
     const waybillNotScanned = activeData.kpis.find(kpi => kpi.id === 'waybill-not-scanned');
     
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         {/* First column */}
         <Grid item xs={12} md={4}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

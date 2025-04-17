@@ -24,9 +24,9 @@ const PlanningSection = ({ data, onKPIClick }) => {
 
   return (
     <KpiSection title={data.title}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         {/* First column */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={4} sx={{display: 'flex', flexDirection: 'row', gap: 2}}>
           {ordersCreated && (
             <StatTile
               title={ordersCreated.name}
@@ -34,7 +34,7 @@ const PlanningSection = ({ data, onKPIClick }) => {
               trend={ordersCreated.trend}
               status={ordersCreated.status}
               onClick={() => onKPIClick && onKPIClick(ordersCreated.id, ordersCreated)}
-              sx={{ mb: 2 }}
+              sx={{ width: '50%', mb: 2 }}
             />
           )}
           {orderTripMatchRate && (
