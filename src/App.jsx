@@ -12,6 +12,7 @@ import AlertsWithLayout from './components/alerts/AlertsWithLayout';
 import SearchDropdownDemo from './pages/SearchDropdownDemo';
 import EnhancedSearchDemo from './pages/EnhancedSearchDemo';
 import PlantYardOperations from './components/operations/PlantYardOperations';
+import PTLKpiTestPage from './pages/PTLKpiTestPage';
 
 // Create a theme instance
 const theme = createTheme({
@@ -96,6 +97,16 @@ function App() {
                 <ProtectedRoute>
                   <DataProvider>
                     <PlantYardOperations />
+                  </DataProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ptl-test"
+              element={
+                <ProtectedRoute>
+                  <DataProvider>
+                    <PTLKpiTestPage />
                   </DataProvider>
                 </ProtectedRoute>
               }
