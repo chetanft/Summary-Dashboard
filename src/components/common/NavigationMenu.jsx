@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Menu, MenuItem } from '@mui/material';
-import { 
+import {
   Dashboard as DashboardIcon,
   Inventory as InventoryIcon,
   LocalShipping as LocalShippingIcon,
@@ -13,20 +13,20 @@ const NavigationMenu = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleNavigation = (path) => {
     navigate(path);
     handleClose();
   };
-  
+
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Button
@@ -49,10 +49,10 @@ const NavigationMenu = () => {
           'aria-labelledby': 'operations-button',
         }}
       >
-        <MenuItem onClick={() => handleNavigation('/operations/plant-yard')}>
+        <MenuItem onClick={() => handleNavigation('/alerts')}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <LocalShippingIcon fontSize="small" />
-            <Typography>Plant & Yard Operations</Typography>
+            <Typography>Operations</Typography>
           </Box>
         </MenuItem>
         <MenuItem onClick={() => handleNavigation('/dashboard')}>

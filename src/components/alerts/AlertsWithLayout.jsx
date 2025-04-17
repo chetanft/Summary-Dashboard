@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '../layout/Layout';
 import DashboardHeader from '../dashboard/DashboardHeader';
-import RealtimeKPIDashboard from '../realtime-kpis/RealtimeKPIDashboard';
+import OperationsDashboard from '../operations/OperationsDashboard';
 import { useSearch } from '../../context/SearchContext';
 
 const AlertsWithLayout = () => {
@@ -41,8 +41,8 @@ const AlertsWithLayout = () => {
         onSearch={handleSearch}
       />
 
-      {/* Real-Time KPIs Dashboard */}
-      <RealtimeKPIDashboard />
+      {/* Operations Dashboard */}
+      <OperationsDashboard />
     </Layout>
   );
 };
