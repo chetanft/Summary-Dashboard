@@ -133,90 +133,94 @@ const PostDeliverySection = ({ data, onKPIClick }) => {
         </Grid>
         
         {/* Invoicing KPIs - First row */}
-        <Grid item xs={12} md={4}>
-          {totalInvoicedAmount && (
-            <StatTile
-              title={totalInvoicedAmount.name}
-              value={totalInvoicedAmount.value}
-              subtitle={totalInvoicedAmount.subtitle}
-              trend={totalInvoicedAmount.trend}
-              status={totalInvoicedAmount.status}
-              onClick={() => onKPIClick && onKPIClick(totalInvoicedAmount.id, totalInvoicedAmount)}
-              sx={{ mb: 2 }}
-            />
-          )}
-        </Grid>
-        
-        <Grid item xs={12} md={4}>
-          {approvedInvoices && (
-            <StatTile
-              title={approvedInvoices.name}
-              value={approvedInvoices.value}
-              subtitle={approvedInvoices.subtitle}
-              trend={approvedInvoices.trend}
-              status={approvedInvoices.status}
-              onClick={() => onKPIClick && onKPIClick(approvedInvoices.id, approvedInvoices)}
-              sx={{ mb: 2 }}
-            />
-          )}
-        </Grid>
-        
-        <Grid item xs={12} md={4}>
-          {pendingApproval && (
-            <StatTile
-              title={pendingApproval.name}
-              value={pendingApproval.value}
-              subtitle={pendingApproval.subtitle}
-              trend={pendingApproval.trend}
-              status={pendingApproval.status}
-              onClick={() => onKPIClick && onKPIClick(pendingApproval.id, pendingApproval)}
-              sx={{ mb: 2 }}
-            />
-          )}
-        </Grid>
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+          <Grid item xs={12} md={12} sx={{width: '100%'}}>
+            {totalInvoicedAmount && (
+              <StatTile
+                title={totalInvoicedAmount.name}
+                value={totalInvoicedAmount.value}
+                subtitle={totalInvoicedAmount.subtitle}
+                trend={totalInvoicedAmount.trend}
+                status={totalInvoicedAmount.status}
+                onClick={() => onKPIClick && onKPIClick(totalInvoicedAmount.id, totalInvoicedAmount)}
+                sx={{ width: '100%', mb: 2 }}
+              />
+            )}
+          </Grid>
+          
+          <Grid item xs={12} md={4} sx={{width: '100%'}}>
+            {approvedInvoices && (
+              <StatTile
+                title={approvedInvoices.name}
+                value={approvedInvoices.value}
+                subtitle={approvedInvoices.subtitle}
+                trend={approvedInvoices.trend}
+                status={approvedInvoices.status}
+                onClick={() => onKPIClick && onKPIClick(approvedInvoices.id, approvedInvoices)}
+                sx={{ mb: 2 }}
+              />
+            )}
+          </Grid>
+          
+          <Grid item xs={12} md={4} sx={{width: '100%'}}>
+            {pendingApproval && (
+              <StatTile
+                title={pendingApproval.name}
+                value={pendingApproval.value}
+                subtitle={pendingApproval.subtitle}
+                trend={pendingApproval.trend}
+                status={pendingApproval.status}
+                onClick={() => onKPIClick && onKPIClick(pendingApproval.id, pendingApproval)}
+                sx={{ mb: 2 }}
+              />
+            )}
+          </Grid>
+        </Box>
         
         {/* Invoicing KPIs - Second row */}
-        <Grid item xs={12} md={4}>
-          {rejectedInvoices && (
-            <StatTile
-              title={rejectedInvoices.name}
-              value={rejectedInvoices.value}
-              subtitle={rejectedInvoices.subtitle}
-              trend={rejectedInvoices.trend}
-              status={rejectedInvoices.status}
-              onClick={() => onKPIClick && onKPIClick(rejectedInvoices.id, rejectedInvoices)}
-              sx={{ mb: 2 }}
-            />
-          )}
-        </Grid>
-        
-        <Grid item xs={12} md={4}>
-          {disputedInvoices && (
-            <StatTile
-              title={disputedInvoices.name}
-              value={disputedInvoices.value}
-              subtitle={disputedInvoices.subtitle}
-              trend={disputedInvoices.trend}
-              status={disputedInvoices.status}
-              onClick={() => onKPIClick && onKPIClick(disputedInvoices.id, disputedInvoices)}
-              sx={{ mb: 2 }}
-            />
-          )}
-        </Grid>
-        
-        <Grid item xs={12} md={4}>
-          {settledInvoices && (
-            <StatTile
-              title={settledInvoices.name}
-              value={settledInvoices.value}
-              subtitle={settledInvoices.subtitle}
-              trend={settledInvoices.trend}
-              status={settledInvoices.status}
-              onClick={() => onKPIClick && onKPIClick(settledInvoices.id, settledInvoices)}
-              sx={{ mb: 2 }}
-            />
-          )}
-        </Grid>
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+          <Grid item xs={12} md={4}  sx={{width: '100%'}}>
+            {rejectedInvoices && (
+              <StatTile
+                title={rejectedInvoices.name}
+                value={rejectedInvoices.value}
+                subtitle={rejectedInvoices.subtitle}
+                trend={rejectedInvoices.trend}
+                status={rejectedInvoices.status}
+                onClick={() => onKPIClick && onKPIClick(rejectedInvoices.id, rejectedInvoices)}
+                sx={{ mb: 2 }}
+              />
+            )}
+          </Grid>
+          
+          <Grid item xs={12} md={4} sx={{width: '100%'}}>
+            {disputedInvoices && (
+              <StatTile
+                title={disputedInvoices.name}
+                value={disputedInvoices.value}
+                subtitle={disputedInvoices.subtitle}
+                trend={disputedInvoices.trend}
+                status={disputedInvoices.status}
+                onClick={() => onKPIClick && onKPIClick(disputedInvoices.id, disputedInvoices)}
+                sx={{ mb: 2 }}
+              />
+            )}
+          </Grid>
+          
+          <Grid item xs={12} md={4} sx={{width: '100%'}}>
+            {settledInvoices && (
+              <StatTile
+                title={settledInvoices.name}
+                value={settledInvoices.value}
+                subtitle={settledInvoices.subtitle}
+                trend={settledInvoices.trend}
+                status={settledInvoices.status}
+                onClick={() => onKPIClick && onKPIClick(settledInvoices.id, settledInvoices)}
+                sx={{ mb: 2 }}
+              />
+            )}
+          </Grid>
+        </Box>
         
         {/* Invoicing KPIs - Third row */}
         <Grid item xs={12} md={6}>

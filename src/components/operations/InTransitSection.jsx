@@ -63,7 +63,7 @@ const InTransitSection = ({ data, onKPIClick }) => {
         
         {/* Second column */}
         <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             {tripDelayFlag && (
               <StatTile
                 title={tripDelayFlag.name}
@@ -96,7 +96,7 @@ const InTransitSection = ({ data, onKPIClick }) => {
         
         {/* Third column */}
         <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             {temperatureBreach && (
               <StatTile
                 title={temperatureBreach.name}
@@ -134,7 +134,7 @@ const InTransitSection = ({ data, onKPIClick }) => {
       <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         {/* First column */}
         <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             {shipmentsInTransit && (
               <StatTile
                 title={shipmentsInTransit.name}
@@ -178,7 +178,7 @@ const InTransitSection = ({ data, onKPIClick }) => {
         
         {/* Third column */}
         <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             {bagLossOrDamage && (
               <StatTile
                 title={bagLossOrDamage.name}

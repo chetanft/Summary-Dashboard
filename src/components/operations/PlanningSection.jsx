@@ -26,7 +26,7 @@ const PlanningSection = ({ data, onKPIClick }) => {
     <KpiSection title={data.title}>
       <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         {/* First column */}
-        <Grid item xs={12} md={4} sx={{display: 'flex', flexDirection: 'row', gap: 2}}>
+        <Grid item xs={12} md={12} sx={{display: 'flex', flexDirection: 'row', gap: 2}}>
           {ordersCreated && (
             <StatTile
               title={ordersCreated.name}
@@ -34,7 +34,7 @@ const PlanningSection = ({ data, onKPIClick }) => {
               trend={ordersCreated.trend}
               status={ordersCreated.status}
               onClick={() => onKPIClick && onKPIClick(ordersCreated.id, ordersCreated)}
-              sx={{ width: '50%', mb: 2 }}
+              sx={{ width: '100%'}}
             />
           )}
           {orderTripMatchRate && (
@@ -44,44 +44,48 @@ const PlanningSection = ({ data, onKPIClick }) => {
               trend={orderTripMatchRate.trend}
               status={orderTripMatchRate.status}
               onClick={() => onKPIClick && onKPIClick(orderTripMatchRate.id, orderTripMatchRate)}
+              sx={{width: '100%'}}
             />
           )}
         </Grid>
 
-        {/* Second column */}
-        <Grid item xs={12} md={4}>
-          {ordersAssigned && (
-            <Box sx={{ height: '250px' }}>
-              <DonutChartComponent
-                data={ordersAssigned.chartData}
-                innerRadius={60}
-                outerRadius={80}
-                showLabel={true}
-                height="100%"
-                centerLabel={{
-                  title: ordersAssigned.name,
-                  value: `${ordersAssigned.chartData[0].value}%`,
-                  subtitle: 'Assigned'
-                }}
-              />
-            </Box>
-          )}
-        </Grid>
+        
+        <Grid sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+          {/* Second column */}
+          <Grid item xs={12} md={12} sx={{width: '100%'}}>
+            {ordersAssigned && (
+              <Box sx={{ height: '250px' }}>
+                <DonutChartComponent
+                  data={ordersAssigned.chartData}
+                  innerRadius={60}
+                  outerRadius={80}
+                  showLabel={true}
+                  height="100%"
+                  centerLabel={{
+                    title: ordersAssigned.name,
+                    value: `${ordersAssigned.chartData[0].value}%`,
+                    subtitle: 'Assigned'
+                  }}
+                />
+              </Box>
+            )}
+          </Grid>
 
-        {/* Third column */}
-        <Grid item xs={12} md={4}>
-          {tripCreationTrend && (
-            <Box sx={{ height: '250px' }}>
-              <LineChartComponent
-                data={tripCreationTrend.chartData}
-                lines={[{ dataKey: 'value', color: '#1976d2', strokeWidth: 2 }]}
-                xAxisKey="date"
-                unit={tripCreationTrend.metadata?.unit || ''}
-                showGrid={true}
-                height="100%"
-              />
-            </Box>
-          )}
+          {/* Third column */}
+          <Grid item xs={12} md={12} sx={{width: '100%'}}>
+            {tripCreationTrend && (
+              <Box sx={{ height: '250px' }}>
+                <LineChartComponent
+                  data={tripCreationTrend.chartData}
+                  lines={[{ dataKey: 'value', color: '#1976d2', strokeWidth: 2 }]}
+                  xAxisKey="date"
+                  unit={tripCreationTrend.metadata?.unit || ''}
+                  showGrid={true}
+                  height="100%"
+                />
+              </Box>
+            )}
+          </Grid>
         </Grid>
       </Grid>
     </KpiSection>

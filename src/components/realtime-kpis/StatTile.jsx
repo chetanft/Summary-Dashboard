@@ -49,7 +49,9 @@ const StatTile = ({
         },
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width: '100%',
+        ...sx
       }}
       onClick={onClick}
     >

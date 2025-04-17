@@ -113,8 +113,8 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
           )}
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Grid item xs={12} md={12}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             {activePreTransits && (
               <StatTile
                 title={activePreTransits.name}
@@ -122,6 +122,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
                 trend={activePreTransits.trend}
                 status={activePreTransits.status}
                 onClick={() => onKPIClick && onKPIClick(activePreTransits.id, activePreTransits)}
+                sx={{width: '100%'}}
               />
             )}
             {delayForFulfilment && (
@@ -131,6 +132,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
                 trend={delayForFulfilment.trend}
                 status={delayForFulfilment.status}
                 onClick={() => onKPIClick && onKPIClick(delayForFulfilment.id, delayForFulfilment)}
+                sx={{width: '100%'}}
               />
             )}
           </Box>
@@ -202,7 +204,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             {yardOccupancy && (
               <StatTile
                 title={yardOccupancy.name}
@@ -257,7 +259,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
     const pickupSlaBreached = activeData.kpis.find(kpi => kpi.id === 'pickup-sla-breached');
 
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{flexDirection: 'column'}}>
         {/* First row */}
         <Grid item xs={12} md={4}>
           {indentStatus && (
@@ -298,7 +300,7 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
             {hubReportingSlaBreach && (
               <StatTile
                 title={hubReportingSlaBreach.name}
