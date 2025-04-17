@@ -69,7 +69,7 @@ const OperationsDashboard = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {/* Planning Section */}
       <PlanningSection data={data.planning} onKPIClick={handleKPIClick} />
 
