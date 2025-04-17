@@ -6,7 +6,8 @@ import StatTile from '../realtime-kpis/StatTile';
 import DonutChartComponent from '../charts/DonutChartComponent';
 import BarChartComponent from '../charts/BarChartComponent';
 import DockOccupancyHeatmap from './DockOccupancyHeatmap';
-import { fetchDockOccupancyData } from '../../services/operationsService';
+import TruckTimelineChart from './TruckTimelineChart';
+import { fetchDockOccupancyData, fetchTruckTimelineData } from '../../services/operationsService';
 
 /**
  * Pre Dispatch Section component with FTL/PTL toggle
@@ -19,26 +20,31 @@ import { fetchDockOccupancyData } from '../../services/operationsService';
 const PreDispatchSection = ({ data, onKPIClick }) => {
   const [activeType, setActiveType] = useState('ftl');
   const [dockData, setDockData] = useState(null);
+  const [truckTimelineData, setTruckTimelineData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch dock occupancy data
+  // Fetch dock occupancy data and truck timeline data
   useEffect(() => {
-    const loadDockData = async () => {
+    const loadData = async () => {
       try {
         setLoading(true);
-        const result = await fetchDockOccupancyData();
-        setDockData(result);
+        const [dockResult, truckResult] = await Promise.all([
+          fetchDockOccupancyData(),
+          fetchTruckTimelineData()
+        ]);
+        setDockData(dockResult);
+        setTruckTimelineData(truckResult);
         setError(null);
       } catch (err) {
-        console.error('Error loading dock occupancy data:', err);
-        setError('Failed to load dock occupancy data. Please try again.');
+        console.error('Error loading operations data:', err);
+        setError('Failed to load operations data. Please try again.');
       } finally {
         setLoading(false);
       }
     };
 
-    loadDockData();
+    loadData();
   }, []);
 
   if (!data) return null;
@@ -222,6 +228,26 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
                 status={dockUtilisation.status}
                 onClick={() => onKPIClick && onKPIClick(dockUtilisation.id, dockUtilisation)}
               />
+            )}
+          </Box>
+        </Grid>
+
+        {/* Truck Timeline Chart */}
+        <Grid item xs={12}>
+          <Typography variant="subtitle1" sx={{ mt: 2, mb: 2, fontWeight: 600, color: '#434F64' }}>
+            Truck Movement Timeline
+          </Typography>
+          <Box sx={{ height: 400, width: '100%' }}>
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+              </Box>
+            ) : error ? (
+              <Alert severity="error">{error}</Alert>
+            ) : truckTimelineData ? (
+              <TruckTimelineChart data={truckTimelineData} />
+            ) : (
+              <Alert severity="info">No truck timeline data available</Alert>
             )}
           </Box>
         </Grid>
