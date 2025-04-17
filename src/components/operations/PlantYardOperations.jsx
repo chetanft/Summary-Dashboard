@@ -2,7 +2,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Box, Typography, Paper, CircularProgress, Alert, FormControl, InputLabel, Select, MenuItem, Tabs, Tab } from '@mui/material';
 import { fetchDockOccupancyData } from '../../services/operationsService';
-import { LazyOperationsDashboard, LazyDockOccupancyHeatmap } from '../../utils/lazyOperations';
+import OperationsDashboard from './OperationsDashboard';
+import DockOccupancyHeatmap from './DockOccupancyHeatmap';
 
 const PlantYardOperations = () => {
   const [data, setData] = useState(null);
@@ -74,7 +75,7 @@ const PlantYardOperations = () => {
 
       {/* Tab Content */}
       {activeTab === 0 ? (
-        <LazyOperationsDashboard />
+        <OperationsDashboard />
       ) : (
         <Box>
           {/* Filters */}
@@ -105,7 +106,7 @@ const PlantYardOperations = () => {
             ) : error ? (
               <Alert severity="error">{error}</Alert>
             ) : filteredData ? (
-              <LazyDockOccupancyHeatmap data={filteredData} />
+              <DockOccupancyHeatmap data={filteredData} />
             ) : (
               <Alert severity="info">No data available</Alert>
             )}
