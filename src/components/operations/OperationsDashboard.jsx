@@ -8,14 +8,14 @@ import { ptlKpiData } from '../../data/ptl';
 
 /**
  * Operations Dashboard component that integrates all KPI sections
- * 
+ *
  * @returns {JSX.Element}
  */
 const OperationsDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
-  
+
   // Simulate loading data
   useEffect(() => {
     const loadData = async () => {
@@ -23,7 +23,7 @@ const OperationsDashboard = () => {
         setLoading(true);
         // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         // Use mock data
         setData(ptlKpiData);
         setError(null);
@@ -34,16 +34,16 @@ const OperationsDashboard = () => {
         setLoading(false);
       }
     };
-    
+
     loadData();
   }, []);
-  
+
   // Handle KPI click for drilldown
   const handleKPIClick = (kpiId, kpiData) => {
     console.log('KPI clicked:', kpiId, kpiData);
     // Implement drilldown functionality here
   };
-  
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -51,7 +51,7 @@ const OperationsDashboard = () => {
       </Box>
     );
   }
-  
+
   if (error) {
     return (
       <Box sx={{ p: 2 }}>
@@ -59,7 +59,7 @@ const OperationsDashboard = () => {
       </Box>
     );
   }
-  
+
   if (!data) {
     return (
       <Box sx={{ p: 2 }}>
@@ -67,20 +67,18 @@ const OperationsDashboard = () => {
       </Box>
     );
   }
-  
+
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h5" gutterBottom>Operations Dashboard</Typography>
-      
+    <Box>
       {/* Planning Section */}
       <PlanningSection data={data.planning} onKPIClick={handleKPIClick} />
-      
+
       {/* Pre Dispatch Section */}
       <PreDispatchSection data={data.preDispatch} onKPIClick={handleKPIClick} />
-      
+
       {/* In Transit Section */}
       <InTransitSection data={data.inTransit} onKPIClick={handleKPIClick} />
-      
+
       {/* Post Delivery Section */}
       <PostDeliverySection data={data.postDelivery} onKPIClick={handleKPIClick} />
     </Box>

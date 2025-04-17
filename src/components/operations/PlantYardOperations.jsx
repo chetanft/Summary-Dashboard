@@ -4,7 +4,6 @@ import { Box, Typography, Paper, CircularProgress, Alert, FormControl, InputLabe
 import { fetchDockOccupancyData } from '../../services/operationsService';
 import OperationsDashboard from './OperationsDashboard';
 import DockOccupancyHeatmap from './DockOccupancyHeatmap';
-import TestPTLKPI from './TestPTLKPI';
 
 const PlantYardOperations = () => {
   const [data, setData] = useState(null);
@@ -76,10 +75,7 @@ const PlantYardOperations = () => {
 
       {/* Tab Content */}
       {activeTab === 0 ? (
-        <>
-          <TestPTLKPI />
-          <OperationsDashboard />
-        </>
+        <OperationsDashboard />
       ) : (
         <Box>
           {/* Filters */}
