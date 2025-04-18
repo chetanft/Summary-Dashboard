@@ -10,6 +10,7 @@ A comprehensive Transportation Management System (TMS) Dashboard for monitoring 
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
+- [Figma Integration](#figma-integration)
 - [Project Structure](#project-structure)
 - [Components](#components)
 - [Data Flow](#data-flow)
@@ -89,6 +90,45 @@ The dashboard is organized into three main sections:
 
 Use the navigation tabs at the top of the dashboard to switch between these sections. Each section provides specific insights and tools for different aspects of transportation management.
 
+## Figma Integration
+
+The TMS Dashboard includes integration with Figma through the Figma MCP Server, allowing you to directly access design tokens, components, and assets from your Figma files.
+
+### Setting Up Figma Integration
+
+1. **Configure Figma Access Token**:
+   - Go to Figma.com > Account Settings > Personal Access Tokens
+   - Create a new access token
+   - Open `/figma-mcp-server/.env` and update the `FIGMA_ACCESS_TOKEN` value
+
+2. **Start the Figma MCP Server**:
+   ```bash
+   # From the project root
+   ./start-figma-server.sh
+   ```
+   This will start the Figma MCP Server on port 3001 (default)
+
+3. **Access the Figma Explorer**:
+   - Navigate to `/figma-explorer` in the application
+   - Enter a Figma file ID or URL to explore its components and design tokens
+
+### Using Figma Design Tokens
+
+To use design tokens from Figma in your application:
+
+1. Replace the ThemeProvider in `App.jsx` with FigmaThemeProvider:
+   ```jsx
+   <FigmaThemeProvider fileId="YOUR_FIGMA_FILE_ID">
+     {/* Application content */}
+   </FigmaThemeProvider>
+   ```
+
+2. The FigmaThemeProvider will fetch design tokens from your Figma file and create a theme that is consistent with your design system.
+
+### Figma Components
+
+The Figma Explorer allows you to browse components from your Figma files, making it easier to implement consistent designs in the application.
+
 ## Project Structure
 
 ```
@@ -101,7 +141,9 @@ tms-dashboard/
 │   │   ├── alerts/        # Alert-related components
 │   │   ├── auth/          # Authentication components
 │   │   ├── charts/        # Chart components
+│   │   ├── core/          # Core component library
 │   │   ├── dashboard/     # Dashboard components
+│   │   ├── figma/         # Figma integration components
 │   │   ├── layout/        # Layout components
 │   │   └── orders/        # Order-related components
 │   ├── context/           # React context providers
@@ -229,6 +271,7 @@ The project follows a feature branch workflow:
 - **React Router**: For application routing
 - **Context API**: For state management
 - **date-fns**: For date manipulation and formatting
+- **Figma MCP Server**: For integrating with Figma design files
 
 ## Contributing
 

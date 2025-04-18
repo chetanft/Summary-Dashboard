@@ -15,11 +15,18 @@ import PlantYardOperations from './components/operations/PlantYardOperations';
 import PTLKpiTestPage from './pages/PTLKpiTestPage';
 import ControlTowerPage from './components/control-tower/ControlTowerPage';
 import ComponentLibraryDemo from './pages/ComponentLibraryDemo';
+import FigmaExplorerPage from './pages/FigmaExplorerPage';
 
-// Import the theme configuration
+// Import Figma Theme Provider
+import FigmaThemeProvider from './components/figma/FigmaThemeProvider';
+
+// Import the theme configuration (used as fallback)
 import theme from './theme/themeConfig';
 
 function App() {
+  // Use default theme for now, but you can replace with FigmaThemeProvider
+  // and specify a Figma file ID to use design tokens from Figma
+  // Example: <FigmaThemeProvider fileId="YOUR_FIGMA_FILE_ID">
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -118,6 +125,12 @@ function App() {
               path="/component-library"
               element={
                 <ComponentLibraryDemo />
+              }
+            />
+            <Route
+              path="/figma-explorer"
+              element={
+                <FigmaExplorerPage />
               }
             />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
