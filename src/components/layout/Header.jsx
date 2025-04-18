@@ -25,12 +25,14 @@ import {
   VpnKey as VpnKeyIcon,
   Logout as LogoutIcon,
 } from '@mui/icons-material';
+import NavigationDrawer from '../navigation/NavigationDrawer';
 import freightTigerLogo from '../../assets/freight-tiger-logo-correct.svg';
 
 const Header = ({ onRefresh }) => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Placeholder handlers for new menu items
   const handleViewProfile = () => {
@@ -72,7 +74,16 @@ const Header = ({ onRefresh }) => {
     }
   };
 
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
+
   return (
+    <>
     <Box
       sx={{
         width: '100%',
@@ -97,7 +108,9 @@ const Header = ({ onRefresh }) => {
             justifyContent: 'center',
             backgroundColor: '#FFFFFF',
             borderRadius: '100px',
+            cursor: 'pointer',
           }}
+          onClick={handleDrawerOpen}
         >
           <MenuIcon sx={{ color: '#434F64' }} />
         </Box>
@@ -268,6 +281,10 @@ const Header = ({ onRefresh }) => {
         </Paper>
       </Box>
     </Box>
+
+      {/* Navigation Drawer */}
+      <NavigationDrawer open={drawerOpen} onClose={handleDrawerClose} />
+    </>
   );
 };
 
