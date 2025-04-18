@@ -25,6 +25,8 @@ import {
   Apartment as ApartmentIcon,
   Speed as SpeedIcon,
   SupportAgent as SupportAgentIcon,
+  ArrowForward as ArrowForwardIcon,
+  Circle as CircleIcon,
 } from '@mui/icons-material';
 import freightTigerLogo from '../../assets/freight-tiger-logo-correct.svg';
 
@@ -36,49 +38,49 @@ const NavigationDrawer = ({ open, onClose }) => {
   const navigationItems = [
     {
       title: 'Summary Page',
-      icon: <DashboardIcon />,
+      icon: <CircleIcon fontSize="small" />,
       path: '/dashboard',
-      active: location.pathname === '/dashboard',
+      active: location.pathname === '/dashboard' || location.pathname === '/',
     },
     {
       title: 'Planning',
-      icon: <AssignmentIcon />,
+      icon: <CircleIcon fontSize="small" />,
       path: '/planning',
       active: location.pathname === '/planning',
     },
     {
       title: 'Full Truck Load',
-      icon: <LocalShippingIcon />,
+      icon: <CircleIcon fontSize="small" />,
       path: '/ftl',
       active: location.pathname === '/ftl',
     },
     {
       title: 'Part Truck Load',
-      icon: <InventoryIcon />,
+      icon: <CircleIcon fontSize="small" />,
       path: '/ptl',
       active: location.pathname === '/ptl',
     },
     {
       title: 'Control Tower',
-      icon: <ApartmentIcon />,
+      icon: <CircleIcon fontSize="small" />,
       path: '/control-tower',
       active: location.pathname === '/control-tower',
     },
     {
       title: 'Dashboard',
-      icon: <ViewQuiltIcon />,
-      path: '/dashboard',
-      active: location.pathname === '/dashboard',
+      icon: <CircleIcon fontSize="small" />,
+      path: '/dashboard-view',
+      active: location.pathname === '/dashboard-view',
     },
     {
       title: 'Reporting',
-      icon: <BarChartIcon />,
+      icon: <CircleIcon fontSize="small" />,
       path: '/reporting',
       active: location.pathname === '/reporting',
     },
     {
       title: 'Support',
-      icon: <SupportAgentIcon />,
+      icon: <CircleIcon fontSize="small" />,
       path: '/support',
       active: location.pathname === '/support',
     },
@@ -97,8 +99,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       PaperProps={{
         sx: {
           width: 280,
-          borderTopRightRadius: 16,
-          borderBottomRightRadius: 16,
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
         },
       }}
     >
@@ -120,13 +121,13 @@ const NavigationDrawer = ({ open, onClose }) => {
             sx={{ height: 28 }}
           />
         </Box>
-        <IconButton onClick={onClose} size="small">
+        <IconButton onClick={onClose} size="small" sx={{ color: '#000' }}>
           <CloseIcon />
         </IconButton>
       </Box>
 
       {/* Navigation Items */}
-      <List sx={{ pt: 1 }}>
+      <List sx={{ pt: 1, px: 2 }}>
         {navigationItems.map((item, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton
@@ -134,11 +135,10 @@ const NavigationDrawer = ({ open, onClose }) => {
               selected={item.active}
               sx={{
                 py: 1.5,
-                pl: 3,
+                px: 2,
+                borderRadius: '8px',
                 '&.Mui-selected': {
-                  backgroundColor: '#F0F7FF',
-                  borderLeft: '4px solid #1976d2',
-                  pl: 2.5,
+                  backgroundColor: '#EBF2FF',
                 },
                 '&:hover': {
                   backgroundColor: '#F5F5F5',
@@ -147,8 +147,8 @@ const NavigationDrawer = ({ open, onClose }) => {
             >
               <ListItemIcon
                 sx={{
-                  color: item.active ? '#1976d2' : '#5F697B',
-                  minWidth: 40,
+                  color: item.active ? '#0066FF' : '#8A94A6',
+                  minWidth: 32,
                 }}
               >
                 {item.icon}
@@ -158,8 +158,9 @@ const NavigationDrawer = ({ open, onClose }) => {
                   <Typography
                     variant="body1"
                     sx={{
-                      fontWeight: item.active ? 600 : 500,
-                      color: item.active ? '#1976d2' : '#434F64',
+                      fontWeight: item.active ? 600 : 400,
+                      color: item.active ? '#0066FF' : '#434F64',
+                      fontSize: '14px',
                     }}
                   >
                     {item.title}
@@ -171,72 +172,22 @@ const NavigationDrawer = ({ open, onClose }) => {
         ))}
       </List>
 
-      <Divider sx={{ my: 2 }} />
 
-      {/* Footer Items */}
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => handleNavigation('/settings')}
-            sx={{ py: 1.5, pl: 3 }}
-          >
-            <ListItemIcon sx={{ color: '#5F697B', minWidth: 40 }}>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography variant="body1" sx={{ fontWeight: 500, color: '#434F64' }}>
-                  Settings
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => handleNavigation('/help')}
-            sx={{ py: 1.5, pl: 3 }}
-          >
-            <ListItemIcon sx={{ color: '#5F697B', minWidth: 40 }}>
-              <HelpIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography variant="body1" sx={{ fontWeight: 500, color: '#434F64' }}>
-                  Help & Support
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </ListItem>
-      </List>
 
       {/* Get Started Button */}
-      <Box sx={{ p: 2, mt: 'auto' }}>
+      <Box sx={{ p: 2, mt: 'auto', borderTop: '1px solid #E0E0E0' }}>
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-end',
-            p: 2,
-            backgroundColor: '#F8F9FA',
-            borderRadius: 2,
+            justifyContent: 'space-between',
+            p: 1,
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: 500, color: '#1976d2' }}>
+          <Typography variant="body2" sx={{ fontWeight: 500, color: '#434F64' }}>
             Get Started
           </Typography>
-          <Box
-            component="span"
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              ml: 1,
-              color: '#1976d2',
-            }}
-          >
-            →
-          </Box>
+          <ArrowForwardIcon sx={{ color: '#434F64', fontSize: 18 }} />
         </Box>
       </Box>
     </Drawer>
