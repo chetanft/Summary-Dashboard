@@ -13,6 +13,7 @@ import SearchDropdownDemo from './pages/SearchDropdownDemo';
 import EnhancedSearchDemo from './pages/EnhancedSearchDemo';
 import PlantYardOperations from './components/operations/PlantYardOperations';
 import PTLKpiTestPage from './pages/PTLKpiTestPage';
+import ControlTowerPage from './components/control-tower/ControlTowerPage';
 
 // Create a theme instance
 const theme = createTheme({
@@ -107,6 +108,16 @@ function App() {
                 <ProtectedRoute>
                   <DataProvider>
                     <PTLKpiTestPage />
+                  </DataProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/control-tower"
+              element={
+                <ProtectedRoute>
+                  <DataProvider>
+                    <ControlTowerPage />
                   </DataProvider>
                 </ProtectedRoute>
               }
