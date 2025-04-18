@@ -1,0 +1,49 @@
+{
+  "lastUpdated": "2025-04-12T04:43:21.722472",
+  "userRole": "CXO",
+  "kpis": [
+    {
+      "id": "freight_budget_actual",
+      "label": "Budgeted Freight vs Actual",
+      "value": 886095,
+      "budget": 1000000,
+      "unit": "INR",
+      "color": "green",
+      "trend": [
+        345214,
+        313317,
+        322861,
+        417088,
+        337041
+      ]
+    },
+    {
+      "id": "freight_cost_per_km",
+      "label": "Freight Cost per KM",
+      "value": 5.5,
+      "unit": "INR/km",
+      "color": "yellow"
+    },
+    {
+      "id": "vehicle_utilization",
+      "label": "Vehicle Utilization",
+      "value": 64.2,
+      "unit": "%",
+      "color": "red"
+    },
+    {
+      "id": "otif_percentage",
+      "label": "OTIF %",
+      "value": 86.6,
+      "unit": "%",
+      "color": "yellow"
+    },
+    {
+      "id": "placement_efficiency",
+      "label": "Placement Efficiency",
+      "value": 73.6,
+      "unit": "%",
+      "color": "red"
+    }
+  ]
+}

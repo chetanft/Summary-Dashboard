@@ -1,0 +1,19 @@
+[build]
+  command = "npm install axios jwt-decode crypto-js && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Deploy all branches, not just production
+[context.branch-deploy]
+  command = "npm install axios jwt-decode crypto-js && npm run build"
+
+# Deploy preview contexts
+[context.deploy-preview]
+  command = "npm install axios jwt-decode crypto-js && npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
