@@ -33,6 +33,7 @@ Atoms are the basic building blocks of the interface. They include:
 
 - **StatusBadge**: Displays a status indicator with customizable appearance
 - **ValueDisplay**: Shows a value with optional formatting, label, and icon
+- **StatusChip**: Displays a status chip with various styles and variants
 
 ### Molecules
 
@@ -46,6 +47,7 @@ Molecules are groups of atoms bonded together:
 Organisms are groups of molecules that form a relatively complex section:
 
 - **MetricCardGroup**: Groups related metric cards with an optional title and header actions
+- **DataTable**: A comprehensive table component with sorting, pagination, selection, and expandable rows
 
 ### Templates
 

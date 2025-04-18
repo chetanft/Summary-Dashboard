@@ -19,13 +19,136 @@ import {
   TrendIndicator,
   MetricCard,
   MetricCardGroup,
+  DataTable,
+  StatusChip,
 } from '../components/core';
+
+// Sample data for the table demo
+const tableData = [
+  {
+    id: 'SO-21424',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-MUM',
+    tripType: 'FTL',
+    stage: 'Planning',
+    status: 'In Process',
+    deliveryDate: '2025-04-25',
+    statusColor: 'default',
+  },
+  {
+    id: 'SO-21425',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-MUM',
+    tripType: 'FTL',
+    stage: 'Indent',
+    status: 'In Assignment',
+    deliveryDate: '2025-04-25',
+    statusColor: 'default',
+  },
+  {
+    id: 'SO-21426',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-HYD',
+    tripType: 'FTL',
+    stage: 'Tracking',
+    status: 'In Transit',
+    deliveryDate: '2025-04-26',
+    statusColor: 'error',
+    delayed: true,
+    delayDuration: 24,
+  },
+  {
+    id: 'SO-21427',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Star Retailers',
+    route: 'AMRIT-HYD',
+    tripType: 'FTL',
+    stage: 'ePOD',
+    status: 'Pending',
+    deliveryDate: '2025-04-25',
+    statusColor: 'error',
+    delayed: true,
+    delayDuration: 12,
+  },
+  {
+    id: 'SO-21428',
+    consignor: 'JSW- AMRIT',
+    consignee: 'Yonex Retailers',
+    route: 'AMRIT-CHN',
+    tripType: 'FTL',
+    stage: 'Freight Invoicing',
+    status: 'Pending Approval',
+    deliveryDate: '2025-04-25',
+    statusColor: 'success',
+  },
+];
+
+const tableColumns = [
+  { id: 'id', label: 'Order ID', sortable: true },
+  { id: 'consignor', label: 'Consignor', sortable: true },
+  { id: 'consignee', label: 'Consignee', sortable: true },
+  { id: 'route', label: 'Route', sortable: true },
+  { id: 'tripType', label: 'Trip Type', sortable: true },
+  { id: 'stage', label: 'Stage', sortable: true },
+  {
+    id: 'status',
+    label: 'Status',
+    sortable: true,
+    renderCell: (row) => (
+      <StatusChip
+        label={row.status}
+        status={row.statusColor === 'error' ? 'error' : row.statusColor === 'success' ? 'success' : 'default'}
+        variant="subtle"
+      />
+    )
+  },
+  {
+    id: 'deliveryDate',
+    label: 'Delivery Status',
+    sortable: true,
+    renderCell: (row) => (
+      <Box>
+        {row.delayed ? (
+          <>
+            <StatusChip
+              label="Delayed"
+              count={`${row.delayDuration}h`}
+              status="error"
+              variant="subtle"
+              sx={{ mb: 0.5 }}
+            />
+            <Typography variant="caption" sx={{ display: 'block', color: '#5F697B' }}>
+              ETA: {new Date(row.deliveryDate).toLocaleDateString()}
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="body2">
+            {new Date(row.deliveryDate).toLocaleDateString()}
+          </Typography>
+        )}
+      </Box>
+    )
+  },
+];
 
 const ComponentLibraryDemo = () => {
   const [loading, setLoading] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const handleToggleLoading = () => {
     setLoading(!loading);
+  };
+
+  const handleRowClick = (row) => {
+    console.log('Row clicked:', row);
+  };
+
+  const handleSelectionChange = (selected) => {
+    setSelectedRows(selected);
+    console.log('Selected rows:', selected);
   };
 
   return (
@@ -393,6 +516,112 @@ const ComponentLibraryDemo = () => {
             loading={loading}
           />
         </MetricCardGroup>
+      </Box>
+
+      {/* DataTable Section */}
+      <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>
+        DataTable
+      </Typography>
+      <Divider sx={{ mb: 3 }} />
+
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Default Table
+        </Typography>
+        <DataTable
+          columns={tableColumns}
+          data={tableData}
+          onRowClick={handleRowClick}
+          loading={loading}
+          initialSortBy="id"
+          actionColumn={{
+            label: 'Actions',
+            icon: <ChevronRightIcon />,
+            onClick: (row) => console.log('Action clicked:', row),
+          }}
+        />
+      </Box>
+
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Selectable Table
+        </Typography>
+        <DataTable
+          columns={tableColumns.slice(0, 6)}
+          data={tableData}
+          onRowClick={handleRowClick}
+          loading={loading}
+          selectable
+          onSelectionChange={handleSelectionChange}
+          variant="outlined"
+          headerBackgroundColor="#F8F9FA"
+        />
+      </Box>
+
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Compact Table
+        </Typography>
+        <DataTable
+          columns={tableColumns.slice(0, 5)}
+          data={tableData}
+          loading={loading}
+          variant="compact"
+          size="small"
+          zebra={false}
+          pagination={false}
+        />
+      </Box>
+
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Expandable Table
+        </Typography>
+        <DataTable
+          columns={tableColumns.slice(0, 4)}
+          data={tableData}
+          loading={loading}
+          expandableRows
+          renderExpandedRow={(row) => (
+            <Box sx={{ p: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Order Details
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={3}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    Trip Type
+                  </Typography>
+                  <Typography variant="body2">{row.tripType}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    Stage
+                  </Typography>
+                  <Typography variant="body2">{row.stage}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    Status
+                  </Typography>
+                  <StatusChip
+                    label={row.status}
+                    status={row.statusColor === 'error' ? 'error' : row.statusColor === 'success' ? 'success' : 'default'}
+                    variant="subtle"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    Delivery Date
+                  </Typography>
+                  <Typography variant="body2">
+                    {new Date(row.deliveryDate).toLocaleDateString()}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          )}
+        />
       </Box>
     </Container>
   );
