@@ -117,113 +117,123 @@ const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, bra
 
       {/* Toggle Buttons and Search */}
       <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'flex-start', width: '100%', gap: 2 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          {/* Toggle Button Group */}
-          <Paper
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: '8px 9px',
-              gap: '4px',
-              width: '450px',
-              height: '48px',
-              backgroundColor: '#F8F8F9',
-              borderRadius: '8px',
-            }}
-          >
-          <Box
-            onClick={() => handleTabChange('performance')}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '8px 12px',
-              gap: '4px',
-              height: '32px',
-              flex: 1,
-              backgroundColor: activeTab === 'performance' ? '#FFFFFF' : '#F8F8F9',
-              boxShadow: activeTab === 'performance' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            <Typography
+        {/* Only show toggle tabs if not on Control Tower page */}
+        {activeTab !== 'controlTower' && (
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            {/* Toggle Button Group */}
+            <Paper
               sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: activeTab === 'performance' ? 600 : 500,
-                fontSize: '14px',
-                lineHeight: '140%',
-                color: activeTab === 'performance' ? '#434F64' : '#5F697B',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                padding: '8px 9px',
+                gap: '4px',
+                width: '450px',
+                height: '48px',
+                backgroundColor: '#F8F8F9',
+                borderRadius: '8px',
               }}
             >
-              Performance
-            </Typography>
-          </Box>
-          <Box
-            onClick={() => handleTabChange('operations')}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '8px 12px',
-              gap: '4px',
-              height: '32px',
-              flex: 1,
-              backgroundColor: activeTab === 'operations' ? '#FFFFFF' : '#F8F8F9',
-              boxShadow: activeTab === 'operations' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            <Typography
+            <Box
+              onClick={() => handleTabChange('performance')}
               sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: activeTab === 'operations' ? 600 : 500,
-                fontSize: '14px',
-                lineHeight: '140%',
-                color: activeTab === 'operations' ? '#434F64' : '#5F697B',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '8px 12px',
+                gap: '4px',
+                height: '32px',
+                flex: 1,
+                backgroundColor: activeTab === 'performance' ? '#FFFFFF' : '#F8F8F9',
+                boxShadow: activeTab === 'performance' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
               }}
             >
-              Operations
-            </Typography>
-          </Box>
-          <Box
-            onClick={() => handleTabChange('orderData')}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '8px 12px',
-              gap: '4px',
-              height: '32px',
-              flex: 1,
-              backgroundColor: activeTab === 'orderData' ? '#FFFFFF' : '#F8F8F9',
-              boxShadow: activeTab === 'orderData' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            <Typography
+              <Typography
+                sx={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: activeTab === 'performance' ? 600 : 500,
+                  fontSize: '14px',
+                  lineHeight: '140%',
+                  color: activeTab === 'performance' ? '#434F64' : '#5F697B',
+                }}
+              >
+                Performance
+              </Typography>
+            </Box>
+            <Box
+              onClick={() => handleTabChange('operations')}
               sx={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: activeTab === 'orderData' ? 600 : 500,
-                fontSize: '14px',
-                lineHeight: '140%',
-                color: activeTab === 'orderData' ? '#434F64' : '#5F697B',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '8px 12px',
+                gap: '4px',
+                height: '32px',
+                flex: 1,
+                backgroundColor: activeTab === 'operations' ? '#FFFFFF' : '#F8F8F9',
+                boxShadow: activeTab === 'operations' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
               }}
             >
-              Orders
-            </Typography>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: activeTab === 'operations' ? 600 : 500,
+                  fontSize: '14px',
+                  lineHeight: '140%',
+                  color: activeTab === 'operations' ? '#434F64' : '#5F697B',
+                }}
+              >
+                Operations
+              </Typography>
+            </Box>
+            <Box
+              onClick={() => handleTabChange('orderData')}
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '8px 12px',
+                gap: '4px',
+                height: '32px',
+                flex: 1,
+                backgroundColor: activeTab === 'orderData' ? '#FFFFFF' : '#F8F8F9',
+                boxShadow: activeTab === 'orderData' ? '0px 4px 4px rgba(0, 0, 0, 0.08)' : 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: activeTab === 'orderData' ? 600 : 500,
+                  fontSize: '14px',
+                  lineHeight: '140%',
+                  color: activeTab === 'orderData' ? '#434F64' : '#5F697B',
+                }}
+              >
+                Orders
+              </Typography>
+            </Box>
+          </Paper>
           </Box>
-        </Paper>
-        </Box>
+        )}
 
         {/* Search and Branch Selector */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+            ...(activeTab === 'controlTower' && { marginLeft: 'auto' }) // Push to right when toggle tabs are hidden
+          }}
+        >
           {searchBar && (
             <Box sx={{ position: 'relative', width: 400 }}>
               <EnhancedSearchDropdown
