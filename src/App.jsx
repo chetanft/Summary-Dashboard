@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import { SearchProvider } from './context/SearchContext';
@@ -14,18 +14,10 @@ import EnhancedSearchDemo from './pages/EnhancedSearchDemo';
 import PlantYardOperations from './components/operations/PlantYardOperations';
 import PTLKpiTestPage from './pages/PTLKpiTestPage';
 import ControlTowerPage from './components/control-tower/ControlTowerPage';
+import ComponentLibraryDemo from './pages/ComponentLibraryDemo';
 
-// Create a theme instance
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+// Import the theme configuration
+import theme from './theme/themeConfig';
 
 function App() {
   return (
@@ -120,6 +112,12 @@ function App() {
                     <ControlTowerPage />
                   </DataProvider>
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/component-library"
+              element={
+                <ComponentLibraryDemo />
               }
             />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
