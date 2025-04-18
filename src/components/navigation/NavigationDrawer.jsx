@@ -10,21 +10,9 @@ import {
   ListItemText,
   Typography,
   IconButton,
-  Divider,
 } from '@mui/material';
 import {
   Close as CloseIcon,
-  Dashboard as DashboardIcon,
-  Assignment as AssignmentIcon,
-  LocalShipping as LocalShippingIcon,
-  BarChart as BarChartIcon,
-  Settings as SettingsIcon,
-  Help as HelpIcon,
-  Inventory as InventoryIcon,
-  ViewQuilt as ViewQuiltIcon,
-  Apartment as ApartmentIcon,
-  Speed as SpeedIcon,
-  SupportAgent as SupportAgentIcon,
   ArrowForward as ArrowForwardIcon,
   Circle as CircleIcon,
 } from '@mui/icons-material';
