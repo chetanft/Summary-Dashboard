@@ -30,6 +30,19 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import CircleIcon from '@mui/icons-material/Circle';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import DescriptionIcon from '@mui/icons-material/Description';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import GavelIcon from '@mui/icons-material/Gavel';
+import ArticleIcon from '@mui/icons-material/Article';
+import HistoryIcon from '@mui/icons-material/History';
+import SupportIcon from '@mui/icons-material/Support';
+import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
+import PlanningIcon from '@mui/icons-material/Event';
 
 // Create a map of all pre-imported icons
 const materialIcons = {
@@ -62,6 +75,19 @@ const materialIcons = {
   Visibility: VisibilityIcon,
   VisibilityOff: VisibilityOffIcon,
   WarningAmber: WarningAmberIcon,
+  Circle: CircleIcon,
+  Assignment: AssignmentIcon,
+  DirectionsCar: DirectionsCarIcon,
+  Storefront: StorefrontIcon,
+  Receipt: ReceiptIcon,
+  Description: DescriptionIcon,
+  AttachMoney: AttachMoneyIcon,
+  Gavel: GavelIcon,
+  Article: ArticleIcon,
+  History: HistoryIcon,
+  Support: SupportIcon,
+  ViewQuilt: ViewQuiltIcon,
+  Planning: PlanningIcon,
 };
 
 // Create a context to provide icons throughout the app
@@ -89,12 +115,12 @@ export const useIconRegistry = () => useContext(IconContext);
 const Icon = memo(({ name, ...props }) => {
   const iconRegistry = useIconRegistry();
   const IconComponent = iconRegistry[name];
-  
+
   if (!IconComponent) {
     console.warn(`Icon "${name}" not found in registry`);
     return null;
   }
-  
+
   return <IconComponent {...props} />;
 });
 
