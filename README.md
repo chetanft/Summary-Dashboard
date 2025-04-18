@@ -1,6 +1,6 @@
 # TMS Dashboard
 
-A comprehensive Transportation Management System (TMS) Dashboard for monitoring and managing logistics operations.
+A comprehensive Transportation Management System (TMS) Dashboard for monitoring and managing logistics operations. This application provides real-time insights into transportation metrics, order tracking, and operational alerts to help logistics managers make informed decisions.
 
 ## Table of Contents
 
@@ -24,12 +24,17 @@ The TMS Dashboard is a web application designed to provide real-time insights in
 
 ## Features
 
-- **Authentication**: Secure login with role-based access control
-- **Summary Dashboard**: Overview of key performance metrics with interactive charts
-- **Order Management**: Track and manage orders with detailed information
-- **Order Timeline**: Visualize the journey of orders through various milestones
-- **Operational Alerts**: Real-time notifications for critical events
-- **Responsive Design**: Works on desktop and mobile devices
+- **Authentication**: Secure login with role-based access control (CXO, Company User, Branch User)
+- **Performance Dashboard**: Overview of key performance metrics with interactive charts and drill-down capabilities
+- **Operations Dashboard**: Real-time KPIs for planning, pre-dispatch, in-transit, and post-delivery operations
+- **Order Management**: Track and manage orders with detailed information and search functionality
+- **Order Timeline**: Visualize the journey of orders through various milestones with stage tracking
+- **Operational Alerts**: Real-time notifications for critical events and exceptions
+- **Advanced Visualizations**:
+  - Dock Occupancy Heatmap: Visual representation of dock utilization
+  - Truck Timeline Chart: Gantt-style visualization of truck movements
+  - Interactive KPI Cards: Click-through for detailed analysis
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
 ## Getting Started
 
@@ -78,11 +83,11 @@ Use the following credentials for testing:
 
 The dashboard is organized into three main sections:
 
-1. **Summary**: Overview of key performance indicators
-2. **Order Data**: Detailed view of orders and their status
-3. **Alerts**: Operational alerts requiring attention
+1. **Performance**: Overview of key performance indicators with drill-down capabilities
+2. **Operations**: Real-time operational KPIs for different stages of the logistics process
+3. **Orders**: Detailed view of orders and their status with search and filtering
 
-Use the navigation tabs at the top of the dashboard to switch between these sections.
+Use the navigation tabs at the top of the dashboard to switch between these sections. Each section provides specific insights and tools for different aspects of transportation management.
 
 ## Project Structure
 
@@ -117,43 +122,60 @@ tms-dashboard/
 
 ### Dashboard Components
 
-- **Dashboard**: Main dashboard component
-- **DashboardHeader**: Header with navigation tabs
-- **HeroKPI**: Large KPI component with chart
-- **SecondaryKPI**: Smaller KPI components
-- **LineChartKPI**: KPI with line chart visualization
-- **AlertIndicator**: Alert notification component
+- **EnhancedDashboard**: Main performance dashboard component with KPI cards and charts
+- **DashboardHeader**: Header with navigation tabs and user profile
+- **KpiCard**: Reusable KPI card component with drill-down capability
+- **StatTile**: Compact KPI display with trend indicators
+- **LineChartComponent**: Reusable line chart for time-series data
+- **BarChartComponent**: Reusable bar chart for comparative data
+- **DonutChartComponent**: Reusable donut chart for distribution data
+
+### Operations Components
+
+- **OperationsDashboard**: Main operations dashboard with sectioned KPIs
+- **PlanningSection**: KPIs related to planning operations
+- **PreDispatchSection**: KPIs related to pre-dispatch operations
+- **InTransitSection**: KPIs related to in-transit operations
+- **PostDeliverySection**: KPIs related to post-delivery operations
+- **DockOccupancyHeatmap**: Visual representation of dock utilization
+- **TruckTimelineChart**: Gantt-style visualization of truck movements
 
 ### Order Components
 
-- **Orders**: Order listing and management
-- **OrderDetailsPane**: Detailed view of an order
-- **OrderDetailsTab**: Basic order information
-- **OrderTimelineTab**: Order journey visualization
-- **OrderCommentsTab**: Comments and communication
-
-### Alert Components
-
-- **Alerts**: Alert listing and management
-- **AlertDetailsPane**: Detailed view of an alert
+- **OrdersPage**: Order listing with search and filtering
+- **OrderDetailsPane**: Slide-in pane with detailed order information
+- **OrderDetailsTab**: Basic order information and current status
+- **OrderTimelineTab**: Visual journey of an order through various stages
+- **OrderCommentsTab**: Communication history related to the order
+- **SearchDropdown**: Advanced search functionality for orders
 
 ### Authentication Components
 
-- **Login**: Login form
-- **ProtectedRoute**: Route protection based on authentication
+- **Login**: Login form with role selection
+- **ProtectedRoute**: Route protection based on authentication and role
+- **UserProfileMenu**: User profile and logout functionality
 
 ## Data Flow
 
 The application uses React Context API for state management:
 
-- **AuthContext**: Manages authentication state
+- **AuthContext**: Manages authentication state and user roles
 - **DataContext**: Manages dashboard data and provides data refresh functionality
+- **SearchContext**: Manages search state and functionality across the application
 
-Data flows from the context providers to the components through props and context hooks.
+Data flows from the context providers to the components through props and context hooks. The application uses a combination of static data (for demonstration) and simulated API calls to mimic real-world data flow.
 
 ## Authentication
 
 Authentication is implemented using JWT (JSON Web Tokens). The token is stored in local storage and included in API requests as a bearer token.
+
+The application supports three user roles:
+
+1. **CXO**: Access to all features with a focus on high-level KPIs and company-wide data
+2. **Company User**: Access to company-specific data and operations
+3. **Branch User**: Access to branch-specific data and operations with limited scope
+
+Each role has a customized dashboard view that highlights the most relevant information for that user type.
 
 ## Deployment
 
@@ -169,33 +191,44 @@ This will create a `dist` directory with optimized production files.
 
 ### Deployment Options
 
-#### Option 1: Static Hosting
+#### Recommended: Netlify Deployment
 
-The built application can be deployed to any static hosting service:
+The application is optimized for deployment on Netlify:
 
-- Netlify
-- Vercel
-- GitHub Pages
-- AWS S3 + CloudFront
+1. Connect your GitHub repository to Netlify
+2. Configure the build settings:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+3. Deploy the site
 
-#### Option 2: Docker Deployment
+Netlify automatically handles continuous deployment from your GitHub repository.
 
-A Dockerfile is provided for containerized deployment:
+#### Alternative Options
 
-```bash
-# Build the Docker image
-docker build -t tms-dashboard .
+- **Vercel**: Similar setup to Netlify with automatic deployments
+- **GitHub Pages**: Deploy the static files to GitHub Pages
+- **AWS S3 + CloudFront**: For enterprise-level hosting with CDN capabilities
 
-# Run the container
-docker run -p 8080:80 tms-dashboard
-```
+### Development Workflow
 
-#### Option 3: CI/CD Pipeline
+The project follows a feature branch workflow:
 
-The repository includes GitHub Actions workflows for continuous integration and deployment:
+1. Create a feature branch for each new feature or fix
+2. Develop and test the feature locally
+3. Push the feature branch to GitHub
+4. Create a pull request for review
+5. Merge to main after approval
+6. Automatic deployment via Netlify
 
-- `.github/workflows/ci.yml`: Runs tests and linting on pull requests
-- `.github/workflows/deploy.yml`: Deploys to production on merges to main branch
+## Key Technologies
+
+- **React**: Frontend library for building the user interface
+- **Vite**: Build tool and development server
+- **Material-UI**: Component library for consistent design
+- **Recharts**: Charting library for data visualization
+- **React Router**: For application routing
+- **Context API**: For state management
+- **date-fns**: For date manipulation and formatting
 
 ## Contributing
 
