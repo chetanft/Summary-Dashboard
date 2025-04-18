@@ -15,7 +15,7 @@ import FigmaComponentViewer from '../components/figma/FigmaComponentViewer';
 
 /**
  * FigmaExplorerPage component
- * 
+ *
  * This page allows users to explore Figma designs by entering a file ID.
  */
 const FigmaExplorerPage = () => {
@@ -32,35 +32,61 @@ const FigmaExplorerPage = () => {
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     // Validate file ID
     if (!fileId.trim()) {
       setError('Please enter a Figma file ID');
       return;
     }
-    
+
     // Extract file ID from URL if needed
     let extractedFileId = fileId.trim();
-    
+
     // Check if it's a Figma URL
-    if (extractedFileId.includes('figma.com/file/')) {
+    if (extractedFileId.includes('figma.com')) {
       try {
-        const url = new URL(extractedFileId);
-        const pathParts = url.pathname.split('/');
-        const fileIdIndex = pathParts.indexOf('file') + 1;
-        
-        if (fileIdIndex > 0 && fileIdIndex < pathParts.length) {
-          extractedFileId = pathParts[fileIdIndex];
+        // Handle different Figma URL formats
+        if (extractedFileId.includes('/file/')) {
+          // Standard file URL: https://www.figma.com/file/abcdef123456/FileName
+          const url = new URL(extractedFileId);
+          const pathParts = url.pathname.split('/');
+          const fileIdIndex = pathParts.indexOf('file') + 1;
+
+          if (fileIdIndex > 0 && fileIdIndex < pathParts.length) {
+            extractedFileId = pathParts[fileIdIndex];
+          } else {
+            setError('Could not extract file ID from URL');
+            return;
+          }
+        } else if (extractedFileId.includes('/design/')) {
+          // Design URL: https://www.figma.com/design/abcdef123456/FileName
+          const url = new URL(extractedFileId);
+          const pathParts = url.pathname.split('/');
+          const fileIdIndex = pathParts.indexOf('design') + 1;
+
+          if (fileIdIndex > 0 && fileIdIndex < pathParts.length) {
+            extractedFileId = pathParts[fileIdIndex];
+          } else {
+            setError('Could not extract file ID from URL');
+            return;
+          }
         } else {
-          setError('Could not extract file ID from URL');
-          return;
+          // Try to extract ID using regex
+          const matches = extractedFileId.match(/[a-zA-Z0-9]{22,32}/);
+          if (matches && matches.length > 0) {
+            extractedFileId = matches[0];
+          } else {
+            setError('Could not extract file ID from URL');
+            return;
+          }
         }
       } catch (err) {
+        console.error('Error parsing Figma URL:', err);
         setError('Invalid Figma URL');
         return;
       }
     }
-    
+
     setActiveFileId(extractedFileId);
     setError(null);
   };
@@ -75,11 +101,11 @@ const FigmaExplorerPage = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         Figma Design Explorer
       </Typography>
-      
+
       <Typography variant="body1" sx={{ mb: 4 }}>
         Enter a Figma file ID or URL to explore its design components and tokens.
       </Typography>
-      
+
       {/* File ID input form */}
       <Paper sx={{ p: 3, mb: 4 }}>
         <form onSubmit={handleSubmit}>
@@ -105,7 +131,7 @@ const FigmaExplorerPage = () => {
           </Box>
         </form>
       </Paper>
-      
+
       {/* Display content when a file ID is provided */}
       {activeFileId ? (
         <>
@@ -122,14 +148,14 @@ const FigmaExplorerPage = () => {
               <Tab label="Color Palette" />
             </Tabs>
           </Paper>
-          
+
           {/* Components tab */}
           {activeTab === 0 && (
             <Paper sx={{ p: 0, overflow: 'hidden' }}>
               <FigmaComponentViewer fileId={activeFileId} />
             </Paper>
           )}
-          
+
           {/* Design Tokens tab */}
           {activeTab === 1 && (
             <Paper sx={{ p: 3 }}>
@@ -141,7 +167,7 @@ const FigmaExplorerPage = () => {
               </Alert>
             </Paper>
           )}
-          
+
           {/* Color Palette tab */}
           {activeTab === 2 && (
             <Paper sx={{ p: 3 }}>
