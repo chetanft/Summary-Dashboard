@@ -20,6 +20,7 @@ import {
   Share as ShareIcon,
   Add as AddIcon
 } from '@mui/icons-material';
+import { format } from 'date-fns';
 
 /**
  * My Journeys Page component
@@ -57,6 +58,15 @@ const MyJourneysPage = () => {
 
   // Search state
   const [localSearchTerm, setLocalSearchTerm] = useState('');
+
+  // Date range filter state
+  const [dateRange, setDateRange] = useState({
+    start: '12 Aug 2024',
+    end: '12 Sep 2024'
+  });
+
+  // Source filter state
+  const [sourceFilter, setSourceFilter] = useState('Outbound - Source');
 
   // Initialize with journey data
   useEffect(() => {
@@ -158,38 +168,45 @@ const MyJourneysPage = () => {
     // Implement journey creation logic here
   };
 
+  // Handle date range change
+  const handleDateRangeChange = (newRange) => {
+    if (newRange === null) {
+      // Reset to default date range
+      setDateRange({
+        start: '12 Aug 2024',
+        end: '12 Sep 2024'
+      });
+    } else {
+      setDateRange(newRange);
+    }
+  };
+
+  // Handle source filter change
+  const handleSourceFilterChange = () => {
+    // This would typically open a dropdown or dialog to select a new source
+    console.log('Source filter clicked');
+    // For now, we'll just toggle between two options
+    setSourceFilter(sourceFilter === 'Outbound - Source' ? 'Inbound - Destination' : 'Outbound - Source');
+  };
+
   return (
     <Layout>
       {/* Dashboard Header */}
       <DashboardHeader
         title="My Journeys"
-        activeTab="journeys"
+        activeTab="controlTower" /* Using controlTower to hide toggle tabs */
         searchBar={true}
         searchValue={localSearchTerm}
         onSearch={handleSearch}
+        showDateFilter={true}
+        dateRange={dateRange}
+        onDateRangeChange={handleDateRangeChange}
+        showSourceFilter={true}
+        sourceFilter={sourceFilter}
+        onSourceFilterChange={handleSourceFilterChange}
+        showAddButton={true}
+        onAddClick={handleAddJourney}
       />
-
-      {/* Page Header with Add Journey Button */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h5" sx={{ fontWeight: 600, color: '#2D3748' }}>
-          My Journeys
-        </Typography>
-
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={handleAddJourney}
-          sx={{
-            textTransform: 'none',
-            fontWeight: 500,
-            borderRadius: '6px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          }}
-        >
-          Add Journey
-        </Button>
-      </Box>
 
       {/* Journey Status Tabs */}
       <JourneyStatusTabs

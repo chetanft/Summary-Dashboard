@@ -24,6 +24,7 @@ import {
   MetricCardGroup,
   DataTable,
   StatusChip,
+  Badge,
 } from '../components/core';
 
 // Sample data for the table demo
@@ -174,6 +175,38 @@ const ComponentLibraryDemo = () => {
         Atoms
       </Typography>
       <Divider sx={{ mb: 3 }} />
+
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Badge (New)
+      </Typography>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <Box sx={{ p: 2, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+            <Typography variant="subtitle2" sx={{ mb: 2 }}>
+              Status Variants
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Badge status="error" label="Critical" />
+              <Badge status="warning" label="Warning" />
+              <Badge status="success" label="Success" />
+              <Badge status="info" label="Information" />
+              <Badge status="default" label="Default" />
+            </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Box sx={{ p: 2, border: '1px solid #e0e0e0', borderRadius: 1 }}>
+            <Typography variant="subtitle2" sx={{ mb: 2 }}>
+              Width Variants
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Badge status="error" label="Fixed Width" width="128px" />
+              <Badge status="warning" label="Auto Width" />
+              <Badge status="success" label="Long Text Example That Will Expand" />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
 
       <Typography variant="h6" sx={{ mb: 2 }}>
         StatusBadge

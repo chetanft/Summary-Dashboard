@@ -43,6 +43,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import SupportIcon from '@mui/icons-material/Support';
 import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 import PlanningIcon from '@mui/icons-material/Event';
+import PaletteIcon from '@mui/icons-material/Palette';
 
 // Create a map of all pre-imported icons
 const materialIcons = {
@@ -88,6 +89,7 @@ const materialIcons = {
   Support: SupportIcon,
   ViewQuilt: ViewQuiltIcon,
   Planning: PlanningIcon,
+  Palette: PaletteIcon,
 };
 
 // Create a context to provide icons throughout the app

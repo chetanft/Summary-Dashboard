@@ -16,6 +16,7 @@ import PTLKpiTestPage from './pages/PTLKpiTestPage';
 import ControlTowerPage from './components/control-tower/ControlTowerPage';
 import ComponentLibraryDemo from './pages/ComponentLibraryDemo';
 import FigmaExplorerPage from './pages/FigmaExplorerPage';
+import ColorSystemDemo from './pages/ColorSystemDemo';
 import MyJourneysPage from './components/journeys/MyJourneysPage';
 
 // Import Figma Theme Provider
@@ -146,6 +147,14 @@ function App() {
             />
             <Route path="/ftl/journeys" element={<Navigate to="/my-journeys?type=ftl" replace />} />
             <Route path="/ptl/journeys" element={<Navigate to="/my-journeys?type=ptl" replace />} />
+            <Route
+              path="/color-system"
+              element={
+                <DataProvider>
+                  <ColorSystemDemo />
+                </DataProvider>
+              }
+            />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
           </Router>

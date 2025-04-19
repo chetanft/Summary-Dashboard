@@ -14,6 +14,7 @@ import {
   IconButton,
   TablePagination
 } from '@mui/material';
+import { Badge } from '../../components/core';
 import {
   ChevronRight as ChevronRightIcon,
   MoreVert as MoreVertIcon
@@ -218,17 +219,9 @@ const JourneysTable = ({ journeys, onJourneyClick }) => {
                       )}
                     </TableCell>
                     <TableCell sx={{ borderBottom: '1px solid #E0E4E8' }}>
-                      <Chip
+                      <Badge
                         label={journey.statusText}
-                        color={getStatusColor(journey)}
-                        size="small"
-                        sx={{
-                          fontWeight: 500,
-                          backgroundColor: journey.isDelayed ? 'rgba(245, 101, 101, 0.1)' : 'rgba(72, 187, 120, 0.1)',
-                          color: journey.isDelayed ? '#E53E3E' : '#38A169',
-                          borderRadius: '4px',
-                          height: '24px',
-                        }}
+                        status={journey.isDelayed ? 'error' : 'success'}
                       />
                     </TableCell>
                     <TableCell sx={{ borderBottom: '1px solid #E0E4E8' }}>

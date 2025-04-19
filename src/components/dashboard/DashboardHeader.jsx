@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, IconButton, TextField, InputAdornment } from '@mui/material';
-import { Dashboard as DashboardIcon, Search as SearchIcon } from '@mui/icons-material';
+import { Box, Typography, Paper, IconButton, TextField, InputAdornment, Button, Chip } from '@mui/material';
+import { Dashboard as DashboardIcon, Search as SearchIcon, Add as AddIcon, Close as CloseIcon, KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import BranchSelector from '../common/BranchSelector';
 import EnhancedSearchDropdown from '../common/EnhancedSearchDropdown';
 import { useData } from '../../context/DataContext';
@@ -9,7 +9,23 @@ import { useSearch } from '../../context/SearchContext';
 import { useAuth } from '../../context/AuthContext';
 import { ROLES } from '../../constants/roles';
 
-const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, branchSelector = false, onSearch, searchData = [] }) => {
+const DashboardHeader = ({
+  title,
+  activeTab,
+  onTabChange,
+  searchBar = false,
+  branchSelector = false,
+  onSearch,
+  searchData = [],
+  showDateFilter = false,
+  dateRange = { start: '', end: '' },
+  onDateRangeChange,
+  showSourceFilter = false,
+  sourceFilter = '',
+  onSourceFilterChange,
+  showAddButton = false,
+  onAddClick
+}) => {
   const navigate = useNavigate();
   const { handleBranchChange, handleSearchTermChange } = useData();
   const { recentSearches, addRecentSearch } = useSearch();
@@ -225,7 +241,7 @@ const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, bra
           </Box>
         )}
 
-        {/* Search and Branch Selector */}
+        {/* Filters, Search, and Actions */}
         <Box
           sx={{
             display: 'flex',
@@ -234,6 +250,49 @@ const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, bra
             ...(activeTab === 'controlTower' && { marginLeft: 'auto' }) // Push to right when toggle tabs are hidden
           }}
         >
+          {/* Date Range Filter */}
+          {showDateFilter && (
+            <Chip
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <Typography variant="body2">{dateRange.start}</Typography>
+                  <Typography variant="body2">→</Typography>
+                  <Typography variant="body2">{dateRange.end}</Typography>
+                </Box>
+              }
+              onDelete={() => onDateRangeChange && onDateRangeChange(null)}
+              deleteIcon={<CloseIcon fontSize="small" />}
+              sx={{
+                height: '32px',
+                borderRadius: '4px',
+                backgroundColor: '#F8F8F9',
+                '& .MuiChip-label': { px: 1 },
+                '& .MuiChip-deleteIcon': { color: '#5F697B' }
+              }}
+            />
+          )}
+
+          {/* Source Filter */}
+          {showSourceFilter && (
+            <Chip
+              label={
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <Typography variant="body2">{sourceFilter}</Typography>
+                </Box>
+              }
+              deleteIcon={<KeyboardArrowDownIcon fontSize="small" />}
+              onDelete={() => onSourceFilterChange && onSourceFilterChange()}
+              sx={{
+                height: '32px',
+                borderRadius: '4px',
+                backgroundColor: '#F8F8F9',
+                '& .MuiChip-label': { px: 1 },
+                '& .MuiChip-deleteIcon': { color: '#5F697B' }
+              }}
+            />
+          )}
+
+          {/* Search */}
           {searchBar && (
             <Box sx={{ position: 'relative', width: 400 }}>
               <EnhancedSearchDropdown
@@ -248,8 +307,28 @@ const DashboardHeader = ({ title, activeTab, onTabChange, searchBar = false, bra
             </Box>
           )}
 
+          {/* Branch Selector */}
           {showBranchSelector && (
             <BranchSelector onBranchChange={handleBranchSelect} />
+          )}
+
+          {/* Add Button */}
+          {showAddButton && (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={onAddClick}
+              sx={{
+                textTransform: 'none',
+                fontWeight: 500,
+                borderRadius: '6px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                height: '36px',
+              }}
+            >
+              Add Journey
+            </Button>
           )}
         </Box>
       </Box>

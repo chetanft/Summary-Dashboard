@@ -74,6 +74,12 @@ const NavigationDrawer = ({ open, onClose }) => {
       path: '/support',
       active: location.pathname === '/support',
     },
+    {
+      title: 'Color System',
+      icon: 'Palette',
+      path: '/color-system',
+      active: location.pathname === '/color-system',
+    },
   ];
 
   // Indent section items
@@ -224,7 +230,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                     px: 2,
                     borderRadius: '8px',
                     '&.Mui-selected': {
-                      backgroundColor: '#EBF2FF',
+                      backgroundColor: '#F1F3F5',
                     },
                     '&:hover': {
                       backgroundColor: '#F5F5F5',
@@ -233,7 +239,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                 >
                   <ListItemIcon
                     sx={{
-                      color: item.active ? '#0066FF' : '#8A94A6',
+                      color: item.active ? '#434F64' : '#8A94A6',
                       minWidth: 32,
                     }}
                   >
@@ -245,7 +251,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                         variant="body1"
                         sx={{
                           fontWeight: item.active ? 600 : 400,
-                          color: item.active ? '#0066FF' : '#434F64',
+                          color: item.active ? '#434F64' : '#5F697B',
                           fontSize: '14px',
                         }}
                       >
@@ -295,7 +301,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                     >
                       <ListItemIcon
                         sx={{
-                          color: item.active ? '#0066FF' : '#8A94A6',
+                          color: item.active ? '#434F64' : '#8A94A6',
                           minWidth: 32,
                         }}
                       >
@@ -307,7 +313,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                             variant="body2"
                             sx={{
                               fontWeight: item.active ? 600 : 400,
-                              color: item.active ? '#0066FF' : '#434F64',
+                              color: item.active ? '#434F64' : '#5F697B',
                               fontSize: '14px',
                             }}
                           >
@@ -354,7 +360,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                     >
                       <ListItemIcon
                         sx={{
-                          color: item.active ? '#0066FF' : '#8A94A6',
+                          color: item.active ? '#434F64' : '#8A94A6',
                           minWidth: 32,
                         }}
                       >
@@ -366,7 +372,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                             variant="body2"
                             sx={{
                               fontWeight: item.active ? 600 : 400,
-                              color: item.active ? '#0066FF' : '#434F64',
+                              color: item.active ? '#434F64' : '#5F697B',
                               fontSize: '14px',
                             }}
                           >
@@ -413,7 +419,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                     >
                       <ListItemIcon
                         sx={{
-                          color: item.active ? '#0066FF' : '#8A94A6',
+                          color: item.active ? '#434F64' : '#8A94A6',
                           minWidth: 32,
                         }}
                       >
@@ -425,7 +431,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                             variant="body2"
                             sx={{
                               fontWeight: item.active ? 600 : 400,
-                              color: item.active ? '#0066FF' : '#434F64',
+                              color: item.active ? '#434F64' : '#5F697B',
                               fontSize: '14px',
                             }}
                           >

@@ -5,6 +5,7 @@ import { useData } from '../../context/DataContext';
 import { useSearch } from '../../context/SearchContext';
 import OrderDetailsDrawer from './OrderDetailsDrawer';
 import EnhancedSearchDropdown from '../common/EnhancedSearchDropdown';
+import { Badge } from '../core';
 import {
   Box,
   Typography,
@@ -72,17 +73,9 @@ const orderData = [
     trackingId: 'Trip: 66147250',
     deliveryStatus: (
       <>
-        <Chip
+        <Badge
           label="Delayed by 1 day"
-          size="small"
-          sx={{
-            bgcolor: '#FFEAEA',
-            color: '#FF3533',
-            fontWeight: 600,
-            fontSize: '14px',
-            borderRadius: '4px',
-            height: '24px',
-          }}
+          status="error"
         />
         <Typography variant="body2" sx={{ color: '#434F64', mt: 0.5 }}>
           ETA: 25 April, 2025
@@ -102,17 +95,9 @@ const orderData = [
     trackingId: 'EPOD: 623748',
     deliveryStatus: (
       <>
-        <Chip
+        <Badge
           label="Delayed by 1 day"
-          size="small"
-          sx={{
-            bgcolor: '#FFEAEA',
-            color: '#FF3533',
-            fontWeight: 600,
-            fontSize: '14px',
-            borderRadius: '4px',
-            height: '24px',
-          }}
+          status="error"
         />
         <Typography variant="body2" sx={{ color: '#434F64', mt: 0.5 }}>
           25 April, 2025

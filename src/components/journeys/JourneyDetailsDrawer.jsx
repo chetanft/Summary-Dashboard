@@ -18,6 +18,7 @@ import {
   Button,
   TextField
 } from '@mui/material';
+import { Badge } from '../../components/core';
 import {
   Close as CloseIcon,
   LocalShipping as LocalShippingIcon,
@@ -161,16 +162,9 @@ const JourneyDetailsDrawer = ({ journey, open, onClose }) => {
 
                 <Grid item xs={6}>
                   <Typography variant="body2" sx={{ color: '#718096', mb: 0.5 }}>Status</Typography>
-                  <Chip
+                  <Badge
                     label={journey.statusText}
-                    size="small"
-                    sx={{
-                      backgroundColor: journey.isDelayed ? 'rgba(245, 101, 101, 0.1)' : 'rgba(72, 187, 120, 0.1)',
-                      color: getStatusColor(),
-                      fontWeight: 500,
-                      borderRadius: '4px',
-                      height: '24px',
-                    }}
+                    status={journey.isDelayed ? 'error' : 'success'}
                   />
                 </Grid>
 
