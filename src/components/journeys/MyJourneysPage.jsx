@@ -10,19 +10,20 @@ import JourneyFilters from './JourneyFilters';
 import JourneysTable from './JourneysTable';
 import JourneyDetailsDrawer from './JourneyDetailsDrawer';
 import { journeyData } from '../../data/journeyData';
-import { Box, Typography, Button, IconButton } from '@mui/material';
+import { Box, Typography, Button, IconButton, Divider } from '@mui/material';
 import {
   FilterList as FilterIcon,
   ViewList as ViewListIcon,
   ViewModule as ViewModuleIcon,
   GetApp as GetAppIcon,
   Print as PrintIcon,
-  Share as ShareIcon
+  Share as ShareIcon,
+  Add as AddIcon
 } from '@mui/icons-material';
 
 /**
  * My Journeys Page component
- * 
+ *
  * @returns {JSX.Element}
  */
 const MyJourneysPage = () => {
@@ -31,50 +32,50 @@ const MyJourneysPage = () => {
   const { currentUser } = useAuth();
   const { searchTerm, handleSearchTermChange } = useData();
   const { addRecentSearch } = useSearch();
-  
+
   // Get journey type from URL query params (ftl or ptl)
   const queryParams = new URLSearchParams(location.search);
   const journeyType = queryParams.get('type') || 'all';
-  
+
   // State for journey status tabs
   const [activeStatus, setActiveStatus] = useState('en-route-to-loading');
-  
+
   // State for filters
   const [filters, setFilters] = useState({
     expectedArrival: null,
     delayedStatus: null,
     consignee: 'all'
   });
-  
+
   // State for journey data
   const [filteredJourneys, setFilteredJourneys] = useState([]);
   const [selectedJourney, setSelectedJourney] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  
+
   // State for view mode
   const [viewMode, setViewMode] = useState('list');
-  
+
   // Search state
   const [localSearchTerm, setLocalSearchTerm] = useState('');
-  
+
   // Initialize with journey data
   useEffect(() => {
     // Filter journeys based on type, status, and filters
     let filtered = [...journeyData];
-    
+
     // Filter by journey type if specified
     if (journeyType !== 'all') {
       filtered = filtered.filter(journey => journey.type.toLowerCase() === journeyType.toLowerCase());
     }
-    
+
     // Filter by status
     filtered = filtered.filter(journey => journey.status === activeStatus);
-    
+
     // Apply consignee filter
     if (filters.consignee !== 'all') {
       filtered = filtered.filter(journey => journey.to.company === filters.consignee);
     }
-    
+
     // Apply search filter
     if (localSearchTerm) {
       const searchLower = localSearchTerm.toLowerCase();
@@ -89,29 +90,29 @@ const MyJourneysPage = () => {
         journey.tripInfo.toLowerCase().includes(searchLower)
       );
     }
-    
+
     setFilteredJourneys(filtered);
   }, [journeyType, activeStatus, filters, localSearchTerm]);
-  
+
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!currentUser) {
       navigate('/login');
     }
   }, [currentUser, navigate]);
-  
+
   // Initialize local search term with global search term
   useEffect(() => {
     setLocalSearchTerm(searchTerm || '');
   }, [searchTerm]);
-  
+
   // Handle status change
   const handleStatusChange = (event, newStatus) => {
     if (newStatus !== null) {
       setActiveStatus(newStatus);
     }
   };
-  
+
   // Handle filter change
   const handleFilterChange = (filterName, value) => {
     setFilters(prevFilters => ({
@@ -119,12 +120,12 @@ const MyJourneysPage = () => {
       [filterName]: value
     }));
   };
-  
+
   // Handle journey click
   const handleJourneyClick = (journey) => {
     setSelectedJourney(journey);
     setDrawerOpen(true);
-    
+
     // Add to recent searches
     addRecentSearch({
       type: 'Journey ID',
@@ -132,17 +133,17 @@ const MyJourneysPage = () => {
       tripId: journey.tripId
     });
   };
-  
+
   // Handle close drawer
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
   };
-  
+
   // Handle view mode change
   const handleViewModeChange = (mode) => {
     setViewMode(mode);
   };
-  
+
   // Handle search
   const handleSearch = (value) => {
     setLocalSearchTerm(value);
@@ -150,7 +151,13 @@ const MyJourneysPage = () => {
       handleSearchTermChange(value);
     }
   };
-  
+
+  // Handle add journey
+  const handleAddJourney = () => {
+    console.log('Add journey clicked');
+    // Implement journey creation logic here
+  };
+
   return (
     <Layout>
       {/* Dashboard Header */}
@@ -161,65 +168,100 @@ const MyJourneysPage = () => {
         searchValue={localSearchTerm}
         onSearch={handleSearch}
       />
-      
+
+      {/* Page Header with Add Journey Button */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, color: '#2D3748' }}>
+          My Journeys
+        </Typography>
+
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAddJourney}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 500,
+            borderRadius: '6px',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          }}
+        >
+          Add Journey
+        </Button>
+      </Box>
+
       {/* Journey Status Tabs */}
-      <JourneyStatusTabs 
-        activeStatus={activeStatus} 
-        onStatusChange={handleStatusChange} 
+      <JourneyStatusTabs
+        activeStatus={activeStatus}
+        onStatusChange={handleStatusChange}
       />
-      
+
       {/* Filters and Actions */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <JourneyFilters 
-          filters={filters} 
-          onFilterChange={handleFilterChange} 
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'center' }}>
+        <JourneyFilters
+          filters={filters}
+          onFilterChange={handleFilterChange}
         />
-        
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <IconButton 
-            size="small" 
+
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <IconButton
+            size="small"
             onClick={() => handleViewModeChange('list')}
             color={viewMode === 'list' ? 'primary' : 'default'}
+            sx={{ color: viewMode === 'list' ? '#4299E1' : '#A0AEC0' }}
           >
             <ViewListIcon />
           </IconButton>
-          <IconButton 
-            size="small" 
+          <IconButton
+            size="small"
             onClick={() => handleViewModeChange('grid')}
             color={viewMode === 'grid' ? 'primary' : 'default'}
+            sx={{ color: viewMode === 'grid' ? '#4299E1' : '#A0AEC0' }}
           >
             <ViewModuleIcon />
           </IconButton>
-          <IconButton size="small">
+          <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: '20px', alignSelf: 'center' }} />
+          <IconButton size="small" sx={{ color: '#A0AEC0' }}>
             <GetAppIcon />
           </IconButton>
-          <IconButton size="small">
+          <IconButton size="small" sx={{ color: '#A0AEC0' }}>
             <PrintIcon />
           </IconButton>
-          <IconButton size="small">
+          <IconButton size="small" sx={{ color: '#A0AEC0' }}>
             <ShareIcon />
           </IconButton>
-          <Button 
-            variant="outlined" 
+          <Button
+            variant="outlined"
             startIcon={<FilterIcon />}
             size="small"
+            sx={{
+              textTransform: 'none',
+              borderColor: '#E2E8F0',
+              color: '#4A5568',
+              '&:hover': {
+                borderColor: '#CBD5E0',
+                backgroundColor: '#F7FAFC',
+              },
+              height: '32px',
+            }}
           >
             More Filters
           </Button>
         </Box>
       </Box>
-      
+
       {/* Journeys count */}
-      <Typography variant="body2" sx={{ mb: 2 }}>
+      <Typography variant="body2" sx={{ mb: 2, color: '#718096', fontWeight: 500 }}>
         {filteredJourneys.length} Journeys available
       </Typography>
-      
+
       {/* Journeys Table */}
-      <JourneysTable 
-        journeys={filteredJourneys} 
-        onJourneyClick={handleJourneyClick} 
+      <JourneysTable
+        journeys={filteredJourneys}
+        onJourneyClick={handleJourneyClick}
       />
-      
+
       {/* Journey Details Drawer */}
       <JourneyDetailsDrawer
         journey={selectedJourney}
