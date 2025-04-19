@@ -16,6 +16,7 @@ import PTLKpiTestPage from './pages/PTLKpiTestPage';
 import ControlTowerPage from './components/control-tower/ControlTowerPage';
 import ComponentLibraryDemo from './pages/ComponentLibraryDemo';
 import FigmaExplorerPage from './pages/FigmaExplorerPage';
+import MyJourneysPage from './components/journeys/MyJourneysPage';
 
 // Import Figma Theme Provider
 import FigmaThemeProvider from './components/figma/FigmaThemeProvider';
@@ -133,6 +134,18 @@ function App() {
                 <FigmaExplorerPage />
               }
             />
+            <Route
+              path="/my-journeys"
+              element={
+                <ProtectedRoute>
+                  <DataProvider>
+                    <MyJourneysPage />
+                  </DataProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/ftl/journeys" element={<Navigate to="/my-journeys?type=ftl" replace />} />
+            <Route path="/ptl/journeys" element={<Navigate to="/my-journeys?type=ptl" replace />} />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
           </Router>
