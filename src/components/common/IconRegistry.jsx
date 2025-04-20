@@ -47,21 +47,9 @@ import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 import PlanningIcon from '@mui/icons-material/Event';
 import PaletteIcon from '@mui/icons-material/Palette';
 
-// Import Lucide icons
-// Using dynamic import to avoid build issues
-let LucideIcons = {};
-
-// Try to load Lucide icons, but don't fail if they're not available
-try {
-  // This will be properly chunked during build
-  import('lucide-react').then(module => {
-    LucideIcons = module;
-  }).catch(error => {
-    console.warn('Failed to load Lucide icons:', error);
-  });
-} catch (error) {
-  console.warn('Failed to import Lucide icons:', error);
-}
+// We'll load Lucide icons at runtime, not during build
+// This empty object will be populated at runtime
+const LucideIcons = {};
 
 // Create a map of all pre-imported Material UI icons
 const materialIcons = {
@@ -167,23 +155,33 @@ const IconContext = createContext({ materialIcons, lucideIcons: LucideIcons, ico
  */
 export const IconRegistryProvider = ({ children }) => {
   // State to track if Lucide icons are loaded
-  const [lucideIcons, setLucideIcons] = React.useState(LucideIcons);
+  const [lucideIcons, setLucideIcons] = React.useState({});
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  // Load Lucide icons dynamically
+  // Load Lucide icons dynamically at runtime only (not during build)
   useEffect(() => {
-    import('lucide-react')
+    // Use a function constructor to avoid Vite/Rollup from trying to analyze this import
+    // This is a workaround for the Netlify build issue
+    const dynamicImport = new Function('return import("lucide-react")');
+
+    dynamicImport()
       .then(module => {
         setLucideIcons(module);
-        // Preload common icons after Lucide is loaded
-        preloadCommonIcons();
+        // Only preload common icons if we successfully loaded lucide-react
+        if (typeof preloadCommonIcons === 'function') {
+          preloadCommonIcons();
+        }
       })
       .catch(error => {
-        console.warn('Failed to load Lucide icons in provider:', error);
+        console.warn('Failed to load Lucide icons at runtime:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
   return (
-    <IconContext.Provider value={{ materialIcons, lucideIcons, iconMapping }}>
+    <IconContext.Provider value={{ materialIcons, lucideIcons, iconMapping, isLoading }}>
       {children}
     </IconContext.Provider>
   );
@@ -202,19 +200,36 @@ export const useIconRegistry = () => useContext(IconContext);
  * @param {Object} props.rest - Other props to pass to the icon component
  */
 const Icon = memo(({ name, useMui = false, ...props }) => {
-  const { materialIcons, lucideIcons, iconMapping } = useIconRegistry();
+  const { materialIcons, lucideIcons, iconMapping, isLoading } = useIconRegistry();
 
-  // If useMui is true, use Material UI icon
-  if (useMui) {
+  // If useMui is true or if Lucide is still loading, use Material UI icon
+  if (useMui || isLoading) {
     const MuiIconComponent = materialIcons[name];
     if (!MuiIconComponent) {
-      console.warn(`Material UI Icon "${name}" not found in registry`);
-      return null;
+      // Only warn if we're explicitly requesting a MUI icon
+      if (useMui) {
+        console.warn(`Material UI Icon "${name}" not found in registry`);
+      }
+      // Return null only if we're explicitly requesting a MUI icon that doesn't exist
+      // Otherwise, we'll try Lucide icons below
+      if (useMui) {
+        return null;
+      }
+    } else {
+      // If we have a MUI icon and either useMui is true or Lucide is loading, use the MUI icon
+      if (useMui || isLoading) {
+        return <MuiIconComponent {...props} />;
+      }
     }
-    return <MuiIconComponent {...props} />;
   }
 
-  // Otherwise, use Lucide icon
+  // If we get here and Lucide is still loading, return the MUI icon or null
+  if (isLoading) {
+    const MuiIconComponent = materialIcons[name];
+    return MuiIconComponent ? <MuiIconComponent {...props} /> : null;
+  }
+
+  // Try to use Lucide icon
   // First, check if there's a mapping for this icon name
   const lucideIconName = iconMapping[name] || name;
 
@@ -227,7 +242,7 @@ const Icon = memo(({ name, useMui = false, ...props }) => {
     }
   }
 
-  // Fallback to Material UI icon if Lucide icon is not found or not loaded yet
+  // Fallback to Material UI icon if Lucide icon is not found
   const FallbackIcon = materialIcons[name];
   if (FallbackIcon) {
     return <FallbackIcon {...props} />;

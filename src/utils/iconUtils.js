@@ -14,16 +14,12 @@ export const importLucideIcon = async (iconName) => {
   }
 
   try {
-    // First check if lucide-react is available
-    const lucideModule = await import('lucide-react').catch(() => null);
-    if (!lucideModule) {
-      console.warn('lucide-react module is not available');
-      return null;
-    }
+    // Use Function constructor to avoid Vite/Rollup from analyzing this import
+    // This is a workaround for the Netlify build issue
+    const dynamicImport = new Function('iconName', 'return import("lucide-react/dist/esm/icons/" + iconName)');
 
     // Then try to import the specific icon
-    // eslint-disable-next-line import/no-dynamic-require
-    return await import(/* @vite-ignore */ `lucide-react/dist/esm/icons/${iconName}`);
+    return await dynamicImport(iconName).catch(() => null);
   } catch (error) {
     console.warn(`Failed to load icon: ${iconName}`, error);
     return null;
@@ -110,14 +106,15 @@ export const commonIconNames = [
  */
 export const preloadCommonIcons = () => {
   try {
+    // Use Function constructor to avoid Vite/Rollup from analyzing this import
+    const dynamicImport = new Function('iconName', 'return import("lucide-react/dist/esm/icons/" + iconName)');
+
     commonIconNames.forEach(iconName => {
       // Use low priority to avoid blocking other resources
-      // eslint-disable-next-line import/no-dynamic-require
-      import(/* @vite-ignore */ `lucide-react/dist/esm/icons/${iconName}`)
-        .catch(error => {
-          // Silently fail individual icon loading
-          console.debug(`Failed to preload icon: ${iconName}`, error);
-        });
+      dynamicImport(iconName).catch(error => {
+        // Silently fail individual icon loading
+        console.debug(`Failed to preload icon: ${iconName}`, error);
+      });
     });
   } catch (error) {
     // Catch any errors during preloading
