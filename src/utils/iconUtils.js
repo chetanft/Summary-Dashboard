@@ -10,6 +10,7 @@
 export const importLucideIcon = async (iconName) => {
   try {
     // Dynamic import with code splitting
+    // @vite-ignore
     return await import(`lucide-react/dist/esm/icons/${iconName}`);
   } catch (error) {
     console.error(`Failed to load icon: ${iconName}`, error);
@@ -34,7 +35,7 @@ export const commonIconNames = [
   'ChevronRight',
   'ChevronDown',
   'ChevronUp',
-  
+
   // Action icons
   'Plus',
   'Minus',
@@ -48,7 +49,7 @@ export const commonIconNames = [
   'Filter',
   'RefreshCw',
   'X',
-  
+
   // Status icons
   'CheckCircle',
   'AlertCircle',
@@ -56,7 +57,7 @@ export const commonIconNames = [
   'Info',
   'HelpCircle',
   'Clock',
-  
+
   // Domain-specific icons
   'Truck',
   'Package',
@@ -72,12 +73,12 @@ export const commonIconNames = [
   'BarChart',
   'PieChart',
   'LineChart',
-  
+
   // Notification icons
   'Bell',
   'Mail',
   'MessageSquare',
-  
+
   // Misc icons
   'Eye',
   'EyeOff',
@@ -98,6 +99,7 @@ export const commonIconNames = [
 export const preloadCommonIcons = () => {
   commonIconNames.forEach(iconName => {
     // Use low priority to avoid blocking other resources
+    // @vite-ignore
     import(`lucide-react/dist/esm/icons/${iconName}`);
   });
 };
