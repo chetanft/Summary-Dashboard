@@ -187,17 +187,10 @@ const MyJourneysPage = () => {
       <DashboardHeader
         title="My Journeys"
         activeTab="controlTower" /* Using controlTower to hide toggle tabs */
-        searchBar={true}
-        searchValue={localSearchTerm}
-        onSearch={handleSearch}
-        showDateFilter={true}
-        dateRange={dateRange}
-        onDateRangeChange={handleDateRangeChange}
-        showSourceFilter={true}
-        sourceFilter={sourceFilter}
-        onSourceFilterChange={handleSourceFilterChange}
-        showAddButton={true}
-        onAddClick={handleAddJourney}
+        searchBar={false}
+        showDateFilter={false}
+        showSourceFilter={false}
+        showAddButton={false}
       />
 
       {/* Journey Status Tabs */}
@@ -206,64 +199,127 @@ const MyJourneysPage = () => {
         onStatusChange={handleStatusChange}
       />
 
-      {/* Filters and Actions */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'center' }}>
-        <JourneyFilters
-          filters={filters}
-          onFilterChange={handleFilterChange}
-        />
-
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <IconButton
-            size="small"
-            onClick={() => handleViewModeChange('list')}
-            color={viewMode === 'list' ? 'primary' : 'default'}
-            sx={{ color: viewMode === 'list' ? '#4299E1' : '#A0AEC0' }}
-          >
-            <Icon name="List" size={20} />
-          </IconButton>
-          <IconButton
-            size="small"
-            onClick={() => handleViewModeChange('grid')}
-            color={viewMode === 'grid' ? 'primary' : 'default'}
-            sx={{ color: viewMode === 'grid' ? '#4299E1' : '#A0AEC0' }}
-          >
-            <Icon name="LayoutGrid" size={20} />
-          </IconButton>
-          <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: '20px', alignSelf: 'center' }} />
-          <IconButton size="small" sx={{ color: '#A0AEC0' }}>
-            <Icon name="Download" size={20} />
-          </IconButton>
-          <IconButton size="small" sx={{ color: '#A0AEC0' }}>
-            <Icon name="Printer" size={20} />
-          </IconButton>
-          <IconButton size="small" sx={{ color: '#A0AEC0' }}>
-            <Icon name="Share2" size={20} />
-          </IconButton>
-          <Button
-            variant="outlined"
-            startIcon={<Icon name="Filter" size={18} />}
-            size="small"
-            sx={{
-              textTransform: 'none',
-              borderColor: '#E2E8F0',
-              color: '#4A5568',
-              '&:hover': {
-                borderColor: '#CBD5E0',
-                backgroundColor: '#F7FAFC',
-              },
-              height: '32px',
-            }}
-          >
-            More Filters
-          </Button>
+      {/* Filter Bar */}
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '20px',
+        mb: 2,
+        height: '40px'
+      }}>
+        {/* Source Filter */}
+        <Box sx={{
+          width: '236px',
+          height: '40px',
+          border: '1px solid #434F64',
+          borderRadius: '8px',
+          backgroundColor: '#F8F8F9',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 12px'
+        }}>
+          <Typography variant="body1" sx={{ color: '#434F64' }}>
+            {sourceFilter}
+          </Typography>
+          <Icon name="ChevronDown" size={16} color="#434F64" />
         </Box>
-      </Box>
 
-      {/* Journeys count */}
-      <Typography variant="body2" sx={{ mb: 2, color: '#718096', fontWeight: 500 }}>
-        {filteredJourneys.length} Journeys available
-      </Typography>
+        {/* Date Range Filter */}
+        <Box sx={{
+          width: '296px',
+          height: '40px',
+          border: '1px solid #434F64',
+          borderRadius: '8px',
+          backgroundColor: '#F8F8F9',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 12px',
+          gap: '4px'
+        }}>
+          <Icon name="Calendar" size={16} color="#434F64" />
+          <Typography variant="body1" sx={{ color: '#434F64', flexGrow: 1 }}>
+            {dateRange.start}
+          </Typography>
+          <Typography variant="body1" sx={{ color: '#838C9D' }}>
+            -
+          </Typography>
+          <Typography variant="body1" sx={{ color: '#434F64', flexGrow: 1 }}>
+            {dateRange.end}
+          </Typography>
+          <Icon name="X" size={16} color="#434F64" />
+        </Box>
+
+        {/* Status Filter */}
+        <Box sx={{
+          width: '191px',
+          height: '40px',
+          border: '1px solid #434F64',
+          borderRadius: '8px',
+          backgroundColor: '#F8F8F9',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 12px'
+        }}>
+          <Typography variant="body1" sx={{ color: '#434F64' }}>
+            All Statuses
+          </Typography>
+          <Icon name="ChevronDown" size={16} color="#434F64" />
+        </Box>
+
+        {/* Search Box */}
+        <Box sx={{
+          width: '259px',
+          height: '40px',
+          border: '1px solid #CED1D7',
+          borderRadius: '8px',
+          backgroundColor: '#FFFFFF',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 12px',
+          gap: '10px'
+        }}>
+          <Icon name="Search" size={16} color="#838C9D" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={localSearchTerm}
+            onChange={(e) => handleSearch(e.target.value)}
+            style={{
+              border: 'none',
+              outline: 'none',
+              width: '100%',
+              background: 'transparent',
+              color: '#434F64',
+              fontSize: '16px',
+              fontFamily: 'Inter, sans-serif'
+            }}
+          />
+        </Box>
+
+        {/* Add Journey Button */}
+        <Button
+          variant="contained"
+          startIcon={<Icon name="Plus" size={24} color="#FFFFFF" />}
+          onClick={handleAddJourney}
+          sx={{
+            backgroundColor: '#434F64',
+            borderRadius: '8px',
+            textTransform: 'none',
+            padding: '12px 24px',
+            height: '40px',
+            '&:hover': {
+              backgroundColor: '#323C4D',
+            },
+            fontSize: '20px',
+            fontWeight: 500,
+          }}
+        >
+          Journey
+        </Button>
+      </Box>
 
       {/* Journeys Table */}
       <JourneysTable
