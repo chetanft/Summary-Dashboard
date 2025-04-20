@@ -120,10 +120,10 @@ const Header = ({ onRefresh }) => {
       {/* Right side - Notifications and User */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
-          <IconButton aria-label="quick actions">
+          <IconButton aria-label="quick actions" sx={{ display: 'flex' }}>
             <Icon name="Rocket" color="#434F64" size={24} />
           </IconButton>
-          <IconButton aria-label="notifications">
+          <IconButton aria-label="notifications" sx={{ display: 'flex' }}>
             <Icon name="Bell" color="#434F64" size={24} />
           </IconButton>
         </Box>

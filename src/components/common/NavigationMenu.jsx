@@ -6,7 +6,8 @@ import {
   Dashboard as DashboardIcon,
   Inventory as InventoryIcon,
   LocalShipping as LocalShippingIcon,
-  Warehouse as WarehouseIcon
+  Warehouse as WarehouseIcon,
+  DirectionsCar as DirectionsCarIcon
 } from '@mui/icons-material';
 
 const NavigationMenu = () => {
@@ -65,6 +66,18 @@ const NavigationMenu = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <InventoryIcon fontSize="small" />
             <Typography>Orders</Typography>
+          </Box>
+        </MenuItem>
+        <MenuItem onClick={() => handleNavigation('/journeys')}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <DirectionsCarIcon fontSize="small" />
+            <Typography>Journeys</Typography>
+          </Box>
+        </MenuItem>
+        <MenuItem onClick={() => handleNavigation('/control-tower')}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <WarehouseIcon fontSize="small" />
+            <Typography>Control Tower</Typography>
           </Box>
         </MenuItem>
       </Menu>

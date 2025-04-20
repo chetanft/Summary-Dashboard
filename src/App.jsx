@@ -4,6 +4,8 @@ import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import { SearchProvider } from './context/SearchContext';
 import { IconRegistryProvider } from './components/common/IconRegistry';
+import { JourneyProvider } from './contexts/JourneyContext';
+import { ControlTowerProvider } from './context/ControlTowerContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
 import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
@@ -11,6 +13,8 @@ import OrdersPage from './components/orders/OrdersPage';
 import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
 import MyJourneysPage from './components/journeys/MyJourneysPage';
+import JourneyPage from './pages/JourneyPage';
+import ControlTowerPage from './components/control-tower/ControlTowerPage';
 import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
 import IconsDemo from './pages/IconsDemo';
 
@@ -73,6 +77,30 @@ function App() {
                   <ProtectedRoute>
                     <DataProvider>
                       <MyJourneysPage />
+                    </DataProvider>
+                  </ProtectedRoute>
+              }
+            />
+              <Route
+                path="/journeys"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <JourneyProvider>
+                        <JourneyPage />
+                      </JourneyProvider>
+                    </DataProvider>
+                  </ProtectedRoute>
+              }
+            />
+              <Route
+                path="/control-tower"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <ControlTowerProvider>
+                        <ControlTowerPage />
+                      </ControlTowerProvider>
                     </DataProvider>
                   </ProtectedRoute>
               }

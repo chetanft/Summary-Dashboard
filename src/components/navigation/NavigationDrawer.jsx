@@ -162,6 +162,28 @@ const NavigationDrawer = ({ open, onClose }) => {
     },
   ];
 
+  // Control Tower section items
+  const controlTowerItems = [
+    {
+      title: 'Overview',
+      icon: 'Circle',
+      path: '/control-tower',
+      active: location.pathname === '/control-tower',
+    },
+    {
+      title: 'Live Tracking',
+      icon: 'MapPin',
+      path: '/control-tower/live',
+      active: location.pathname === '/control-tower/live',
+    },
+    {
+      title: 'Analytics',
+      icon: 'BarChart2',
+      path: '/control-tower/analytics',
+      active: location.pathname === '/control-tower/analytics',
+    },
+  ];
+
   const handleNavigation = (path) => {
     navigate(path);
     onClose();
@@ -264,8 +286,67 @@ const NavigationDrawer = ({ open, onClose }) => {
         {/* Right content with categorized navigation */}
         <Box sx={{ flex: 1, p: 3, overflowY: 'auto' }}>
           <Grid container spacing={4}>
+            {/* Control Tower Section */}
+            <Grid item xs={3}>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: 600,
+                  color: '#434F64',
+                  mb: 2,
+                  textTransform: 'uppercase',
+                  fontSize: '14px',
+                }}
+              >
+                CONTROL TOWER
+              </Typography>
+              <List sx={{ pt: 0 }}>
+                {controlTowerItems.map((item, index) => (
+                  <ListItem key={index} disablePadding>
+                    <ListItemButton
+                      onClick={() => handleNavigation(item.path)}
+                      selected={item.active}
+                      sx={{
+                        py: 1,
+                        px: 0,
+                        '&.Mui-selected': {
+                          backgroundColor: 'transparent',
+                        },
+                        '&:hover': {
+                          backgroundColor: 'transparent',
+                        },
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          color: item.active ? '#434F64' : '#8A94A6',
+                          minWidth: 32,
+                        }}
+                      >
+                        <Icon name={item.icon} size={18} />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontWeight: item.active ? 600 : 400,
+                              color: item.active ? '#434F64' : '#5F697B',
+                              fontSize: '14px',
+                            }}
+                          >
+                            {item.title}
+                          </Typography>
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+
             {/* Indent Section */}
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography
                 variant="subtitle1"
                 sx={{
@@ -324,7 +405,7 @@ const NavigationDrawer = ({ open, onClose }) => {
             </Grid>
 
             {/* Tracking Section */}
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography
                 variant="subtitle1"
                 sx={{
@@ -383,7 +464,7 @@ const NavigationDrawer = ({ open, onClose }) => {
             </Grid>
 
             {/* Freight Audit Section */}
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography
                 variant="subtitle1"
                 sx={{
