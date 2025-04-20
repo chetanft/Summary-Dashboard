@@ -12,12 +12,8 @@ import {
   Typography,
   Chip,
   IconButton,
-  TablePagination,
-  Button,
-  Divider,
-  Grid
+  Tooltip
 } from '@mui/material';
-import { Badge } from '../../components/core';
 import Icon from '../common/Icon';
 
 /**
@@ -99,105 +95,99 @@ const JourneysTable = ({ journeys, onJourneyClick }) => {
 
   return (
     <Box>
-      {/* Toggle Container */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, height: '40px' }}>
-        <Typography variant="body1" sx={{ fontWeight: 600, color: '#434F64' }}>
-          {journeys.length} Journeys available
-        </Typography>
-
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '18px', height: '40px' }}>
-          <IconButton sx={{ width: '40px', height: '40px', borderRadius: '8px' }}>
-            <Icon name="Download" size={20} color="#434F64" />
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 1, gap: 1 }}>
+        <Tooltip title="Favorite">
+          <IconButton size="small">
+            <Icon name="Star" size={16} color="#838C9D" />
           </IconButton>
-
-          <IconButton sx={{ width: '40px', height: '40px', borderRadius: '8px' }}>
-            <Icon name="ListFilter" size={20} color="#434F64" />
+        </Tooltip>
+        <Tooltip title="Print">
+          <IconButton size="small">
+            <Icon name="Printer" size={16} color="#838C9D" />
           </IconButton>
-
-          <IconButton sx={{ width: '40px', height: '40px', borderRadius: '8px' }}>
-            <Icon name="Settings" size={20} color="#434F64" />
+        </Tooltip>
+        <Tooltip title="Filter">
+          <IconButton size="small">
+            <Icon name="Filter" size={16} color="#838C9D" />
           </IconButton>
-
-          <IconButton sx={{ width: '40px', height: '40px', borderRadius: '8px' }}>
-            <Icon name="Filter" size={20} color="#434F64" />
+        </Tooltip>
+        <Tooltip title="Equal Columns">
+          <IconButton size="small">
+            <Icon name="Columns" size={16} color="#838C9D" />
           </IconButton>
-
-          <IconButton sx={{ width: '40px', height: '40px', borderRadius: '8px' }}>
-            <Icon name="ArrowDownUp" size={20} color="#434F64" />
+        </Tooltip>
+        <Tooltip title="Export">
+          <IconButton size="small">
+            <Icon name="FileText" size={16} color="#838C9D" />
           </IconButton>
-
-          <IconButton sx={{ width: '40px', height: '40px', borderRadius: '8px' }}>
-            <Icon name="FileSpreadsheet" size={20} color="#434F64" />
+        </Tooltip>
+        <Tooltip title="Previous">
+          <IconButton size="small">
+            <Icon name="ChevronLeft" size={16} color="#838C9D" />
           </IconButton>
-
-          <Box sx={{ display: 'flex', gap: '8px' }}>
-            <IconButton sx={{ width: '39px', height: '39px', backgroundColor: '#FFFFFF', borderRadius: '100px' }}>
-              <Icon name="ChevronLeft" size={16} color="#434F64" />
-            </IconButton>
-
-            <Box sx={{
-              width: '54px',
-              height: '40px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1px solid #CED1D7',
-              borderRadius: '8px'
-            }}>
-              <Typography variant="body1" sx={{ color: '#434F64' }}>1</Typography>
-            </Box>
-
-            <IconButton sx={{ width: '39px', height: '39px', backgroundColor: '#FFFFFF', borderRadius: '100px' }}>
-              <Icon name="ChevronRight" size={16} color="#434F64" />
-            </IconButton>
-          </Box>
+        </Tooltip>
+        <Box sx={{
+          width: '24px',
+          height: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '1px solid #E0E4E8',
+          borderRadius: '4px'
+        }}>
+          <Typography variant="body2" sx={{ color: '#434F64' }}>1</Typography>
         </Box>
+        <Tooltip title="Next">
+          <IconButton size="small">
+            <Icon name="ChevronRight" size={16} color="#838C9D" />
+          </IconButton>
+        </Tooltip>
       </Box>
 
-      <TableContainer component={Paper} sx={{ border: '1px solid #CED1D7', borderRadius: '8px', mb: 2 }}>
-        <Table>
-          <TableHead sx={{ backgroundColor: '#838C9D' }}>
+      <TableContainer component={Paper} sx={{ border: '1px solid #E0E4E8', borderRadius: '4px', mb: 2, boxShadow: 'none' }}>
+        <Table size="small">
+          <TableHead sx={{ backgroundColor: '#F5F7FA' }}>
             <TableRow>
-              <TableCell padding="checkbox" sx={{ width: '86px', height: '50px' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', ml: 2 }}>
-                  <Checkbox
-                    indeterminate={selected.length > 0 && selected.length < journeys.length}
-                    checked={journeys.length > 0 && selected.length === journeys.length}
-                    onChange={handleSelectAllClick}
-                    inputProps={{ 'aria-label': 'select all journeys' }}
-                    sx={{
-                      color: '#FFFFFF',
-                      '&.Mui-checked': {
-                        color: '#FFFFFF',
-                      },
-                      '&.MuiCheckbox-indeterminate': {
-                        color: '#FFFFFF',
-                      },
-                    }}
-                  />
-                  <Icon name="ChevronDown" size={16} color="#FFFFFF" />
-                </Box>
+              <TableCell padding="checkbox" sx={{ width: '40px', height: '40px', borderBottom: '1px solid #E0E4E8' }}>
+                <Checkbox
+                  indeterminate={selected.length > 0 && selected.length < journeys.length}
+                  checked={journeys.length > 0 && selected.length === journeys.length}
+                  onChange={handleSelectAllClick}
+                  inputProps={{ 'aria-label': 'select all journeys' }}
+                  sx={{
+                    color: '#838C9D',
+                    '&.Mui-checked': {
+                      color: '#434F64',
+                    },
+                    '&.MuiCheckbox-indeterminate': {
+                      color: '#434F64',
+                    },
+                  }}
+                />
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#FFFFFF', height: '50px' }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: '#FFFFFF' }}>From</Typography>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px' }}>
+                From
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#FFFFFF', height: '50px' }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: '#FFFFFF' }}>To</Typography>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px' }}>
+                To
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#FFFFFF', height: '50px' }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: '#FFFFFF' }}>Vehicle Info</Typography>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px' }}>
+                Vehicle Info
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#FFFFFF', height: '50px' }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: '#FFFFFF' }}>Trip Info</Typography>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px' }}>
+                Trip Info
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#FFFFFF', height: '50px' }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: '#FFFFFF' }}>Status</Typography>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px' }}>
+                Status
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#FFFFFF', height: '50px' }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: '#FFFFFF' }}>ETA</Typography>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px' }}>
+                SLA
               </TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#FFFFFF', height: '50px', width: '124px' }}>
-                <Typography variant="body1" sx={{ fontWeight: 600, color: '#FFFFFF' }}>Actions</Typography>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px', width: '80px' }}>
+                Alerts
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#434F64', height: '40px', borderBottom: '1px solid #E0E4E8', padding: '8px', width: '80px' }}>
+                Actions
               </TableCell>
             </TableRow>
           </TableHead>
@@ -218,195 +208,231 @@ const JourneysTable = ({ journeys, onJourneyClick }) => {
                     selected={isItemSelected}
                     sx={{
                       cursor: 'pointer',
-                      height: '116px',
-                      backgroundColor: index % 2 === 0 ? '#FFFFFF' : '#F8F8F9',
-                      borderBottom: '1px solid #CED1D7',
+                      height: '48px',
+                      backgroundColor: '#FFFFFF',
+                      borderBottom: '1px solid #E0E4E8',
                       '&.Mui-selected, &.Mui-selected:hover': {
-                        backgroundColor: index % 2 === 0 ? '#F0F7FF' : '#E6F0FF',
+                        backgroundColor: '#F5F7FA',
                       },
                       '&:hover': {
-                        backgroundColor: index % 2 === 0 ? '#F5F9FF' : '#EFF5FF',
+                        backgroundColor: '#F5F7FA',
                       },
                     }}
                   >
-                    <TableCell padding="checkbox" sx={{ height: '116px' }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', ml: 2 }}>
-                        <Checkbox
-                          checked={isItemSelected}
-                          onClick={(event) => handleCheckboxClick(event, journey.id)}
-                          inputProps={{ 'aria-labelledby': `journey-${journey.id}` }}
-                          sx={{
-                            color: '#838C9D',
-                            '&.Mui-checked': {
-                              color: '#434F64',
-                            },
-                          }}
-                        />
-                        <Icon name="Frame" size={20} color="#CED1D7" />
-                      </Box>
+                    <TableCell padding="checkbox" sx={{ padding: '0 0 0 8px', height: '48px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Checkbox
+                        checked={isItemSelected}
+                        onClick={(event) => handleCheckboxClick(event, journey.id)}
+                        inputProps={{ 'aria-labelledby': `journey-${journey.id}` }}
+                        sx={{
+                          color: '#838C9D',
+                          '&.Mui-checked': {
+                            color: '#434F64',
+                          },
+                        }}
+                      />
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '54px' }}>
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Typography variant="body1" sx={{ fontWeight: 400, color: '#434F64' }}>
+                          <Typography variant="body2" sx={{ fontWeight: 500, color: '#434F64' }}>
                             {journey.from.location}
                           </Typography>
-                          <Box sx={{
-                            padding: '2px 8px',
-                            height: '24px',
-                            background: '#F0F1F7',
-                            border: '1px solid #CED1D7',
-                            borderRadius: '4px',
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}>
-                            <Typography sx={{ fontWeight: 600, fontSize: '14px', color: '#434F64' }}>
-                              FTL
-                            </Typography>
-                          </Box>
+                          {index === 0 && (
+                            <Box sx={{
+                              padding: '0 4px',
+                              height: '16px',
+                              background: '#F5F7FA',
+                              borderRadius: '4px',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}>
+                              <Typography sx={{ fontWeight: 600, fontSize: '12px', color: '#434F64' }}>
+                                +1 P
+                              </Typography>
+                            </Box>
+                          )}
                         </Box>
-                        <Typography variant="body1" sx={{ color: '#5F697B' }}>
+                        <Typography variant="caption" sx={{ color: '#838C9D' }}>
                           {journey.from.company}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '54px' }}>
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Typography variant="body1" sx={{ fontWeight: 400, color: '#434F64' }}>
+                          <Typography variant="body2" sx={{ fontWeight: 500, color: '#434F64' }}>
                             {journey.to.location}
                           </Typography>
-                          <Box sx={{
-                            padding: '2px 8px',
-                            height: '24px',
-                            background: '#F0F1F7',
-                            border: '1px solid #CED1D7',
-                            borderRadius: '4px',
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}>
-                            <Typography sx={{ fontWeight: 600, fontSize: '14px', color: '#434F64' }}>
-                              PTL
-                            </Typography>
-                          </Box>
+                          {index === 0 && (
+                            <Box sx={{
+                              padding: '0 4px',
+                              height: '16px',
+                              background: '#F5F7FA',
+                              borderRadius: '4px',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}>
+                              <Typography sx={{ fontWeight: 600, fontSize: '12px', color: '#434F64' }}>
+                                +3 D
+                              </Typography>
+                            </Box>
+                          )}
                         </Box>
-                        <Typography variant="body1" sx={{ color: '#5F697B' }}>
+                        <Typography variant="caption" sx={{ color: '#838C9D' }}>
                           {journey.to.company}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '60px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <Typography variant="body1" sx={{ color: '#434F64' }}>
-                            {journey.vehicleInfo}
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Typography variant="body2" sx={{ color: '#434F64' }}>
+                          {journey.vehicleInfo}
+                        </Typography>
+                        {journey.communicationType && (
+                          <Chip
+                            label={journey.communicationType}
+                            size="small"
+                            sx={{
+                              height: '16px',
+                              fontSize: '10px',
+                              backgroundColor: journey.communicationType === 'SIM' ? '#E6FFFA' : '#F0FFF4',
+                              color: journey.communicationType === 'SIM' ? '#319795' : '#38A169',
+                              fontWeight: 500,
+                              '& .MuiChip-label': { padding: '0 4px' }
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </TableCell>
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant="body2" sx={{ color: '#434F64' }}>
+                          {journey.tripInfo}
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <Icon name="Phone" size={12} color="#838C9D" />
+                          <Typography variant="caption" sx={{ color: '#838C9D' }}>
+                            {journey.contactNumber}
                           </Typography>
-                          <Box sx={{
-                            width: '30px',
-                            height: '30px',
-                            borderRadius: '50%',
-                            backgroundColor: '#F0F1F7',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}>
-                            <Icon name="Truck" size={16} color="#5F697B" />
-                          </Box>
+                          {index % 2 === 0 && (
+                            <Icon name="Check" size={12} color="#00C638" />
+                          )}
                         </Box>
-                        <Typography variant="body1" sx={{ color: '#5F697B' }}>
-                          {journey.currentLocation || 'Location not available'}
+                      </Box>
+                    </TableCell>
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Box sx={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          backgroundColor: journey.isDelayed ? '#E43634' : '#00C638',
+                        }} />
+                        <Typography variant="body2" sx={{ color: '#434F64' }}>
+                          {journey.status === 'in-transit' ? 'In Transit' :
+                           journey.status === 'at-loading' ? 'At Loading' :
+                           journey.status === 'at-unloading' ? 'At Unloading' :
+                           journey.status === 'at-drop' ? 'At Drop' :
+                           journey.status === 'at-pickup' ? 'At Pickup' : 'In Transit'}
                         </Typography>
                       </Box>
+                      <Typography variant="caption" sx={{ color: '#838C9D', display: 'block', marginLeft: '12px' }}>
+                        Ambala, Haryana
+                      </Typography>
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '52px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <Icon name={journey.isDelayed ? 'AlertCircle' : 'CheckCircle'} size={14} color={journey.isDelayed ? '#FF3533' : '#00C638'} />
-                          <Typography variant="body1" sx={{ color: '#434F64' }}>
-                            {journey.isDelayed ? 'Delayed' : 'On Time'}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <Icon name="Clock" size={16} color="#838C9D" />
-                          <Typography variant="body1" sx={{ color: '#838C9D' }}>
-                            {journey.departureTime}
-                          </Typography>
-                          <Box sx={{
-                            width: '22px',
-                            height: '22px',
-                            borderRadius: '16px',
-                            backgroundColor: journey.isDelayed ? '#FFEAEA' : '#DFFFE8',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}>
-                            <Icon name={journey.isDelayed ? 'X' : 'Check'} size={14} color={journey.isDelayed ? '#FF3533' : '#00763D'} />
-                          </Box>
-                        </Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '52px' }}>
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box sx={{
-                          padding: '2px 8px',
-                          height: '24px',
-                          background: journey.isDelayed ? '#FFEAEA' : '#DFFFE8',
+                          padding: '0 4px',
+                          height: '16px',
+                          background: journey.isDelayed ? '#FFEBEB' : '#EBFFF0',
                           borderRadius: '4px',
                           display: 'flex',
                           alignItems: 'center',
+                          width: 'fit-content',
                         }}>
-                          <Typography sx={{ fontWeight: 600, fontSize: '14px', color: journey.isDelayed ? '#FF3533' : '#00763D' }}>
-                            {journey.isDelayed ? 'Delayed' : 'On Time'}
+                          <Typography sx={{ fontWeight: 600, fontSize: '10px', color: journey.isDelayed ? '#E43634' : '#00C638' }}>
+                            {journey.isDelayed ? 'Delayed by 13 hr' : 'On time'}
                           </Typography>
                         </Box>
-                        <Typography variant="body1" sx={{ color: '#838C9D' }}>
+                        <Typography variant="caption" sx={{ color: '#838C9D' }}>
                           ETA: {journey.eta}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '54px' }}>
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      {index % 3 === 0 && (
                         <Box sx={{
-                          padding: '2px 8px',
-                          height: '24px',
-                          background: journey.isDelayed ? '#FFEAEA' : '#DFFFE8',
+                          padding: '0 4px',
+                          height: '16px',
+                          background: '#FFEBEB',
                           borderRadius: '4px',
                           display: 'flex',
                           alignItems: 'center',
+                          width: 'fit-content',
                         }}>
-                          <Typography sx={{ fontWeight: 600, fontSize: '14px', color: journey.isDelayed ? '#FF3533' : '#00763D' }}>
-                            {journey.isDelayed ? `Delayed by ${journey.delayTime}` : 'On Schedule'}
+                          <Typography sx={{ fontWeight: 600, fontSize: '10px', color: '#E43634' }}>
+                            Long Stoppage
                           </Typography>
                         </Box>
-                        <Typography variant="body1" sx={{ color: '#838C9D' }}>
-                          {journey.vehicleStatus}
-                        </Typography>
-                      </Box>
+                      )}
+                      {index % 3 === 1 && (
+                        <Box sx={{
+                          padding: '0 4px',
+                          height: '16px',
+                          background: '#FFEBEB',
+                          borderRadius: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          width: 'fit-content',
+                        }}>
+                          <Typography sx={{ fontWeight: 600, fontSize: '10px', color: '#E43634' }}>
+                            Route Deviation
+                          </Typography>
+                        </Box>
+                      )}
+                      {index % 3 === 2 && (
+                        <Box sx={{
+                          padding: '0 4px',
+                          height: '16px',
+                          background: '#FFEBEB',
+                          borderRadius: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          width: 'fit-content',
+                        }}>
+                          <Typography sx={{ fontWeight: 600, fontSize: '10px', color: '#E43634' }}>
+                            Transit Delay
+                          </Typography>
+                        </Box>
+                      )}
+                      <Typography variant="caption" sx={{ color: '#838C9D' }}>
+                        1 hour ago
+                      </Typography>
                     </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', gap: '12px', ml: 1 }}>
+                    <TableCell sx={{ padding: '8px', borderBottom: '1px solid #E0E4E8' }}>
+                      <Box sx={{ display: 'flex', gap: '4px' }}>
                         <IconButton
                           size="small"
                           onClick={(e) => e.stopPropagation()}
                           sx={{
-                            width: '40px',
-                            height: '40px',
-                            border: '1px solid #CED1D7',
-                            borderRadius: '100px'
+                            width: '24px',
+                            height: '24px',
+                            padding: 0
                           }}
                         >
-                          <Icon name="MoreHorizontal" size={16} color="#434F64" />
+                          <Icon name="MoreHorizontal" size={16} color="#838C9D" />
                         </IconButton>
                         <IconButton
                           size="small"
                           sx={{
-                            width: '40px',
-                            height: '40px',
-                            border: '1px solid #CED1D7',
-                            borderRadius: '100px'
+                            width: '24px',
+                            height: '24px',
+                            padding: 0
                           }}
                         >
-                          <Icon name="ChevronRight" size={16} color="#434F64" />
+                          <Icon name="ChevronRight" size={16} color="#838C9D" />
                         </IconButton>
                       </Box>
                     </TableCell>

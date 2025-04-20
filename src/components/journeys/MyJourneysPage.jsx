@@ -202,89 +202,86 @@ const MyJourneysPage = () => {
       {/* Filter Bar */}
       <Box sx={{
         display: 'flex',
-        flexDirection: 'row',
         alignItems: 'center',
-        gap: '20px',
+        gap: '8px',
         mb: 2,
-        height: '40px'
+        height: '32px'
       }}>
-        {/* Source Filter */}
+        {/* MDC Labs Filter */}
         <Box sx={{
-          width: '236px',
-          height: '40px',
-          border: '1px solid #434F64',
-          borderRadius: '8px',
-          backgroundColor: '#F8F8F9',
+          height: '32px',
+          border: '1px solid #E0E4E8',
+          borderRadius: '4px',
+          backgroundColor: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 12px'
+          padding: '0 8px',
+          gap: '4px'
         }}>
-          <Typography variant="body1" sx={{ color: '#434F64' }}>
-            {sourceFilter}
+          <Typography variant="body2" sx={{ color: '#434F64' }}>
+            MDC Labs, Amritsar
           </Typography>
-          <Icon name="ChevronDown" size={16} color="#434F64" />
+          <Icon name="ChevronDown" size={12} color="#838C9D" />
         </Box>
 
         {/* Date Range Filter */}
         <Box sx={{
-          width: '296px',
-          height: '40px',
-          border: '1px solid #434F64',
-          borderRadius: '8px',
-          backgroundColor: '#F8F8F9',
+          height: '32px',
+          border: '1px solid #E0E4E8',
+          borderRadius: '4px',
+          backgroundColor: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
-          padding: '0 12px',
+          padding: '0 8px',
           gap: '4px'
         }}>
-          <Icon name="Calendar" size={16} color="#434F64" />
-          <Typography variant="body1" sx={{ color: '#434F64', flexGrow: 1 }}>
-            {dateRange.start}
+          <Icon name="Calendar" size={12} color="#838C9D" />
+          <Typography variant="body2" sx={{ color: '#434F64' }}>
+            12 Aug 2024
           </Typography>
-          <Typography variant="body1" sx={{ color: '#838C9D' }}>
-            -
+          <Typography variant="body2" sx={{ color: '#838C9D' }}>
+            →
           </Typography>
-          <Typography variant="body1" sx={{ color: '#434F64', flexGrow: 1 }}>
-            {dateRange.end}
+          <Typography variant="body2" sx={{ color: '#434F64' }}>
+            12 Sep 2024
           </Typography>
-          <Icon name="X" size={16} color="#434F64" />
+          <Icon name="X" size={12} color="#838C9D" />
         </Box>
 
-        {/* Status Filter */}
+        {/* Outbound Filter */}
         <Box sx={{
-          width: '191px',
-          height: '40px',
-          border: '1px solid #434F64',
-          borderRadius: '8px',
-          backgroundColor: '#F8F8F9',
+          height: '32px',
+          border: '1px solid #E0E4E8',
+          borderRadius: '4px',
+          backgroundColor: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 12px'
+          padding: '0 8px',
+          gap: '4px'
         }}>
-          <Typography variant="body1" sx={{ color: '#434F64' }}>
-            All Statuses
+          <Typography variant="body2" sx={{ color: '#434F64' }}>
+            Outbound - Source
           </Typography>
-          <Icon name="ChevronDown" size={16} color="#434F64" />
+          <Icon name="ChevronDown" size={12} color="#838C9D" />
         </Box>
 
         {/* Search Box */}
         <Box sx={{
-          width: '259px',
-          height: '40px',
-          border: '1px solid #CED1D7',
-          borderRadius: '8px',
+          height: '32px',
+          border: '1px solid #E0E4E8',
+          borderRadius: '4px',
           backgroundColor: '#FFFFFF',
           display: 'flex',
           alignItems: 'center',
-          padding: '0 12px',
-          gap: '10px'
+          padding: '0 8px',
+          gap: '4px',
+          flex: 1,
+          maxWidth: '300px'
         }}>
-          <Icon name="Search" size={16} color="#838C9D" />
+          <Icon name="Search" size={12} color="#838C9D" />
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search My Journeys"
             value={localSearchTerm}
             onChange={(e) => handleSearch(e.target.value)}
             style={{
@@ -293,7 +290,7 @@ const MyJourneysPage = () => {
               width: '100%',
               background: 'transparent',
               color: '#434F64',
-              fontSize: '16px',
+              fontSize: '14px',
               fontFamily: 'Inter, sans-serif'
             }}
           />
@@ -302,22 +299,23 @@ const MyJourneysPage = () => {
         {/* Add Journey Button */}
         <Button
           variant="contained"
-          startIcon={<Icon name="Plus" size={24} color="#FFFFFF" />}
+          startIcon={<Icon name="Plus" size={16} color="#FFFFFF" />}
           onClick={handleAddJourney}
           sx={{
             backgroundColor: '#434F64',
-            borderRadius: '8px',
+            borderRadius: '4px',
             textTransform: 'none',
-            padding: '12px 24px',
-            height: '40px',
+            padding: '0 16px',
+            height: '32px',
             '&:hover': {
               backgroundColor: '#323C4D',
             },
-            fontSize: '20px',
+            fontSize: '14px',
             fontWeight: 500,
+            marginLeft: 'auto'
           }}
         >
-          Journey
+          Add Journey
         </Button>
       </Box>
 

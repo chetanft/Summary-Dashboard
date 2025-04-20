@@ -77,39 +77,32 @@ const Header = ({ onRefresh }) => {
     <Box
       sx={{
         width: '100%',
-        height: '78px',
+        height: '56px',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '13px 20px',
-        backgroundColor: '#F8F8F9',
-        borderBottom: '1px solid #CED1D7',
+        padding: '0 16px',
+        backgroundColor: '#FFFFFF',
+        borderBottom: '1px solid #E0E4E8',
       }}
     >
       {/* Left side - Logo */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <Box
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <IconButton
           sx={{
-            width: '53px',
-            height: '53px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '100px',
-            cursor: 'pointer',
+            padding: '8px',
           }}
           onClick={handleDrawerOpen}
         >
-          <Icon name="Menu" color="#434F64" size={24} />
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Icon name="Menu" color="#434F64" size={20} />
+        </IconButton>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Box
             component="img"
             src={freightTigerLogo}
             alt="Freight Tiger Logo"
-            sx={{ height: '28px' }}
+            sx={{ height: '24px' }}
           />
         </Box>
       </Box>
@@ -119,33 +112,20 @@ const Header = ({ onRefresh }) => {
 
       {/* Right side - Notifications and User */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
-          <IconButton aria-label="quick actions" sx={{ display: 'flex' }}>
-            <Icon name="Rocket" color="#434F64" size={24} />
-          </IconButton>
-          <IconButton aria-label="notifications" sx={{ display: 'flex' }}>
-            <Icon name="Bell" color="#434F64" size={24} />
-          </IconButton>
-        </Box>
+        <IconButton aria-label="quick actions" size="small">
+          <Icon name="Rocket" color="#434F64" size={20} />
+        </IconButton>
+        <IconButton aria-label="notifications" size="small">
+          <Icon name="Bell" color="#434F64" size={20} />
+        </IconButton>
 
-        <Paper
-          elevation={0}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '8px',
-            padding: '5px 20px',
-            height: '51px',
-            width: '229px',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
-            <Typography variant="body1" sx={{ fontWeight: 500, color: '#434F64' }}>
-              {currentUser?.name || 'TATA MOTORS'}
-            </Typography>
-          </Box>
-          <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Box
+            component="img"
+            src="/tata-motors-logo.png"
+            alt="Tata Motors Logo"
+            sx={{ height: '24px' }}
+          />
           <IconButton
             size="small"
             aria-label="account of current user"
@@ -154,8 +134,9 @@ const Header = ({ onRefresh }) => {
             onClick={handleMenu}
             color="inherit"
           >
-            <Icon name="UserCircle" color="#434F64" size={24} />
+            <Icon name="UserCircle" color="#434F64" size={20} />
           </IconButton>
+        </Box>
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
