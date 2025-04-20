@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -53,6 +54,7 @@ const materialIcons = {
   ArrowBack: ArrowBackIcon,
   ArrowDropDown: ArrowDropDownIcon,
   ArrowForward: ArrowForwardIcon,
+  ArrowRight: ArrowRightIcon,
   CheckCircle: CheckCircleIcon,
   ChevronLeft: ChevronLeftIcon,
   ChevronRight: ChevronRightIcon,

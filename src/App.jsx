@@ -9,6 +9,7 @@ import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
 import OrdersPage from './components/orders/OrdersPage';
 import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
+import MyJourneysPage from './components/journeys/MyJourneysPage';
 
 // Create a theme instance
 const theme = createTheme({
@@ -67,6 +68,16 @@ function App() {
                   <ProtectedRoute>
                     <DataProvider>
                       <AlertsWithLayout />
+                    </DataProvider>
+                  </ProtectedRoute>
+              }
+            />
+              <Route
+                path="/my-journeys"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <MyJourneysPage />
                     </DataProvider>
                   </ProtectedRoute>
               }
