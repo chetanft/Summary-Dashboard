@@ -22,7 +22,11 @@ if (root) {
 }
 
 // Service worker registration
-serviceWorkerRegistration.register();
+try {
+  serviceWorkerRegistration.register();
+} catch (error) {
+  console.error('Service worker registration failed:', error);
+}
 
 // Add error handling for uncaught errors
 window.addEventListener('error', (event) => {
