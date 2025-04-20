@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
+import { SearchProvider } from './context/SearchContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
 import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
@@ -26,52 +27,54 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DataProvider>
-                    <EnhancedDashboard />
-                  </DataProvider>
-                </ProtectedRoute>
+        <SearchProvider>
+          <Router>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <EnhancedDashboard />
+                    </DataProvider>
+                  </ProtectedRoute>
               }
             />
-            <Route
-              path="/orders"
-              element={
-                <ProtectedRoute>
-                  <DataProvider>
-                    <OrdersPage />
-                  </DataProvider>
-                </ProtectedRoute>
+              <Route
+                path="/orders"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <OrdersPage />
+                    </DataProvider>
+                  </ProtectedRoute>
               }
             />
-            <Route
-              path="/orders/:orderId"
-              element={
-                <ProtectedRoute>
-                  <DataProvider>
-                    <OrderDetailPage />
-                  </DataProvider>
-                </ProtectedRoute>
+              <Route
+                path="/orders/:orderId"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <OrderDetailPage />
+                    </DataProvider>
+                  </ProtectedRoute>
               }
             />
-            <Route
-              path="/alerts"
-              element={
-                <ProtectedRoute>
-                  <DataProvider>
-                    <AlertsWithLayout />
-                  </DataProvider>
-                </ProtectedRoute>
+              <Route
+                path="/alerts"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <AlertsWithLayout />
+                    </DataProvider>
+                  </ProtectedRoute>
               }
             />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </Router>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </Router>
+        </SearchProvider>
       </AuthProvider>
     </ThemeProvider>
   );
