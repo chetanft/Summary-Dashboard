@@ -154,7 +154,7 @@ const JourneysTable = ({ journeys, onJourneyClick }) => {
         </Box>
       </Box>
 
-      <Box sx={{ border: '1px solid #CED1D7', borderRadius: '8px', mb: 2 }}>
+      <TableContainer component={Paper} sx={{ border: '1px solid #CED1D7', borderRadius: '8px', mb: 2 }}>
         <Table>
           <TableHead sx={{ backgroundColor: '#838C9D' }}>
             <TableRow>
