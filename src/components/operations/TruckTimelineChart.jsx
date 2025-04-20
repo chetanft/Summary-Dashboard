@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 
-  Legend, ResponsiveContainer, Cell, ReferenceLine 
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  Legend, ResponsiveContainer, Cell, ReferenceLine
 } from 'recharts';
 import { format, parseISO, differenceInMinutes } from 'date-fns';
 import { Box, Typography, Paper } from '@mui/material';
 
 /**
  * Truck Timeline Chart component (Gantt-style)
- * 
+ *
  * @param {Object} props - Component props
  * @param {Array} props.data - Truck timeline data
  * @returns {JSX.Element}
@@ -34,7 +34,7 @@ const TruckTimelineChart = ({ data }) => {
         const gateIn = parseISO(truck.gateInTime);
         const dockIn = parseISO(truck.dockInTime);
         const gateOut = parseISO(truck.gateOutTime);
-        
+
         return {
           ...truck,
           gateIn,
@@ -50,15 +50,15 @@ const TruckTimelineChart = ({ data }) => {
     // Find min and max times for the x-axis
     const minTime = Math.min(...processedData.map(d => d.gateIn.getTime()));
     const maxTime = Math.max(...processedData.map(d => d.gateOut.getTime()));
-    
+
     // Convert to minutes from the start for the chart
     const startTime = new Date(minTime);
-    
+
     const chartData = processedData.map(truck => {
       const waitingStart = differenceInMinutes(truck.gateIn, startTime);
       const dockStart = differenceInMinutes(truck.dockIn, startTime);
       const gateOutTime = differenceInMinutes(truck.gateOut, startTime);
-      
+
       return {
         truckId: truck.truckId,
         vehicleType: truck.vehicleType,
@@ -69,9 +69,9 @@ const TruckTimelineChart = ({ data }) => {
         gateOutTime,
         totalTime: truck.totalTime,
         // Store original timestamps for tooltips
-        gateInTime: truck.gateInTime,
-        dockInTime: truck.dockInTime,
-        gateOutTime: truck.gateOutTime,
+        gateInTimeRaw: truck.gateInTime,
+        dockInTimeRaw: truck.dockInTime,
+        gateOutTimeRaw: truck.gateOutTime,
         // Store formatted times for display
         gateInFormatted: format(truck.gateIn, 'HH:mm'),
         dockInFormatted: format(truck.dockIn, 'HH:mm'),
@@ -186,7 +186,7 @@ const TruckTimelineChart = ({ data }) => {
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, color: '#434F64', textAlign: 'center' }}>
         Truck Timeline View – From Gate In to Gate Out
       </Typography>
-      
+
       <ResponsiveContainer width="100%" height="90%">
         <BarChart
           data={chartData}
@@ -196,40 +196,40 @@ const TruckTimelineChart = ({ data }) => {
           barGap={0}
         >
           <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-          <XAxis 
-            type="number" 
-            domain={[0, timeRange.max]} 
+          <XAxis
+            type="number"
+            domain={[0, timeRange.max]}
             tickFormatter={formatXAxis}
             tickCount={10}
           />
-          <YAxis 
-            type="category" 
-            dataKey="truckId" 
+          <YAxis
+            type="category"
+            dataKey="truckId"
             tick={{ fontSize: 12 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend content={<CustomLegend />} />
-          
+
           {/* Waiting time bars (Gate In to Dock In) */}
-          <Bar 
-            dataKey="waitingDuration" 
-            stackId="a" 
-            fill="#e0e0e0" 
+          <Bar
+            dataKey="waitingDuration"
+            stackId="a"
+            fill="#e0e0e0"
             name="Waiting Time"
             radius={[0, 0, 0, 0]}
           />
-          
+
           {/* Dock time bars (Dock In to Gate Out) */}
-          <Bar 
-            dataKey="dockDuration" 
-            stackId="a" 
+          <Bar
+            dataKey="dockDuration"
+            stackId="a"
             name="Vehicle Type"
             radius={[0, 0, 0, 0]}
           >
             {chartData.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={vehicleColors[entry.vehicleType] || '#777777'} 
+              <Cell
+                key={`cell-${index}`}
+                fill={vehicleColors[entry.vehicleType] || '#777777'}
               />
             ))}
           </Bar>
