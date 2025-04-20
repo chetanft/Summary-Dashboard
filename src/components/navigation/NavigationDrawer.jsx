@@ -13,11 +13,7 @@ import {
   Divider,
   Grid,
 } from '@mui/material';
-import {
-  Close as CloseIcon,
-  ArrowForward as ArrowForwardIcon,
-} from '@mui/icons-material';
-import Icon from '../common/IconRegistry';
+import Icon from '../common/Icon';
 import freightTigerLogo from '../../assets/freight-tiger-logo-correct.svg';
 
 const NavigationDrawer = ({ open, onClose }) => {
@@ -34,43 +30,43 @@ const NavigationDrawer = ({ open, onClose }) => {
     },
     {
       title: 'Planning',
-      icon: 'Planning',
+      icon: 'Calendar',
       path: '/planning',
       active: location.pathname === '/planning',
     },
     {
       title: 'Full Truck Load',
-      icon: 'LocalShipping',
+      icon: 'Truck',
       path: '/ftl',
       active: location.pathname === '/ftl',
     },
     {
       title: 'Part Truck Load',
-      icon: 'LocalShipping',
+      icon: 'PackageOpen',
       path: '/ptl',
       active: location.pathname === '/ptl',
     },
     {
       title: 'Control Tower',
-      icon: 'ViewQuilt',
+      icon: 'LayoutGrid',
       path: '/control-tower',
       active: location.pathname === '/control-tower',
     },
     {
       title: 'Dashboard',
-      icon: 'Dashboard',
+      icon: 'LayoutDashboard',
       path: '/dashboard-view',
       active: location.pathname === '/dashboard-view',
     },
     {
       title: 'Reporting',
-      icon: 'Description',
+      icon: 'FileText',
       path: '/reporting',
       active: location.pathname === '/reporting',
     },
     {
       title: 'Support',
-      icon: 'Support',
+      icon: 'LifeBuoy',
       path: '/support',
       active: location.pathname === '/support',
     },
@@ -92,7 +88,7 @@ const NavigationDrawer = ({ open, onClose }) => {
     },
     {
       title: 'Assigned Vehicles',
-      icon: 'DirectionsCar',
+      icon: 'Car',
       path: '/assigned-vehicles',
       active: location.pathname === '/assigned-vehicles',
     },
@@ -108,13 +104,13 @@ const NavigationDrawer = ({ open, onClose }) => {
     },
     {
       title: 'Live View',
-      icon: 'Visibility',
+      icon: 'Eye',
       path: '/live-view',
       active: location.pathname === '/live-view',
     },
     {
       title: 'Yard Management',
-      icon: 'Storefront',
+      icon: 'Store',
       path: '/yard-management',
       active: location.pathname === '/yard-management',
     },
@@ -126,7 +122,7 @@ const NavigationDrawer = ({ open, onClose }) => {
     },
     {
       title: 'Dedicated Vehicles',
-      icon: 'DirectionsCar',
+      icon: 'Car',
       path: '/dedicated-vehicles',
       active: location.pathname === '/dedicated-vehicles',
     },
@@ -148,19 +144,19 @@ const NavigationDrawer = ({ open, onClose }) => {
     },
     {
       title: 'Reconciliation',
-      icon: 'AttachMoney',
+      icon: 'DollarSign',
       path: '/reconciliation',
       active: location.pathname === '/reconciliation',
     },
     {
       title: 'Dispute Management',
-      icon: 'Gavel',
+      icon: 'Scale',
       path: '/dispute-management',
       active: location.pathname === '/dispute-management',
     },
     {
       title: 'Contracts',
-      icon: 'Article',
+      icon: 'FileText',
       path: '/contracts',
       active: location.pathname === '/contracts',
     },
@@ -202,7 +198,7 @@ const NavigationDrawer = ({ open, onClose }) => {
           />
         </Box>
         <IconButton onClick={onClose} size="small" sx={{ color: '#000' }}>
-          <CloseIcon />
+          <Icon name="X" size={20} />
         </IconButton>
       </Box>
 
@@ -243,7 +239,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                       minWidth: 32,
                     }}
                   >
-                    <Icon name={item.icon} fontSize="small" />
+                    <Icon name={item.icon} size={18} />
                   </ListItemIcon>
                   <ListItemText
                     primary={
@@ -305,7 +301,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                           minWidth: 32,
                         }}
                       >
-                        <Icon name={item.icon} fontSize="small" />
+                        <Icon name={item.icon} size={18} />
                       </ListItemIcon>
                       <ListItemText
                         primary={
@@ -364,7 +360,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                           minWidth: 32,
                         }}
                       >
-                        <Icon name={item.icon} fontSize="small" />
+                        <Icon name={item.icon} size={18} />
                       </ListItemIcon>
                       <ListItemText
                         primary={
@@ -423,7 +419,7 @@ const NavigationDrawer = ({ open, onClose }) => {
                           minWidth: 32,
                         }}
                       >
-                        <Icon name={item.icon} fontSize="small" />
+                        <Icon name={item.icon} size={18} />
                       </ListItemIcon>
                       <ListItemText
                         primary={
@@ -462,7 +458,7 @@ const NavigationDrawer = ({ open, onClose }) => {
           <Typography variant="body2" sx={{ fontWeight: 500, color: '#434F64', mr: 1 }}>
             Get Started
           </Typography>
-          <ArrowForwardIcon sx={{ color: '#434F64', fontSize: 18 }} />
+          <Icon name="ArrowRight" color="#434F64" size={18} />
         </Box>
       </Box>
     </Drawer>

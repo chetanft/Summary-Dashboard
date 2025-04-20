@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Container, Typography, Grid, Paper, TextField, InputAdornment, Divider, Tabs, Tab } from '@mui/material';
 import Icon, { useIconRegistry } from '../components/common/Icon';
 import LucideIconsExample from '../components/examples/LucideIconsExample';
+import IconStyleGuide from '../components/docs/IconStyleGuide';
 
 /**
  * Demo page for showcasing icons
@@ -51,11 +52,14 @@ const IconsDemo = () => {
 
       <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 3 }}>
         <Tab label="Examples" />
+        <Tab label="Style Guide" />
         <Tab label="Icon Browser" />
       </Tabs>
 
       {tabValue === 0 ? (
         <LucideIconsExample />
+      ) : tabValue === 1 ? (
+        <IconStyleGuide />
       ) : (
         <>
           <TextField

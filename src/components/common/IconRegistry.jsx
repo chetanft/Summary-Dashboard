@@ -1,4 +1,5 @@
-import React, { createContext, useContext, memo } from 'react';
+import React, { createContext, useContext, memo, useEffect } from 'react';
+import { preloadCommonIcons } from '../../utils/iconUtils';
 
 // Import all commonly used Material UI icons directly
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -152,6 +153,11 @@ const IconContext = createContext({ materialIcons, lucideIcons: LucideIcons, ico
  * Provider component that makes the icon registry available to any nested components
  */
 export const IconRegistryProvider = ({ children }) => {
+  // Preload common icons for better performance
+  useEffect(() => {
+    preloadCommonIcons();
+  }, []);
+
   return (
     <IconContext.Provider value={{ materialIcons, lucideIcons: LucideIcons, iconMapping }}>
       {children}
@@ -173,7 +179,7 @@ export const useIconRegistry = () => useContext(IconContext);
  */
 const Icon = memo(({ name, useMui = false, ...props }) => {
   const { materialIcons, lucideIcons, iconMapping } = useIconRegistry();
-  
+
   // If useMui is true, use Material UI icon
   if (useMui) {
     const MuiIconComponent = materialIcons[name];
@@ -183,12 +189,12 @@ const Icon = memo(({ name, useMui = false, ...props }) => {
     }
     return <MuiIconComponent {...props} />;
   }
-  
+
   // Otherwise, use Lucide icon
   // First, check if there's a mapping for this icon name
   const lucideIconName = iconMapping[name] || name;
   const LucideIconComponent = lucideIcons[lucideIconName];
-  
+
   if (!LucideIconComponent) {
     console.warn(`Lucide Icon "${lucideIconName}" not found in registry`);
     // Fallback to Material UI icon if Lucide icon is not found
@@ -198,7 +204,7 @@ const Icon = memo(({ name, useMui = false, ...props }) => {
     }
     return null;
   }
-  
+
   return <LucideIconComponent {...props} />;
 });
 

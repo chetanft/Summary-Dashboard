@@ -14,17 +14,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import {
-  Menu as MenuIcon,
-  Notifications as NotificationsIcon,
-  Rocket as RocketIcon,
-  AccountCircle,
-  Person as PersonIcon,
-  Settings as SettingsIcon,
-  SwapHoriz as SwapHorizIcon,
-  VpnKey as VpnKeyIcon,
-  Logout as LogoutIcon,
-} from '@mui/icons-material';
+import Icon from '../common/Icon';
 import NavigationDrawer from '../navigation/NavigationDrawer';
 import freightTigerLogo from '../../assets/freight-tiger-logo-correct.svg';
 
@@ -112,7 +102,7 @@ const Header = ({ onRefresh }) => {
           }}
           onClick={handleDrawerOpen}
         >
-          <MenuIcon sx={{ color: '#434F64' }} />
+          <Icon name="Menu" color="#434F64" size={24} />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Box
@@ -131,10 +121,10 @@ const Header = ({ onRefresh }) => {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
           <IconButton aria-label="quick actions">
-            <RocketIcon sx={{ color: '#434F64' }} />
+            <Icon name="Rocket" color="#434F64" size={24} />
           </IconButton>
           <IconButton aria-label="notifications">
-            <NotificationsIcon sx={{ color: '#434F64' }} />
+            <Icon name="Bell" color="#434F64" size={24} />
           </IconButton>
         </Box>
 
@@ -164,7 +154,7 @@ const Header = ({ onRefresh }) => {
             onClick={handleMenu}
             color="inherit"
           >
-            <AccountCircle sx={{ color: '#434F64' }} />
+            <Icon name="UserCircle" color="#434F64" size={24} />
           </IconButton>
           <Menu
             id="menu-appbar"
@@ -237,28 +227,28 @@ const Header = ({ onRefresh }) => {
             {/* Menu Items */}
             <MenuItem onClick={handleViewProfile}>
               <ListItemIcon>
-                <PersonIcon fontSize="small" />
+                <Icon name="User" size={18} />
               </ListItemIcon>
               <ListItemText primary="View Profile" />
             </MenuItem>
 
             <MenuItem onClick={handleSettings}>
               <ListItemIcon>
-                <SettingsIcon fontSize="small" />
+                <Icon name="Settings" size={18} />
               </ListItemIcon>
               <ListItemText primary="Settings" />
             </MenuItem>
 
             <MenuItem onClick={handleChangeDesk}>
               <ListItemIcon>
-                <SwapHorizIcon fontSize="small" />
+                <Icon name="SwitchHorizontal" size={18} />
               </ListItemIcon>
               <ListItemText primary="Change Desk" />
             </MenuItem>
 
             <MenuItem onClick={handleChangePassword}>
               <ListItemIcon>
-                <VpnKeyIcon fontSize="small" />
+                <Icon name="Key" size={18} />
               </ListItemIcon>
               <ListItemText primary="Change Password" />
             </MenuItem>
@@ -273,7 +263,7 @@ const Header = ({ onRefresh }) => {
               }}
             >
               <ListItemIcon>
-                <LogoutIcon fontSize="small" sx={{ color: '#FF4D4F' }} />
+                <Icon name="LogOut" size={18} color="#FF4D4F" />
               </ListItemIcon>
               <ListItemText primary="Logout" />
             </MenuItem>
