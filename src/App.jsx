@@ -10,6 +10,7 @@ import OrdersPage from './components/orders/OrdersPage';
 import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
 import MyJourneysPage from './components/journeys/MyJourneysPage';
+import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
 
 // Create a theme instance
 const theme = createTheme({
@@ -78,6 +79,16 @@ function App() {
                   <ProtectedRoute>
                     <DataProvider>
                       <MyJourneysPage />
+                    </DataProvider>
+                  </ProtectedRoute>
+              }
+            />
+              <Route
+                path="/core-components"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <CoreComponentLibraryDemo />
                     </DataProvider>
                   </ProtectedRoute>
               }
