@@ -15,10 +15,7 @@ import {
   TablePagination
 } from '@mui/material';
 import { Badge } from '../../components/core';
-import {
-  ChevronRight as ChevronRightIcon,
-  MoreVert as MoreVertIcon
-} from '@mui/icons-material';
+import Icon from '../common/Icon';
 
 /**
  * Journeys Table component
@@ -243,10 +240,10 @@ const JourneysTable = ({ journeys, onJourneyClick }) => {
                     <TableCell sx={{ borderBottom: '1px solid #E0E4E8' }}>
                       <Box sx={{ display: 'flex' }}>
                         <IconButton size="small" onClick={(e) => e.stopPropagation()} sx={{ color: '#718096' }}>
-                          <MoreVertIcon fontSize="small" />
+                          <Icon name="MoreVertical" size={18} />
                         </IconButton>
                         <IconButton size="small" sx={{ color: '#4299E1' }}>
-                          <ChevronRightIcon fontSize="small" />
+                          <Icon name="ChevronRight" size={18} />
                         </IconButton>
                       </Box>
                     </TableCell>

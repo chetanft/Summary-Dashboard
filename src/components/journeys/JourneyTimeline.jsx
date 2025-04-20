@@ -7,15 +7,11 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import {
-  CheckCircle as CheckCircleIcon,
-  LocalShipping as LocalShippingIcon,
-  Assignment as AssignmentIcon
-} from '@mui/icons-material';
+import Icon from '../common/Icon';
 
 /**
  * Journey Timeline component
- * 
+ *
  * @param {Object} props - Component props
  * @param {Object} props.journey - Journey data
  * @returns {JSX.Element}
@@ -31,10 +27,10 @@ const JourneyTimeline = ({ journey }) => {
     'in-return',
     'delivered'
   ];
-  
+
   // Get the current stage index
   const currentStageIndex = stages.indexOf(journey.status);
-  
+
   // Generate timeline events based on journey status
   const timelineEvents = [
     {
@@ -43,7 +39,7 @@ const JourneyTimeline = ({ journey }) => {
       time: '09:00 AM, 12 Aug',
       details: 'Journey planned and vehicle assigned',
       completed: currentStageIndex > 0,
-      icon: <AssignmentIcon />
+      icon: <Icon name="ClipboardList" size={18} />
     },
     {
       stage: 'En Route to Loading',
@@ -51,7 +47,7 @@ const JourneyTimeline = ({ journey }) => {
       time: currentStageIndex >= 1 ? '10:30 AM, 12 Aug' : '-',
       details: 'Vehicle en route to loading point',
       completed: currentStageIndex > 1,
-      icon: <LocalShippingIcon />
+      icon: <Icon name="Truck" size={18} />
     },
     {
       stage: 'At Loading',
@@ -59,7 +55,7 @@ const JourneyTimeline = ({ journey }) => {
       time: currentStageIndex >= 2 ? '11:15 AM, 12 Aug' : '-',
       details: 'Vehicle at loading point',
       completed: currentStageIndex > 2,
-      icon: <LocalShippingIcon />
+      icon: <Icon name="Truck" size={18} />
     },
     {
       stage: 'In Transit',
@@ -67,7 +63,7 @@ const JourneyTimeline = ({ journey }) => {
       time: currentStageIndex >= 3 ? '12:00 PM, 12 Aug' : '-',
       details: 'Shipment in transit',
       completed: currentStageIndex > 3,
-      icon: <LocalShippingIcon />
+      icon: <Icon name="Truck" size={18} />
     },
     {
       stage: 'At Unloading',
@@ -75,7 +71,7 @@ const JourneyTimeline = ({ journey }) => {
       time: currentStageIndex >= 4 ? '02:30 PM, 12 Aug' : '-',
       details: 'Vehicle at unloading point',
       completed: currentStageIndex > 4,
-      icon: <LocalShippingIcon />
+      icon: <Icon name="Truck" size={18} />
     },
     {
       stage: 'In Return',
@@ -83,7 +79,7 @@ const JourneyTimeline = ({ journey }) => {
       time: currentStageIndex >= 5 ? '03:15 PM, 12 Aug' : '-',
       details: 'Vehicle returning after delivery',
       completed: currentStageIndex > 5,
-      icon: <LocalShippingIcon />
+      icon: <Icon name="Truck" size={18} />
     },
     {
       stage: 'Delivered',
@@ -91,16 +87,16 @@ const JourneyTimeline = ({ journey }) => {
       time: currentStageIndex >= 6 ? '04:00 PM, 12 Aug' : '-',
       details: 'Shipment delivered successfully',
       completed: currentStageIndex === 6,
-      icon: <CheckCircleIcon />
+      icon: <Icon name="CheckCircle" size={18} />
     }
   ];
-  
+
   return (
     <Box>
       <Typography variant="subtitle2" sx={{ mb: 2 }}>
         Journey Timeline
       </Typography>
-      
+
       <Timeline position="right">
         {timelineEvents.map((event, index) => (
           <TimelineItem key={index}>
@@ -110,7 +106,7 @@ const JourneyTimeline = ({ journey }) => {
               </Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot 
+              <TimelineDot
                 color={event.completed ? "success" : index === currentStageIndex ? "primary" : "grey"}
                 variant={event.completed || index === currentStageIndex ? "filled" : "outlined"}
               >
@@ -125,9 +121,9 @@ const JourneyTimeline = ({ journey }) => {
               <Typography variant="caption" color="text.secondary">
                 {event.details}
               </Typography>
-              <Typography variant="caption" sx={{ 
-                display: 'block', 
-                color: event.status === 'In Progress' ? 'primary.main' : 
+              <Typography variant="caption" sx={{
+                display: 'block',
+                color: event.status === 'In Progress' ? 'primary.main' :
                        event.status === 'Completed' ? 'success.main' : 'text.secondary'
               }}>
                 {event.status}

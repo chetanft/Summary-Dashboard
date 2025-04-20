@@ -19,20 +19,7 @@ import {
   TextField
 } from '@mui/material';
 import { Badge } from '../../components/core';
-import {
-  Close as CloseIcon,
-  LocalShipping as LocalShippingIcon,
-  Business as BusinessIcon,
-  Person as PersonIcon,
-  Timeline as TimelineIcon,
-  ErrorOutline as ErrorOutlineIcon,
-  CheckCircle as CheckCircleIcon,
-  Comment as CommentIcon,
-  Send as SendIcon,
-  ArrowForward as ArrowForwardIcon,
-  NavigateNext as NavigateNextIcon,
-  NavigateBefore as NavigateBeforeIcon
-} from '@mui/icons-material';
+import Icon from '../common/Icon';
 import JourneyTimeline from './JourneyTimeline';
 
 /**
@@ -97,7 +84,7 @@ const JourneyDetailsDrawer = ({ journey, open, onClose }) => {
             sx={{ mr: 1, color: '#718096' }}
             onClick={onClose}
           >
-            <NavigateBeforeIcon />
+            <Icon name="ChevronLeft" size={20} />
           </IconButton>
           <Typography variant="h6" sx={{ fontWeight: 600, color: '#2D3748' }}>
             Journey Details
@@ -105,10 +92,10 @@ const JourneyDetailsDrawer = ({ journey, open, onClose }) => {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <IconButton size="small" sx={{ color: '#718096', mr: 1 }}>
-            <NavigateNextIcon />
+            <Icon name="ChevronRight" size={20} />
           </IconButton>
           <IconButton onClick={onClose} size="small" sx={{ color: '#718096' }}>
-            <CloseIcon />
+            <Icon name="X" size={20} />
           </IconButton>
         </Box>
       </Box>

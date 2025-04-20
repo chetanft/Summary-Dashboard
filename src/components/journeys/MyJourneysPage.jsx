@@ -11,15 +11,7 @@ import JourneysTable from './JourneysTable';
 import JourneyDetailsDrawer from './JourneyDetailsDrawer';
 import { journeyData } from '../../data/journeyData';
 import { Box, Typography, Button, IconButton, Divider } from '@mui/material';
-import {
-  FilterList as FilterIcon,
-  ViewList as ViewListIcon,
-  ViewModule as ViewModuleIcon,
-  GetApp as GetAppIcon,
-  Print as PrintIcon,
-  Share as ShareIcon,
-  Add as AddIcon
-} from '@mui/icons-material';
+import Icon from '../common/Icon';
 import { format } from 'date-fns';
 
 /**
@@ -228,7 +220,7 @@ const MyJourneysPage = () => {
             color={viewMode === 'list' ? 'primary' : 'default'}
             sx={{ color: viewMode === 'list' ? '#4299E1' : '#A0AEC0' }}
           >
-            <ViewListIcon />
+            <Icon name="List" size={20} />
           </IconButton>
           <IconButton
             size="small"
@@ -236,21 +228,21 @@ const MyJourneysPage = () => {
             color={viewMode === 'grid' ? 'primary' : 'default'}
             sx={{ color: viewMode === 'grid' ? '#4299E1' : '#A0AEC0' }}
           >
-            <ViewModuleIcon />
+            <Icon name="LayoutGrid" size={20} />
           </IconButton>
           <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: '20px', alignSelf: 'center' }} />
           <IconButton size="small" sx={{ color: '#A0AEC0' }}>
-            <GetAppIcon />
+            <Icon name="Download" size={20} />
           </IconButton>
           <IconButton size="small" sx={{ color: '#A0AEC0' }}>
-            <PrintIcon />
+            <Icon name="Printer" size={20} />
           </IconButton>
           <IconButton size="small" sx={{ color: '#A0AEC0' }}>
-            <ShareIcon />
+            <Icon name="Share2" size={20} />
           </IconButton>
           <Button
             variant="outlined"
-            startIcon={<FilterIcon />}
+            startIcon={<Icon name="Filter" size={18} />}
             size="small"
             sx={{
               textTransform: 'none',
