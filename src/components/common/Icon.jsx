@@ -83,4 +83,7 @@ Icon.propTypes = {
   sx: PropTypes.object,
 };
 
+// Export the hook for direct access to the registry
+export { useIconRegistry };
+
 export default Icon;
