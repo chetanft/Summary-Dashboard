@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import { SearchProvider } from './context/SearchContext';
@@ -14,17 +14,8 @@ import MyJourneysPage from './components/journeys/MyJourneysPage';
 import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
 import IconsDemo from './pages/IconsDemo';
 
-// Create a theme instance
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+// Import the updated theme
+import theme from './theme/updatedThemeConfig';
 
 function App() {
   return (

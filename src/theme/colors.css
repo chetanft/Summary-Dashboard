@@ -1,5 +1,5 @@
 :root {
-  /* Primary Colors */
+  /* Primary Colors - Using dark gray instead of blue */
   --color-primary-main: #434F64;
   --color-primary-light: #5F697B;
   --color-primary-dark: #2D3748;
@@ -96,16 +96,16 @@
   --color-border-medium: #E0E4E8;
   --color-border-default: #E0E0E0;
 
-  /* Status Colors */
-  --color-status-success-main: #00C638;
-  --color-status-success-light: #DFFFEA;
-  --color-status-success-dark: #00763D;
-  --color-status-error-main: #FF3533;
-  --color-status-error-light: #FFEBEA;
-  --color-status-error-dark: #B80100;
-  --color-status-warning-main: #FF6C19;
-  --color-status-warning-light: #FFEBDC;
-  --color-status-warning-dark: #DD6A00;
+  /* Status Colors - Updated from Colors.json */
+  --color-status-success-main: #00C638; /* Positive */
+  --color-status-success-light: #DFE0FF; /* Positive - Light */
+  --color-status-success-dark: #00763D; /* Positive - Dark */
+  --color-status-error-main: #FF3533; /* Critical */
+  --color-status-error-light: #FFEBEA; /* Critical - Light */
+  --color-status-error-dark: #B80100; /* Critical - Dark */
+  --color-status-warning-main: #FF6C19; /* Warning */
+  --color-status-warning-light: #FFEBDC; /* Warning - Light */
+  --color-status-warning-dark: #DD6A00; /* Warning - Dark */
   --color-status-info-main: #4299E1;
   --color-status-info-light: rgba(66, 153, 225, 0.1);
   --color-status-info-dark: #3182CE;

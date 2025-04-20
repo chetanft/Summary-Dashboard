@@ -103,7 +103,7 @@
   "status": {
     "success": {
       "main": "#00C638",
-      "light": "#DFFFEA",
+      "light": "#DFE0FF",
       "dark": "#00763D"
     },
     "error": {
