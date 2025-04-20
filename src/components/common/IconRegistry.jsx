@@ -46,7 +46,10 @@ import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 import PlanningIcon from '@mui/icons-material/Event';
 import PaletteIcon from '@mui/icons-material/Palette';
 
-// Create a map of all pre-imported icons
+// Import Lucide icons
+import * as LucideIcons from 'lucide-react';
+
+// Create a map of all pre-imported Material UI icons
 const materialIcons = {
   AccessTime: AccessTimeIcon,
   AccountCircle: AccountCircleIcon,
@@ -94,15 +97,63 @@ const materialIcons = {
   Palette: PaletteIcon,
 };
 
+// Create a mapping between Material UI icons and their Lucide equivalents
+const iconMapping = {
+  AccessTime: 'Clock',
+  AccountCircle: 'UserCircle',
+  Add: 'Plus',
+  ArrowBack: 'ArrowLeft',
+  ArrowDropDown: 'ChevronDown',
+  ArrowForward: 'ArrowRight',
+  ArrowRight: 'ArrowRight',
+  CheckCircle: 'CheckCircle',
+  ChevronLeft: 'ChevronLeft',
+  ChevronRight: 'ChevronRight',
+  Close: 'X',
+  Dashboard: 'LayoutDashboard',
+  Delete: 'Trash2',
+  Edit: 'Edit',
+  Error: 'AlertCircle',
+  FilterList: 'Filter',
+  Info: 'Info',
+  LocalShipping: 'Truck',
+  Menu: 'Menu',
+  MoreVert: 'MoreVertical',
+  Notifications: 'Bell',
+  Person: 'User',
+  Refresh: 'RefreshCw',
+  Search: 'Search',
+  Settings: 'Settings',
+  TrendingDown: 'TrendingDown',
+  TrendingUp: 'TrendingUp',
+  Visibility: 'Eye',
+  VisibilityOff: 'EyeOff',
+  WarningAmber: 'AlertTriangle',
+  Circle: 'Circle',
+  Assignment: 'ClipboardList',
+  DirectionsCar: 'Car',
+  Storefront: 'Store',
+  Receipt: 'Receipt',
+  Description: 'FileText',
+  AttachMoney: 'DollarSign',
+  Gavel: 'Gavel',
+  Article: 'FileText',
+  History: 'History',
+  Support: 'LifeBuoy',
+  ViewQuilt: 'LayoutGrid',
+  Planning: 'Calendar',
+  Palette: 'Palette',
+};
+
 // Create a context to provide icons throughout the app
-const IconContext = createContext(materialIcons);
+const IconContext = createContext({ materialIcons, lucideIcons: LucideIcons, iconMapping });
 
 /**
  * Provider component that makes the icon registry available to any nested components
  */
 export const IconRegistryProvider = ({ children }) => {
   return (
-    <IconContext.Provider value={materialIcons}>
+    <IconContext.Provider value={{ materialIcons, lucideIcons: LucideIcons, iconMapping }}>
       {children}
     </IconContext.Provider>
   );
@@ -114,18 +165,41 @@ export const IconRegistryProvider = ({ children }) => {
 export const useIconRegistry = () => useContext(IconContext);
 
 /**
- * A component that renders a Material UI icon from the registry
+ * A component that renders an icon from the registry
+ * @param {Object} props - Component props
+ * @param {string} props.name - Icon name
+ * @param {boolean} props.useMui - Whether to use Material UI icon (default: false)
+ * @param {Object} props.rest - Other props to pass to the icon component
  */
-const Icon = memo(({ name, ...props }) => {
-  const iconRegistry = useIconRegistry();
-  const IconComponent = iconRegistry[name];
-
-  if (!IconComponent) {
-    console.warn(`Icon "${name}" not found in registry`);
+const Icon = memo(({ name, useMui = false, ...props }) => {
+  const { materialIcons, lucideIcons, iconMapping } = useIconRegistry();
+  
+  // If useMui is true, use Material UI icon
+  if (useMui) {
+    const MuiIconComponent = materialIcons[name];
+    if (!MuiIconComponent) {
+      console.warn(`Material UI Icon "${name}" not found in registry`);
+      return null;
+    }
+    return <MuiIconComponent {...props} />;
+  }
+  
+  // Otherwise, use Lucide icon
+  // First, check if there's a mapping for this icon name
+  const lucideIconName = iconMapping[name] || name;
+  const LucideIconComponent = lucideIcons[lucideIconName];
+  
+  if (!LucideIconComponent) {
+    console.warn(`Lucide Icon "${lucideIconName}" not found in registry`);
+    // Fallback to Material UI icon if Lucide icon is not found
+    const FallbackIcon = materialIcons[name];
+    if (FallbackIcon) {
+      return <FallbackIcon {...props} />;
+    }
     return null;
   }
-
-  return <IconComponent {...props} />;
+  
+  return <LucideIconComponent {...props} />;
 });
 
 export default Icon;

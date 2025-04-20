@@ -3,6 +3,7 @@ import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import { SearchProvider } from './context/SearchContext';
+import { IconRegistryProvider } from './components/common/IconRegistry';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './components/auth/Login';
 import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
@@ -11,6 +12,7 @@ import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
 import MyJourneysPage from './components/journeys/MyJourneysPage';
 import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
+import IconsDemo from './pages/IconsDemo';
 
 // Create a theme instance
 const theme = createTheme({
@@ -28,9 +30,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <SearchProvider>
-          <Router>
+      <IconRegistryProvider>
+        <AuthProvider>
+          <SearchProvider>
+            <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route
@@ -93,11 +96,22 @@ function App() {
                   </ProtectedRoute>
               }
             />
+              <Route
+                path="/icons"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <IconsDemo />
+                    </DataProvider>
+                  </ProtectedRoute>
+              }
+            />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
             </Routes>
-          </Router>
-        </SearchProvider>
-      </AuthProvider>
+            </Router>
+          </SearchProvider>
+        </AuthProvider>
+      </IconRegistryProvider>
     </ThemeProvider>
   );
 }
