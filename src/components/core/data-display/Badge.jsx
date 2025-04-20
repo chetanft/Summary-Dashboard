@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
-import { Text } from '../typography';
 
 /**
  * Badge component for displaying status indicators or labels.
@@ -16,103 +15,106 @@ const Badge = ({
   sx = {},
   ...props
 }) => {
-  // Color mapping for different variants
+  // Color mapping for different variants based on design specs
   const colorMap = {
     primary: {
       filled: {
-        backgroundColor: 'var(--color-primary-light, #E3F2FD)',
-        color: 'var(--color-primary-dark, #1976D2)',
+        backgroundColor: '#E3F2FD',
+        color: '#1976D2',
       },
       outlined: {
         backgroundColor: 'transparent',
-        color: 'var(--color-primary-main, #2196F3)',
-        border: '1px solid var(--color-primary-main, #2196F3)',
+        color: '#2196F3',
+        border: '1px solid #2196F3',
       },
     },
     secondary: {
       filled: {
-        backgroundColor: 'var(--color-secondary-light, #F3E5F5)',
-        color: 'var(--color-secondary-dark, #7B1FA2)',
+        backgroundColor: '#F3E5F5',
+        color: '#7B1FA2',
       },
       outlined: {
         backgroundColor: 'transparent',
-        color: 'var(--color-secondary-main, #9C27B0)',
-        border: '1px solid var(--color-secondary-main, #9C27B0)',
+        color: '#9C27B0',
+        border: '1px solid #9C27B0',
       },
     },
     success: {
       filled: {
-        backgroundColor: 'var(--color-success-light, #E8F5E9)',
-        color: 'var(--color-success-dark, #388E3C)',
+        backgroundColor: '#DFFFE8',
+        color: '#00763D',
       },
       outlined: {
         backgroundColor: 'transparent',
-        color: 'var(--color-success-main, #4CAF50)',
-        border: '1px solid var(--color-success-main, #4CAF50)',
+        color: '#00763D',
+        border: '1px solid #00763D',
       },
     },
     warning: {
       filled: {
-        backgroundColor: 'var(--color-warning-light, #FFF8E1)',
-        color: 'var(--color-warning-dark, #F57C00)',
+        backgroundColor: '#FFEBDC',
+        color: '#FF6C19',
       },
       outlined: {
         backgroundColor: 'transparent',
-        color: 'var(--color-warning-main, #FF9800)',
-        border: '1px solid var(--color-warning-main, #FF9800)',
+        color: '#FF6C19',
+        border: '1px solid #FF6C19',
       },
     },
     error: {
       filled: {
-        backgroundColor: 'var(--color-error-light, #FFEBEE)',
-        color: 'var(--color-error-dark, #D32F2F)',
+        backgroundColor: '#FFEAEA',
+        color: '#FF3533',
       },
       outlined: {
         backgroundColor: 'transparent',
-        color: 'var(--color-error-main, #F44336)',
-        border: '1px solid var(--color-error-main, #F44336)',
+        color: '#FF3533',
+        border: '1px solid #FF3533',
       },
     },
     info: {
       filled: {
-        backgroundColor: 'var(--color-info-light, #E1F5FE)',
-        color: 'var(--color-info-dark, #0288D1)',
+        backgroundColor: '#E1F5FE',
+        color: '#0288D1',
       },
       outlined: {
         backgroundColor: 'transparent',
-        color: 'var(--color-info-main, #03A9F4)',
-        border: '1px solid var(--color-info-main, #03A9F4)',
+        color: '#03A9F4',
+        border: '1px solid #03A9F4',
       },
     },
     default: {
       filled: {
-        backgroundColor: 'var(--color-grey-200, #EEEEEE)',
-        color: 'var(--color-grey-800, #424242)',
+        backgroundColor: '#F0F1F7',
+        color: '#434F64',
       },
       outlined: {
         backgroundColor: 'transparent',
-        color: 'var(--color-grey-600, #757575)',
-        border: '1px solid var(--color-grey-400, #BDBDBD)',
+        color: '#434F64',
+        border: '1px solid #434F64',
       },
     },
   };
 
-  // Size mapping
+  // Size mapping based on design specs
   const sizeMap = {
     small: {
       padding: '2px 8px',
-      fontSize: '0.75rem',
+      fontSize: '12px',
       borderRadius: '4px',
+      gap: '8px',
     },
     medium: {
-      padding: '4px 12px',
-      fontSize: '0.875rem',
-      borderRadius: '6px',
+      padding: '2px 8px',
+      fontSize: '14px',
+      borderRadius: '4px',
+      gap: '8px',
     },
     large: {
-      padding: '6px 16px',
-      fontSize: '1rem',
-      borderRadius: '8px',
+      padding: '2px 8px',
+      fontSize: '16px',
+      borderRadius: '4px',
+      gap: '8px',
     },
   };
 
@@ -120,13 +122,17 @@ const Badge = ({
   const colorStyles = colorMap[color]?.[variant] || colorMap.default[variant];
   const sizeStyles = sizeMap[size] || sizeMap.medium;
 
-  // Base styles for the badge
+  // Base styles for the badge based on design specs
   const baseStyles = {
     display: 'inline-flex',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    fontWeight: 500,
     whiteSpace: 'nowrap',
+    fontFamily: '"Inter", sans-serif',
+    fontStyle: 'normal',
+    fontWeight: 600,
+    lineHeight: '140%',
     ...colorStyles,
     ...sizeStyles,
     ...sx,
@@ -144,7 +150,7 @@ const Badge = ({
           component="span"
           sx={{
             display: 'inline-flex',
-            marginRight: '4px',
+            marginRight: '8px',
             '& svg': {
               fontSize: sizeMap[size].fontSize,
             },
@@ -153,13 +159,7 @@ const Badge = ({
           {icon}
         </Box>
       )}
-      <Text
-        component="span"
-        size={size === 'large' ? 'medium' : size === 'medium' ? 'small' : 'small'}
-        sx={{ lineHeight: 1.2 }}
-      >
-        {label}
-      </Text>
+      {label}
     </Box>
   );
 };
