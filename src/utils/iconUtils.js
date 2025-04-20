@@ -10,8 +10,8 @@
 export const importLucideIcon = async (iconName) => {
   try {
     // Dynamic import with code splitting
-    // @vite-ignore
-    return await import(`lucide-react/dist/esm/icons/${iconName}`);
+    // eslint-disable-next-line import/no-dynamic-require
+    return await import(/* @vite-ignore */ `lucide-react/dist/esm/icons/${iconName}`);
   } catch (error) {
     console.error(`Failed to load icon: ${iconName}`, error);
     return null;
@@ -99,8 +99,8 @@ export const commonIconNames = [
 export const preloadCommonIcons = () => {
   commonIconNames.forEach(iconName => {
     // Use low priority to avoid blocking other resources
-    // @vite-ignore
-    import(`lucide-react/dist/esm/icons/${iconName}`);
+    // eslint-disable-next-line import/no-dynamic-require
+    import(/* @vite-ignore */ `lucide-react/dist/esm/icons/${iconName}`);
   });
 };
 
