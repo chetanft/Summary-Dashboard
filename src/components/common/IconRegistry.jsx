@@ -48,7 +48,20 @@ import PlanningIcon from '@mui/icons-material/Event';
 import PaletteIcon from '@mui/icons-material/Palette';
 
 // Import Lucide icons
-import * as LucideIcons from 'lucide-react';
+// Using dynamic import to avoid build issues
+let LucideIcons = {};
+
+// Try to load Lucide icons, but don't fail if they're not available
+try {
+  // This will be properly chunked during build
+  import('lucide-react').then(module => {
+    LucideIcons = module;
+  }).catch(error => {
+    console.warn('Failed to load Lucide icons:', error);
+  });
+} catch (error) {
+  console.warn('Failed to import Lucide icons:', error);
+}
 
 // Create a map of all pre-imported Material UI icons
 const materialIcons = {
@@ -153,13 +166,24 @@ const IconContext = createContext({ materialIcons, lucideIcons: LucideIcons, ico
  * Provider component that makes the icon registry available to any nested components
  */
 export const IconRegistryProvider = ({ children }) => {
-  // Preload common icons for better performance
+  // State to track if Lucide icons are loaded
+  const [lucideIcons, setLucideIcons] = React.useState(LucideIcons);
+
+  // Load Lucide icons dynamically
   useEffect(() => {
-    preloadCommonIcons();
+    import('lucide-react')
+      .then(module => {
+        setLucideIcons(module);
+        // Preload common icons after Lucide is loaded
+        preloadCommonIcons();
+      })
+      .catch(error => {
+        console.warn('Failed to load Lucide icons in provider:', error);
+      });
   }, []);
 
   return (
-    <IconContext.Provider value={{ materialIcons, lucideIcons: LucideIcons, iconMapping }}>
+    <IconContext.Provider value={{ materialIcons, lucideIcons, iconMapping }}>
       {children}
     </IconContext.Provider>
   );
@@ -193,19 +217,25 @@ const Icon = memo(({ name, useMui = false, ...props }) => {
   // Otherwise, use Lucide icon
   // First, check if there's a mapping for this icon name
   const lucideIconName = iconMapping[name] || name;
-  const LucideIconComponent = lucideIcons[lucideIconName];
 
-  if (!LucideIconComponent) {
-    console.warn(`Lucide Icon "${lucideIconName}" not found in registry`);
-    // Fallback to Material UI icon if Lucide icon is not found
-    const FallbackIcon = materialIcons[name];
-    if (FallbackIcon) {
-      return <FallbackIcon {...props} />;
+  // Check if lucideIcons is loaded and has the icon
+  if (lucideIcons && typeof lucideIcons === 'object') {
+    const LucideIconComponent = lucideIcons[lucideIconName];
+
+    if (LucideIconComponent) {
+      return <LucideIconComponent {...props} />;
     }
-    return null;
   }
 
-  return <LucideIconComponent {...props} />;
+  // Fallback to Material UI icon if Lucide icon is not found or not loaded yet
+  const FallbackIcon = materialIcons[name];
+  if (FallbackIcon) {
+    return <FallbackIcon {...props} />;
+  }
+
+  // If no icon is found, return null
+  console.warn(`Icon "${name}" (Lucide: "${lucideIconName}") not found in any registry`);
+  return null;
 });
 
 export default Icon;

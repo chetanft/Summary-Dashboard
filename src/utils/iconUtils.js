@@ -8,12 +8,24 @@
  * @returns {Promise<Object>} - A promise that resolves to the icon component
  */
 export const importLucideIcon = async (iconName) => {
+  if (!iconName) {
+    console.warn('No icon name provided to importLucideIcon');
+    return null;
+  }
+
   try {
-    // Dynamic import with code splitting
+    // First check if lucide-react is available
+    const lucideModule = await import('lucide-react').catch(() => null);
+    if (!lucideModule) {
+      console.warn('lucide-react module is not available');
+      return null;
+    }
+
+    // Then try to import the specific icon
     // eslint-disable-next-line import/no-dynamic-require
     return await import(/* @vite-ignore */ `lucide-react/dist/esm/icons/${iconName}`);
   } catch (error) {
-    console.error(`Failed to load icon: ${iconName}`, error);
+    console.warn(`Failed to load icon: ${iconName}`, error);
     return null;
   }
 };
@@ -97,11 +109,20 @@ export const commonIconNames = [
  * Call this function during app initialization
  */
 export const preloadCommonIcons = () => {
-  commonIconNames.forEach(iconName => {
-    // Use low priority to avoid blocking other resources
-    // eslint-disable-next-line import/no-dynamic-require
-    import(/* @vite-ignore */ `lucide-react/dist/esm/icons/${iconName}`);
-  });
+  try {
+    commonIconNames.forEach(iconName => {
+      // Use low priority to avoid blocking other resources
+      // eslint-disable-next-line import/no-dynamic-require
+      import(/* @vite-ignore */ `lucide-react/dist/esm/icons/${iconName}`)
+        .catch(error => {
+          // Silently fail individual icon loading
+          console.debug(`Failed to preload icon: ${iconName}`, error);
+        });
+    });
+  } catch (error) {
+    // Catch any errors during preloading
+    console.warn('Failed to preload icons:', error);
+  }
 };
 
 /**
