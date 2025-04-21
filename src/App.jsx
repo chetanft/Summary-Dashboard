@@ -19,8 +19,8 @@ import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
 import IconsDemo from './pages/IconsDemo';
 import PlaceholderPage from './pages/PlaceholderPage';
 
-// Import the updated theme
-import theme from './theme/updatedThemeConfig';
+// Import the unified theme
+import theme from './theme/unifiedThemeConfig';
 
 function App() {
   return (

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Box, Typography, Paper, Tooltip, IconButton } from '@mui/material';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import { Box, Typography } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import CompositeChartComponent from '../charts/CompositeChartComponent';
+import { EnhancedMetricCard } from '../core';
 
 /**
  * BudgetedVsActualKPI component for displaying freight budget vs actual metrics
+ * Using the standardized EnhancedMetricCard component
  *
  * @param {Object} props
  * @param {string} props.title - Title of the KPI
@@ -38,158 +38,12 @@ const BudgetedVsActualKPI = ({
     return `₹ ${value} Cr`;
   };
 
-  // Get role-specific title suffix
-  const getRoleSuffix = () => {
-    if (userRole === 'Branch User') return " (Branch)";
-    if (userRole === 'Company User') return " (Company)";
-    if (userRole === 'CXO') return " (Pan-India)";
-    return "";
-  };
-
-  return (
-    <Paper
-      sx={{
-        height: '100%',
-        borderRadius: '32px',
-        boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #F0F1F7',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '32px',
-        backgroundColor: '#FFFFFF',
-        gap: '40px'
-      }}
-    >
-      {/* Header */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Typography
-            sx={{
-              color: '#5F697B',
-              fontWeight: 600,
-              fontSize: '24px',
-              lineHeight: '140%',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            {title}{getRoleSuffix()}
-          </Typography>
-          <Tooltip title="Comparison of budgeted, actual, and projected freight costs">
-            <span>
-              <InfoOutlinedIcon sx={{ fontSize: 24, color: '#434F64' }} />
-            </span>
-          </Tooltip>
-        </Box>
-        {onDrillDown && (
-          <Tooltip title="View details">
-            <span>
-              <IconButton
-                size="small"
-                onClick={() => onDrillDown({ id: 'budgeted_vs_actual_freight', title })}
-                sx={{ color: '#434F64' }}
-              >
-                <OpenInFullIcon sx={{ fontSize: 24 }} />
-              </IconButton>
-            </span>
-          </Tooltip>
-        )}
-      </Box>
-
-      {/* Main values */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        {/* Actual */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Typography
-            sx={{
-              color: '#434F64',
-              fontWeight: 600,
-              fontSize: '40px',
-              lineHeight: '140%',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            {formattedActual || formatValue(actual)}
-          </Typography>
-          <Typography
-            sx={{
-              color: '#5F697B',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '140%',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            Actual
-          </Typography>
-        </Box>
-
-        {/* Projected */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-            <Typography
-              sx={{
-                color: '#5F697B',
-                fontWeight: 600,
-                fontSize: '20px',
-                lineHeight: '140%',
-                fontFamily: 'Inter, sans-serif',
-              }}
-            >
-              {formattedProjected || formatValue(projected)}
-            </Typography>
-            <ArrowUpwardIcon sx={{ color: '#FF3533', fontSize: 24, transform: 'rotate(-45deg)' }} />
-          </Box>
-          <Typography
-            sx={{
-              color: '#5F697B',
-              fontWeight: 600,
-              fontSize: '14px',
-              lineHeight: '140%',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            Projected
-          </Typography>
-        </Box>
-
-        {/* Budget */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Typography
-            sx={{
-              color: '#5F697B',
-              fontWeight: 600,
-              fontSize: '20px',
-              lineHeight: '140%',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            {formattedBudget || formatValue(budget)}
-          </Typography>
-          <Typography
-            sx={{
-              color: '#5F697B',
-              fontWeight: 600,
-              fontSize: '14px',
-              lineHeight: '140%',
-              fontFamily: 'Inter, sans-serif',
-            }}
-          >
-            Budget
-          </Typography>
-        </Box>
-      </Box>
-
+  // Create the chart component
+  const chartComponent = (
+    <>
       {/* Chart */}
       <Box
         sx={{
-          flexGrow: 1,
           width: '100%',
           height: '348px',
           position: 'relative'
@@ -218,7 +72,8 @@ const BudgetedVsActualKPI = ({
           display: 'flex',
           justifyContent: 'flex-start',
           gap: 1.5,
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
+          mt: 2
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -231,12 +86,10 @@ const BudgetedVsActualKPI = ({
             }}
           />
           <Typography
+            variant="caption"
             sx={{
-              fontSize: '14px',
               fontWeight: 600,
-              lineHeight: '140%',
-              color: '#5F697B',
-              fontFamily: 'Inter, sans-serif',
+              color: 'text.secondary',
             }}
           >
             Budget
@@ -253,19 +106,113 @@ const BudgetedVsActualKPI = ({
             }}
           />
           <Typography
+            variant="caption"
             sx={{
-              fontSize: '14px',
               fontWeight: 600,
-              lineHeight: '140%',
-              color: '#5F697B',
-              fontFamily: 'Inter, sans-serif',
+              color: 'text.secondary',
             }}
           >
             Projected
           </Typography>
         </Box>
       </Box>
-    </Paper>
+    </>
+  );
+
+  // Create the value display
+  const valueDisplay = (
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2 }}>
+      {/* Actual */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 600,
+            color: 'text.primary',
+          }}
+        >
+          {formattedActual || formatValue(actual)}
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 500,
+            color: 'text.secondary',
+          }}
+        >
+          Actual
+        </Typography>
+      </Box>
+
+      {/* Projected */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              color: 'text.secondary',
+            }}
+          >
+            {formattedProjected || formatValue(projected)}
+          </Typography>
+          <ArrowUpwardIcon sx={{ color: 'error.main', fontSize: 24, transform: 'rotate(-45deg)' }} />
+        </Box>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 600,
+            color: 'text.secondary',
+          }}
+        >
+          Projected
+        </Typography>
+      </Box>
+
+      {/* Budget */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            color: 'text.secondary',
+          }}
+        >
+          {formattedBudget || formatValue(budget)}
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 600,
+            color: 'text.secondary',
+          }}
+        >
+          Budget
+        </Typography>
+      </Box>
+    </Box>
+  );
+
+  return (
+    <EnhancedMetricCard
+      title={title}
+      userRole={userRole}
+      size="large"
+      variant="elevated"
+      tooltip="Comparison of budgeted, actual, and projected freight costs"
+      onDrillDown={() => onDrillDown({ id: 'budgeted_vs_actual_freight', title })}
+      chart={
+        <>
+          {valueDisplay}
+          {chartComponent}
+        </>
+      }
+      chartHeight={400}
+      sx={{
+        height: '100%',
+        borderRadius: '32px',
+      }}
+    />
   );
 };
 
