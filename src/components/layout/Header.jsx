@@ -114,8 +114,19 @@ const Header = ({ onRefresh }) => {
           <IconButton aria-label="quick actions" size="small">
             <Icon name="Rocket" color="#434F64" size={20} />
           </IconButton>
-          <IconButton aria-label="notifications" size="small">
+          <IconButton aria-label="notifications" size="small" sx={{ position: 'relative' }}>
             <Icon name="Bell" color="#434F64" size={20} />
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '2px',
+                right: '2px',
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: '#FF4D4F',
+              }}
+            />
           </IconButton>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -125,16 +136,12 @@ const Header = ({ onRefresh }) => {
               alt="Tata Motors Logo"
               sx={{ height: '24px' }}
             />
-            <IconButton
-              size="small"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
+            <Avatar
+              src={currentUser?.avatar || '/static/images/avatar/1.jpg'}
+              alt={currentUser?.name || 'User'}
+              sx={{ width: 32, height: 32, cursor: 'pointer' }}
               onClick={handleMenu}
-              color="inherit"
-            >
-              <Icon name="UserCircle" color="#434F64" size={20} />
-            </IconButton>
+            />
           </Box>
         </Box>
       </Box>

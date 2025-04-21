@@ -74,7 +74,10 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
             <Typography
               variant="body2"
               sx={{
+                fontFamily: 'Inter, sans-serif',
                 fontWeight: activeStatus === tab.value ? 600 : 400,
+                fontSize: '14px',
+                lineHeight: '20px',
                 color: activeStatus === tab.value ? '#434F64' : '#838C9D',
                 marginRight: '8px',
               }}
@@ -94,6 +97,7 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
                 padding: '0 6px',
                 fontSize: '12px',
                 fontWeight: 500,
+                fontFamily: 'Inter, sans-serif',
               }}
             >
               {tab.count}
@@ -143,7 +147,7 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
               display: 'flex',
               alignItems: 'center',
               padding: '4px 8px',
-              backgroundColor: '#F5F7FA',
+              backgroundColor: badge.color === '#E43634' ? '#FFEBEB' : '#F5F7FA',
               borderRadius: '4px',
               height: '24px',
             }}
@@ -151,6 +155,7 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
             <Typography
               sx={{
                 color: badge.color,
+                fontFamily: 'Inter, sans-serif',
                 fontWeight: 600,
                 fontSize: '12px',
                 marginRight: '4px',
@@ -160,8 +165,10 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
             </Typography>
             <Typography
               sx={{
-                color: '#434F64',
+                color: badge.color === '#E43634' ? badge.color : '#434F64',
+                fontFamily: 'Inter, sans-serif',
                 fontSize: '12px',
+                fontWeight: badge.color === '#E43634' ? 600 : 400,
               }}
             >
               {badge.label}
@@ -170,6 +177,7 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
               <Typography
                 sx={{
                   color: '#434F64',
+                  fontFamily: 'Inter, sans-serif',
                   fontSize: '12px',
                   marginLeft: '4px',
                 }}
@@ -181,10 +189,7 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
         ))}
       </Box>
 
-      {/* Journey Count */}
-      <Typography variant="body2" sx={{ color: '#434F64', fontWeight: 500 }}>
-        78 Journeys available
-      </Typography>
+      {/* We've moved the Journey Count to the JourneysTable component */}
     </Box>
   );
 };
