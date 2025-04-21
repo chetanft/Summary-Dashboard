@@ -82,189 +82,187 @@ const JourneyPageHeader = ({
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0px 20px',
-        gap: '10px',
+        flexDirection: 'column',
         width: '100%',
-        height: '40px',
         background: '#FFFFFF',
       }}
     >
-      {/* Title Container */}
+      {/* Top Row */}
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '0px',
-          gap: '12px',
-          height: '34px',
+          padding: '10px 20px',
+          gap: '10px',
+          width: '100%',
+          height: '40px',
         }}
       >
-        {/* Icon */}
+        {/* Title Container */}
         <Box
           sx={{
-            width: '28px',
-            height: '28px',
-            position: 'relative',
-          }}
-        >
-          <Icon name="Navigation" size={20} color="#434F64" />
-        </Box>
-
-        {/* Title */}
-        <Typography
-          variant="h6"
-          sx={{
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: 600,
-            fontSize: '16px',
-            lineHeight: '24px',
-            color: '#434F64',
-          }}
-        >
-          {title}
-        </Typography>
-      </Box>
-
-      {/* Filter Bar */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: '0px',
-          gap: '8px',
-          height: '32px',
-        }}
-      >
-        {/* Location Dropdown */}
-        <Box
-          onClick={handleLocationChange}
-          sx={{
-            height: '32px',
             display: 'flex',
+            flexDirection: 'row',
             alignItems: 'center',
-            padding: '0 8px',
-            gap: '4px',
-            border: '1px solid #E0E4E8',
-            borderRadius: '4px',
-            backgroundColor: '#FFFFFF',
-            cursor: 'pointer',
+            padding: '0px',
+            gap: '12px',
+            height: '34px',
           }}
         >
-          <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
-            {location}
-          </Typography>
-          <Icon name="ChevronDown" size={12} color="#838C9D" />
-        </Box>
-
-        {/* Date Range Filter */}
-        <Box
-          onClick={handleDateRangeChange}
-          sx={{
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 8px',
-            gap: '4px',
-            border: '1px solid #E0E4E8',
-            borderRadius: '4px',
-            backgroundColor: '#FFFFFF',
-            cursor: 'pointer',
-          }}
-        >
-          <Icon name="Calendar" size={12} color="#838C9D" />
-          <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
-            {dateRange.start}
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#838C9D', fontSize: '14px' }}>
-            →
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
-            {dateRange.end}
-          </Typography>
-          <Box onClick={(e) => { e.stopPropagation(); handleDateRangeClear(); }} sx={{ cursor: 'pointer' }}>
-            <Icon name="X" size={12} color="#838C9D" />
-          </Box>
-        </Box>
-
-        {/* Source Filter Dropdown */}
-        <Box
-          onClick={handleSourceFilterChange}
-          sx={{
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 8px',
-            gap: '4px',
-            border: '1px solid #E0E4E8',
-            borderRadius: '4px',
-            backgroundColor: '#FFFFFF',
-            cursor: 'pointer',
-          }}
-        >
-          <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
-            {sourceFilter}
-          </Typography>
-          <Icon name="ChevronDown" size={12} color="#838C9D" />
-        </Box>
-
-        {/* Search Input */}
-        <Box
-          sx={{
-            height: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 8px',
-            gap: '4px',
-            border: '1px solid #E0E4E8',
-            borderRadius: '4px',
-            backgroundColor: '#FFFFFF',
-            flex: 1,
-            maxWidth: '300px',
-          }}
-        >
-          <Icon name="Search" size={12} color="#838C9D" />
-          <InputBase
-            placeholder="Search My Journeys"
-            value={searchTerm}
-            onChange={handleSearch}
+          {/* Title */}
+          <Typography
+            variant="h6"
             sx={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: '14px',
+              fontWeight: 600,
+              fontSize: '16px',
+              lineHeight: '24px',
               color: '#434F64',
-              flex: 1,
-              '& .MuiInputBase-input': {
-                padding: 0,
-              },
             }}
-          />
+          >
+            {title}
+          </Typography>
         </Box>
 
-        {/* Add Journey Button */}
-        <Button
-          variant="contained"
-          startIcon={<Icon name="Plus" size={16} color="#FFFFFF" />}
-          onClick={handleAddClick}
+        {/* Filter Bar */}
+        <Box
           sx={{
-            backgroundColor: '#434F64',
-            borderRadius: '4px',
-            textTransform: 'none',
-            padding: '0 16px',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: '0px',
+            gap: '8px',
             height: '32px',
-            '&:hover': {
-              backgroundColor: '#323C4D',
-            },
-            fontSize: '14px',
-            fontWeight: 500,
-            marginLeft: 'auto',
           }}
         >
-          Add Journey
-        </Button>
+          {/* Location Dropdown */}
+          <Box
+            onClick={handleLocationChange}
+            sx={{
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 8px',
+              gap: '4px',
+              border: '1px solid #E0E4E8',
+              borderRadius: '4px',
+              backgroundColor: '#FFFFFF',
+              cursor: 'pointer',
+            }}
+          >
+            <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
+              {location}
+            </Typography>
+            <Icon name="ChevronDown" size={12} color="#838C9D" />
+          </Box>
+
+          {/* Date Range Filter */}
+          <Box
+            onClick={handleDateRangeChange}
+            sx={{
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 8px',
+              gap: '4px',
+              border: '1px solid #E0E4E8',
+              borderRadius: '4px',
+              backgroundColor: '#FFFFFF',
+              cursor: 'pointer',
+            }}
+          >
+            <Icon name="Calendar" size={12} color="#838C9D" />
+            <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
+              {dateRange.start}
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#838C9D', fontSize: '14px' }}>
+              →
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
+              {dateRange.end}
+            </Typography>
+            <Box onClick={(e) => { e.stopPropagation(); handleDateRangeClear(); }} sx={{ cursor: 'pointer' }}>
+              <Icon name="X" size={12} color="#838C9D" />
+            </Box>
+          </Box>
+
+          {/* Source Filter Dropdown */}
+          <Box
+            onClick={handleSourceFilterChange}
+            sx={{
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 8px',
+              gap: '4px',
+              border: '1px solid #E0E4E8',
+              borderRadius: '4px',
+              backgroundColor: '#FFFFFF',
+              cursor: 'pointer',
+            }}
+          >
+            <Typography variant="body2" sx={{ color: '#434F64', fontSize: '14px' }}>
+              {sourceFilter}
+            </Typography>
+            <Icon name="ChevronDown" size={12} color="#838C9D" />
+          </Box>
+
+          {/* Search Input */}
+          <Box
+            sx={{
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 8px',
+              gap: '4px',
+              border: '1px solid #E0E4E8',
+              borderRadius: '4px',
+              backgroundColor: '#FFFFFF',
+              flex: 1,
+              maxWidth: '300px',
+            }}
+          >
+            <Icon name="Search" size={12} color="#838C9D" />
+            <InputBase
+              placeholder="Search My Journeys"
+              value={searchTerm}
+              onChange={handleSearch}
+              sx={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '14px',
+                color: '#434F64',
+                flex: 1,
+                '& .MuiInputBase-input': {
+                  padding: 0,
+                },
+              }}
+            />
+          </Box>
+
+          {/* Add Journey Button */}
+          <Button
+            variant="contained"
+            startIcon={<Icon name="Plus" size={16} color="#FFFFFF" />}
+            onClick={handleAddClick}
+            sx={{
+              backgroundColor: '#434F64',
+              borderRadius: '4px',
+              textTransform: 'none',
+              padding: '0 16px',
+              height: '32px',
+              '&:hover': {
+                backgroundColor: '#323C4D',
+              },
+              fontSize: '14px',
+              fontWeight: 500,
+              marginLeft: 'auto',
+            }}
+          >
+            Add Journey
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
