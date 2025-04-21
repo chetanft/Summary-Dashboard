@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { useSearch } from '../../context/SearchContext';
 import Layout from '../layout/Layout';
-import DashboardHeader from '../dashboard/DashboardHeader';
+import JourneyPageHeader from './JourneyPageHeader';
 import JourneyStatusTabs from './JourneyStatusTabs';
 import JourneyFilters from './JourneyFilters';
 import JourneysTable from './JourneysTable';
@@ -183,14 +183,18 @@ const MyJourneysPage = () => {
 
   return (
     <Layout>
-      {/* Dashboard Header */}
-      <DashboardHeader
+      {/* Journey Page Header */}
+      <JourneyPageHeader
         title="My Journeys"
-        activeTab="controlTower" /* Using controlTower to hide toggle tabs */
-        searchBar={false}
-        showDateFilter={false}
-        showSourceFilter={false}
-        showAddButton={false}
+        location="MDC Labs, Amritsar"
+        dateRange={dateRange}
+        sourceFilter={sourceFilter}
+        searchTerm={localSearchTerm}
+        onLocationChange={handleSourceFilterChange}
+        onDateRangeChange={handleDateRangeChange}
+        onSourceFilterChange={handleSourceFilterChange}
+        onSearch={handleSearch}
+        onAddClick={handleAddJourney}
       />
 
       {/* Journey Status Tabs */}
@@ -198,126 +202,6 @@ const MyJourneysPage = () => {
         activeStatus={activeStatus}
         onStatusChange={handleStatusChange}
       />
-
-      {/* Filter Bar */}
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        mb: 2,
-        height: '32px'
-      }}>
-        {/* MDC Labs Filter */}
-        <Box sx={{
-          height: '32px',
-          border: '1px solid #E0E4E8',
-          borderRadius: '4px',
-          backgroundColor: '#FFFFFF',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 8px',
-          gap: '4px'
-        }}>
-          <Typography variant="body2" sx={{ color: '#434F64' }}>
-            MDC Labs, Amritsar
-          </Typography>
-          <Icon name="ChevronDown" size={12} color="#838C9D" />
-        </Box>
-
-        {/* Date Range Filter */}
-        <Box sx={{
-          height: '32px',
-          border: '1px solid #E0E4E8',
-          borderRadius: '4px',
-          backgroundColor: '#FFFFFF',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 8px',
-          gap: '4px'
-        }}>
-          <Icon name="Calendar" size={12} color="#838C9D" />
-          <Typography variant="body2" sx={{ color: '#434F64' }}>
-            12 Aug 2024
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#838C9D' }}>
-            →
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#434F64' }}>
-            12 Sep 2024
-          </Typography>
-          <Icon name="X" size={12} color="#838C9D" />
-        </Box>
-
-        {/* Outbound Filter */}
-        <Box sx={{
-          height: '32px',
-          border: '1px solid #E0E4E8',
-          borderRadius: '4px',
-          backgroundColor: '#FFFFFF',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 8px',
-          gap: '4px'
-        }}>
-          <Typography variant="body2" sx={{ color: '#434F64' }}>
-            Outbound - Source
-          </Typography>
-          <Icon name="ChevronDown" size={12} color="#838C9D" />
-        </Box>
-
-        {/* Search Box */}
-        <Box sx={{
-          height: '32px',
-          border: '1px solid #E0E4E8',
-          borderRadius: '4px',
-          backgroundColor: '#FFFFFF',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 8px',
-          gap: '4px',
-          flex: 1,
-          maxWidth: '300px'
-        }}>
-          <Icon name="Search" size={12} color="#838C9D" />
-          <input
-            type="text"
-            placeholder="Search My Journeys"
-            value={localSearchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            style={{
-              border: 'none',
-              outline: 'none',
-              width: '100%',
-              background: 'transparent',
-              color: '#434F64',
-              fontSize: '14px',
-              fontFamily: 'Inter, sans-serif'
-            }}
-          />
-        </Box>
-
-        {/* Add Journey Button */}
-        <Button
-          variant="contained"
-          startIcon={<Icon name="Plus" size={16} color="#FFFFFF" />}
-          onClick={handleAddJourney}
-          sx={{
-            backgroundColor: '#434F64',
-            borderRadius: '4px',
-            textTransform: 'none',
-            padding: '0 16px',
-            height: '32px',
-            '&:hover': {
-              backgroundColor: '#323C4D',
-            },
-            fontSize: '14px',
-            fontWeight: 500,
-            marginLeft: 'auto'
-          }}
-        >
-          Add Journey
-        </Button>
-      </Box>
 
       {/* Journeys Table */}
       <JourneysTable
