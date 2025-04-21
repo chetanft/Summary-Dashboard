@@ -6,57 +6,31 @@ import {
   Paper,
   Typography,
   CircularProgress,
-  Card,
-  CardContent,
 } from '@mui/material';
 import { useJourney } from '../../contexts/JourneyContext';
 import Icon from '../common/Icon';
+import { EnhancedMetricCard } from '../core';
 
-// KPI card component
+// KPI card component using EnhancedMetricCard
 const KPICard = ({ title, value, trend, icon, color }) => {
-  const trendIcon = trend > 0 ? 'TrendingUp' : trend < 0 ? 'TrendingDown' : 'Minus';
-  const trendColor = 
-    (title === 'Active Alerts' && trend > 0) ? 'error.main' :
-    (title === 'Active Alerts' && trend < 0) ? 'success.main' :
-    trend > 0 ? 'success.main' : 
-    trend < 0 ? 'error.main' : 
-    'text.secondary';
+  // Determine if trend should be inverted (for metrics where lower is better)
+  const trendInverse = title === 'Active Alerts' || title === 'Avg. Duration';
+
+  // Create icon component from icon name
+  const IconComponent = (props) => <Icon name={icon} {...props} />;
 
   return (
-    <Card sx={{ height: '100%' }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-          <Typography variant="h6" color="text.secondary">
-            {title}
-          </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              bgcolor: `${color}.light`,
-              color: `${color}.main`,
-              borderRadius: '50%',
-              width: 40,
-              height: 40,
-            }}
-          >
-            <Icon name={icon} size={20} />
-          </Box>
-        </Box>
-        
-        <Typography variant="h3" component="div" gutterBottom>
-          {value}
-        </Typography>
-        
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Icon name={trendIcon} size={16} sx={{ color: trendColor, mr: 0.5 }} />
-          <Typography variant="body2" sx={{ color: trendColor }}>
-            {Math.abs(trend * 100).toFixed(1)}% {trend > 0 ? 'increase' : trend < 0 ? 'decrease' : 'no change'}
-          </Typography>
-        </Box>
-      </CardContent>
-    </Card>
+    <EnhancedMetricCard
+      title={title}
+      value={value}
+      trend={trend * 100} // Convert from decimal to percentage
+      trendInverse={trendInverse}
+      icon={IconComponent}
+      variant="elevated"
+      size="medium"
+      sx={{ height: '100%' }}
+      additionalInfo={`${Math.abs(trend * 100).toFixed(1)}% ${trend > 0 ? 'increase' : trend < 0 ? 'decrease' : 'no change'}`}
+    />
   );
 };
 
@@ -107,7 +81,7 @@ const JourneyKPIs = ({ kpis }) => {
       <Typography variant="h5" gutterBottom>
         Key Performance Indicators
       </Typography>
-      
+
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6} lg={3}>
           <KPICard
@@ -118,7 +92,7 @@ const JourneyKPIs = ({ kpis }) => {
             color="primary"
           />
         </Grid>
-        
+
         <Grid item xs={12} sm={6} lg={3}>
           <KPICard
             title="On-Time Delivery"
@@ -128,7 +102,7 @@ const JourneyKPIs = ({ kpis }) => {
             color="success"
           />
         </Grid>
-        
+
         <Grid item xs={12} sm={6} lg={3}>
           <KPICard
             title="Avg. Duration"
@@ -138,7 +112,7 @@ const JourneyKPIs = ({ kpis }) => {
             color="info"
           />
         </Grid>
-        
+
         <Grid item xs={12} sm={6} lg={3}>
           <KPICard
             title="Active Alerts"
@@ -149,7 +123,7 @@ const JourneyKPIs = ({ kpis }) => {
           />
         </Grid>
       </Grid>
-      
+
       <Box sx={{ mt: 4 }}>
         <Paper sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>
