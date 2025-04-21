@@ -17,6 +17,7 @@ import JourneyPage from './pages/JourneyPage';
 import ControlTowerPage from './components/control-tower/ControlTowerPage';
 import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
 import IconsDemo from './pages/IconsDemo';
+import PlaceholderPage from './pages/PlaceholderPage';
 
 // Import the updated theme
 import theme from './theme/updatedThemeConfig';
@@ -126,6 +127,17 @@ function App() {
               }
             />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              {/* Catch-all route for pages that don't have dedicated components yet */}
+              <Route
+                path="*"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <PlaceholderPage />
+                    </DataProvider>
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
             </Router>
           </SearchProvider>
