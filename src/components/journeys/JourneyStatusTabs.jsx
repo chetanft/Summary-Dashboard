@@ -118,7 +118,7 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
               justifyContent: 'center',
               width: '32px',
               height: '32px',
-              backgroundColor: activeStatus === 'list-view' ? '#FFFFFF' : '#F5F7FA',
+              backgroundColor: '#FFFFFF',
               cursor: 'pointer',
             }}>
               <Icon name="List" size={16} color="#434F64" />
@@ -129,7 +129,7 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
               justifyContent: 'center',
               width: '32px',
               height: '32px',
-              backgroundColor: activeStatus === 'map-view' ? '#FFFFFF' : '#F5F7FA',
+              backgroundColor: '#F5F7FA',
               cursor: 'pointer',
             }}>
               <Icon name="Map" size={16} color="#434F64" />
@@ -140,56 +140,412 @@ const JourneyStatusTabs = ({ activeStatus, onStatusChange }) => {
 
       {/* Status Badges */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px', mb: 2 }}>
-        {statusBadges.map((badge, index) => (
-          <Box
-            key={index}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#FFEBEB',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '4px 8px',
-              backgroundColor: badge.color === '#E43634' ? '#FFEBEB' : '#F5F7FA',
-              borderRadius: '4px',
-              height: '24px',
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
             }}
           >
-            <Typography
-              sx={{
-                color: badge.color,
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 600,
-                fontSize: '12px',
-                marginRight: '4px',
-              }}
-            >
-              {badge.count}
-            </Typography>
-            <Typography
-              sx={{
-                color: badge.color === '#E43634' ? badge.color : '#434F64',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '12px',
-                fontWeight: badge.color === '#E43634' ? 600 : 400,
-              }}
-            >
-              {badge.label}
-            </Typography>
-            {badge.suffix && (
-              <Typography
-                sx={{
-                  color: '#434F64',
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '12px',
-                  marginLeft: '4px',
-                }}
-              >
-                {badge.suffix}
-              </Typography>
-            )}
-          </Box>
-        ))}
-      </Box>
+            19
+          </Typography>
+          <Typography
+            sx={{
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 600,
+            }}
+          >
+            Long Stoppage
+          </Typography>
+        </Box>
 
-      {/* We've moved the Journey Count to the JourneysTable component */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#FFEBEB',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            19
+          </Typography>
+          <Typography
+            sx={{
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 600,
+            }}
+          >
+            Route Deviation
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#FFEBEB',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            51
+          </Typography>
+          <Typography
+            sx={{
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 600,
+            }}
+          >
+            Delayed
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            28
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            6 hrs
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            18
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            12-18 hrs
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            05
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            18+ hrs
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            E
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            Way Bill
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            28
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            Expiring in 3 hrs
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#FFEBEB',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            18
+          </Typography>
+          <Typography
+            sx={{
+              color: '#E43634',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 600,
+            }}
+          >
+            Expired
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            ETA
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            28
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              marginLeft: '4px',
+            }}
+          >
+            6 hrs
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            18
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            12 hrs
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '4px 8px',
+            backgroundColor: '#F5F7FA',
+            borderRadius: '4px',
+            height: '24px',
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              fontSize: '12px',
+              marginRight: '4px',
+            }}
+          >
+            05
+          </Typography>
+          <Typography
+            sx={{
+              color: '#434F64',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            24+ hrs
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 };
