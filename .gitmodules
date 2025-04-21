@@ -1,0 +1,6 @@
+[submodule "tms-dashboard"]
+	path = tms-dashboard
+	url = https://github.com/chetanft/Summary-Dashboard.git
+[submodule "figma-mcp-server"]
+	path = figma-mcp-server
+	url = https://github.com/chetanft/Summary-Dashboard.git
