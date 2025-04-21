@@ -1,5 +1,9 @@
-module.exports = {
-  plugins: ['react'],
+import reactPlugin from 'eslint-plugin-react';
+
+export default {
+  plugins: {
+    react: reactPlugin
+  },
   rules: {
     // Enforce usage of theme colors instead of hardcoded colors
     'no-restricted-properties': [
@@ -20,7 +24,7 @@ module.exports = {
         message: 'Use theme colors instead of hardcoded values. Example: borderColor: "divider"'
       }
     ],
-    
+
     // Enforce usage of Typography component for text
     'react/forbid-elements': [
       'error',
@@ -61,7 +65,7 @@ module.exports = {
         ]
       }
     ],
-    
+
     // Enforce usage of core components
     'react/forbid-component-props': [
       'warn',
@@ -85,7 +89,7 @@ module.exports = {
         ]
       }
     ],
-    
+
     // Enforce usage of theme spacing
     'no-restricted-syntax': [
       'error',
@@ -94,7 +98,7 @@ module.exports = {
         message: 'Use theme spacing instead of hardcoded pixel values. Example: padding: 2 (which equals 16px)'
       }
     ],
-    
+
     // Enforce usage of theme typography
     'react/forbid-component-props': [
       'warn',
@@ -108,7 +112,7 @@ module.exports = {
         ]
       }
     ],
-    
+
     // Enforce usage of theme shadows
     'no-restricted-properties': [
       'error',
@@ -118,7 +122,7 @@ module.exports = {
         message: 'Use theme shadows instead of hardcoded values. Example: boxShadow: theme.shadows[2]'
       }
     ],
-    
+
     // Enforce usage of theme breakpoints
     'no-restricted-properties': [
       'error',

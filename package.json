@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "lint:design": "eslint --config .eslintrc.design-system.js 'src/**/*.{js,jsx}'",
+    "lint:design": "eslint --config .eslintrc.design-system.cjs 'src/**/*.{js,jsx}'",
     "preview": "vite preview",
     "test": "jest"
   },
