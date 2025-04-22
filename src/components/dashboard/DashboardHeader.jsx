@@ -107,7 +107,7 @@ const DashboardHeader = ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '0px 20px',
+        padding: '0px 0px',
         width: '100%',
         height: '48px',
       }}

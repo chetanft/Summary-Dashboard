@@ -94,7 +94,7 @@ const JourneyPageHeader = ({
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '10px 20px',
+          padding: '0px 0px',
           gap: '10px',
           width: '100%',
           height: '40px',
