@@ -6,6 +6,7 @@ import InTransitSection from './InTransitSection';
 import PostDeliverySection from './PostDeliverySection';
 import LocationSelector from './LocationSelector';
 import SearchInput from './SearchInput';
+import KpiDrilldownDialog from './KpiDrilldownDialog';
 import { getOperationalDashboardData } from '../../services/operationalDashboardService';
 
 /**
@@ -20,6 +21,8 @@ const OperationsDashboard = () => {
   const [userRole, setUserRole] = useState('cxo');
   const [location, setLocation] = useState('MDC Labs, Amritsar');
   const [searchTerm, setSearchTerm] = useState('');
+  const [drilldownOpen, setDrilldownOpen] = useState(false);
+  const [selectedKpi, setSelectedKpi] = useState({ id: null, data: null });
 
   // Load dashboard data
   useEffect(() => {
@@ -28,7 +31,7 @@ const OperationsDashboard = () => {
         setLoading(true);
 
         // Fetch data from service
-        const dashboardData = await getOperationalDashboardData(userRole);
+        const dashboardData = await getOperationalDashboardData(userRole, location, searchTerm);
         setData(dashboardData);
         setError(null);
       } catch (err) {
@@ -39,13 +42,24 @@ const OperationsDashboard = () => {
       }
     };
 
-    loadData();
-  }, [userRole]);
+    // Add a small delay for search to avoid too many requests
+    const searchTimer = setTimeout(() => {
+      loadData();
+    }, searchTerm ? 500 : 0);
+
+    return () => clearTimeout(searchTimer);
+  }, [userRole, location, searchTerm]);
 
   // Handle KPI click for drilldown
   const handleKPIClick = (kpiId, kpiData) => {
     console.log('KPI clicked:', kpiId, kpiData);
-    // Implement drilldown functionality here
+    setSelectedKpi({ id: kpiId, data: kpiData });
+    setDrilldownOpen(true);
+  };
+
+  // Handle close drilldown dialog
+  const handleCloseDrilldown = () => {
+    setDrilldownOpen(false);
   };
 
   // Handle location change
@@ -131,6 +145,14 @@ const OperationsDashboard = () => {
         {/* Post Delivery Section */}
         <PostDeliverySection data={data.postDelivery} onKPIClick={handleKPIClick} />
       </Box>
+
+      {/* KPI Drilldown Dialog */}
+      <KpiDrilldownDialog
+        open={drilldownOpen}
+        onClose={handleCloseDrilldown}
+        kpiId={selectedKpi.id}
+        kpiData={selectedKpi.data}
+      />
     </Box>
   );
 };
