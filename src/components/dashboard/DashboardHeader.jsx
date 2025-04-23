@@ -40,7 +40,8 @@ const DashboardHeader = ({
     if (tab === 'performance') {
       navigate('/dashboard');
     } else if (tab === 'operations') {
-      navigate('/alerts');
+      // Stay on the same page, just change the tab
+      // The EnhancedDashboard component will handle showing the operations tab
     } else if (tab === 'orderData') {
       navigate('/orders');
     }

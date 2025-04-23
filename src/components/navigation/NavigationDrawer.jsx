@@ -57,7 +57,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       title: 'Dashboards',
       icon: 'BarChart2',
       path: '/dashboards',
-      active: location.pathname === '/dashboards' || location.pathname === '/operations-dashboard',
+      active: location.pathname === '/dashboards',
     },
     {
       title: 'Reports',
@@ -241,12 +241,6 @@ const NavigationDrawer = ({ open, onClose }) => {
 
   // Dashboard Analytics items
   const dashboardItems = [
-    {
-      title: 'Operational Dashboard',
-      icon: 'BarChart2',
-      path: '/operations-dashboard',
-      active: location.pathname === '/operations-dashboard',
-    },
     {
       title: 'Journey Analytics',
       icon: 'Circle',

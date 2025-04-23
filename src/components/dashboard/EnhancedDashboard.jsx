@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import Layout from '../layout/Layout';
 import DashboardHeader from './DashboardHeader';
 import KPIDrilldownPane from './KPIDrilldownPane';
+import OperationalDashboardTab from './OperationalDashboardTab';
 import { Box, Grid, Skeleton, Typography, Tooltip, IconButton, Chip, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -345,185 +346,189 @@ const EnhancedDashboard = () => {
 
         {/* Content Container */}
         <StyledContentContainer>
-          {/* Main Grid with the layout matching the design */}
-          <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
-            {/* First row: Left half - Budgeted vs Actual */}
-            <Grid size={{ xs:12, md:6 }}>
-              {loading ? (
-                <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row1} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-              ) : (
-                <BudgetedVsActualKPI
-                  title="Budgeted vs Actual vs Projected Freight"
-                  actual={kpiData.budgetVsActual.actual}
-                  projected={kpiData.budgetVsActual.projected}
-                  budget={kpiData.budgetVsActual.budget}
-                  formattedActual={dashboardData?.heroKPI?.formattedActual}
-                  formattedProjected={dashboardData?.heroKPI?.formattedProjected}
-                  formattedBudget={dashboardData?.heroKPI?.formattedBudget}
-                  chartData={kpiData.budgetVsActual.chartData}
-                  userRole={currentUser?.role}
-                  onDrillDown={handleKPIDrillDown}
-                />
-              )}
-            </Grid>
+          {activeTab === 'operations' ? (
+            <OperationalDashboardTab />
+          ) : (
+            /* Main Grid with the layout matching the design */
+            <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
+              {/* First row: Left half - Budgeted vs Actual */}
+              <Grid size={{ xs:12, md:6 }}>
+                {loading ? (
+                  <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row1} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                ) : (
+                  <BudgetedVsActualKPI
+                    title="Budgeted vs Actual vs Projected Freight"
+                    actual={kpiData.budgetVsActual.actual}
+                    projected={kpiData.budgetVsActual.projected}
+                    budget={kpiData.budgetVsActual.budget}
+                    formattedActual={dashboardData?.heroKPI?.formattedActual}
+                    formattedProjected={dashboardData?.heroKPI?.formattedProjected}
+                    formattedBudget={dashboardData?.heroKPI?.formattedBudget}
+                    chartData={kpiData.budgetVsActual.chartData}
+                    userRole={currentUser?.role}
+                    onDrillDown={handleKPIDrillDown}
+                  />
+                )}
+              </Grid>
 
-            {/* First row: Right half - Stacked KPIs */}
-            <Grid size={{ xs:12, md:6 }}>
-              <Grid container direction="column" spacing={2} sx={{ width: '100%', m: 0 }}>
-                {/* Vehicle Utilisation KPI */}
-                <Grid>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <VehicleUtilizationKPI
-                      title="Vehicle Utilisation"
-                      value={kpiData.vehicleUtilization.value}
-                      target={kpiData.vehicleUtilization.target}
-                      formattedValue={dashboardData?.secondaryKPIs?.[0]?.formattedValue}
-                      formattedTarget={dashboardData?.secondaryKPIs?.[0]?.formattedTarget}
-                      chartData={kpiData.vehicleUtilization.chartData}
-                      userRole={currentUser?.role}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
+              {/* First row: Right half - Stacked KPIs */}
+              <Grid size={{ xs:12, md:6 }}>
+                <Grid container direction="column" spacing={2} sx={{ width: '100%', m: 0 }}>
+                  {/* Vehicle Utilisation KPI */}
+                  <Grid>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <VehicleUtilizationKPI
+                        title="Vehicle Utilisation"
+                        value={kpiData.vehicleUtilization.value}
+                        target={kpiData.vehicleUtilization.target}
+                        formattedValue={dashboardData?.secondaryKPIs?.[0]?.formattedValue}
+                        formattedTarget={dashboardData?.secondaryKPIs?.[0]?.formattedTarget}
+                        chartData={kpiData.vehicleUtilization.chartData}
+                        userRole={currentUser?.role}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
+
+                  {/* Freight Cost KPI */}
+                  <Grid item>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <FreightCostKPI
+                        title="Freight cost per KM"
+                        value={kpiData.freightCost.value}
+                        target={kpiData.freightCost.target}
+                        formattedValue={dashboardData?.secondaryKPIs?.[1]?.formattedValue}
+                        formattedTarget={dashboardData?.secondaryKPIs?.[1]?.formattedTarget}
+                        chartData={kpiData.freightCost.chartData}
+                        info={kpiData.freightCost.info}
+                        userRole={currentUser?.role}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
                 </Grid>
+              </Grid>
 
-                {/* Freight Cost KPI */}
-                <Grid item>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row2} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <FreightCostKPI
-                      title="Freight cost per KM"
-                      value={kpiData.freightCost.value}
-                      target={kpiData.freightCost.target}
-                      formattedValue={dashboardData?.secondaryKPIs?.[1]?.formattedValue}
-                      formattedTarget={dashboardData?.secondaryKPIs?.[1]?.formattedTarget}
-                      chartData={kpiData.freightCost.chartData}
-                      info={kpiData.freightCost.info}
-                      userRole={currentUser?.role}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
+              {/* Second row: Three KPIs horizontally */}
+              <Grid size={{ xs:12, md:12 }}>
+                <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
+                  <Grid size={{ xs:12, md:4 }}>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <PlacementEfficiencyKPI
+                        title="Placement Efficiency"
+                        value={kpiData.placementEfficiency.value}
+                        target={kpiData.placementEfficiency.target}
+                        formattedValue={`${formatToOneDecimal(kpiData.placementEfficiency.value)}%`}
+                        formattedTarget={`${formatToOneDecimal(kpiData.placementEfficiency.target)}%`}
+                        chartData={kpiData.placementEfficiency.chartData}
+                        userRole={currentUser?.role}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
+
+                  <Grid size={{ xs:12, md:4 }}>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <OrderDeliveryTimeKPI
+                        title="Order to Delivery Time"
+                        value={kpiData.orderDeliveryTime.value}
+                        target={kpiData.orderDeliveryTime.target}
+                        formattedValue={`${formatToOneDecimal(kpiData.orderDeliveryTime.value)} days`}
+                        formattedTarget={`${formatToOneDecimal(kpiData.orderDeliveryTime.target)} days`}
+                        userRole={currentUser?.role}
+                        chartData={kpiData.orderDeliveryTime.chartData}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
+
+                  <Grid size={{ xs:12, md:4 }}>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <OTIFKPI
+                        title="OTIF"
+                        value={kpiData.otif.value}
+                        target={kpiData.otif.target}
+                        formattedValue={`${formatToOneDecimal(kpiData.otif.value)}%`}
+                        formattedTarget={`${formatToOneDecimal(kpiData.otif.target)}%`}
+                        chartData={kpiData.otif.chartData}
+                        userRole={currentUser?.role}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              {/* Third row: Three KPIs horizontally */}
+              <Grid size={{ xs:12, md:12 }}>
+                <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
+                  <Grid size={{ xs:12, md:4 }}>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <DelayedDeliveryKPI
+                        title="Delayed Delivery %"
+                        value={kpiData.delayedDelivery.value}
+                        target={kpiData.delayedDelivery.target}
+                        formattedValue={`${formatToOneDecimal(kpiData.delayedDelivery.value)}%`}
+                        formattedTarget={`${formatToOneDecimal(kpiData.delayedDelivery.target)}%`}
+                        chartData={kpiData.delayedDelivery.chartData}
+                        userRole={currentUser?.role}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
+
+                  <Grid size={{ xs:12, md:4 }}>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <PendingDispatchedKPI
+                        title="Pending Dispatched"
+                        value={kpiData.pendingDispatched.value}
+                        target={kpiData.pendingDispatched.target}
+                        formattedValue={`${formatToOneDecimal(kpiData.pendingDispatched.value)}%`}
+                        formattedTarget={`${formatToOneDecimal(kpiData.pendingDispatched.target)}%`}
+                        count={kpiData.pendingDispatched.count}
+                        userRole={currentUser?.role}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
+
+                  <Grid size={{ xs:12, md:4 }}>
+                    {loading ? (
+                      <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
+                    ) : (
+                      <DeliveredVsRunningDelayedKPI
+                        title="Delivered vs Running Delayed"
+                        deliveredValue={kpiData.deliveredRunningDelayed.deliveredValue}
+                        runningDelayedValue={kpiData.deliveredRunningDelayed.runningDelayedValue}
+                        runningDelayedTarget={kpiData.deliveredRunningDelayed.runningDelayedTarget}
+                        formattedDeliveredValue={`${formatToOneDecimal(kpiData.deliveredRunningDelayed.deliveredValue)}%`}
+                        formattedRunningDelayedValue={`${formatToOneDecimal(kpiData.deliveredRunningDelayed.runningDelayedValue)}%`}
+                        formattedRunningDelayedTarget={`${formatToOneDecimal(kpiData.deliveredRunningDelayed.runningDelayedTarget)}%`}
+                        deliveredCount={kpiData.deliveredRunningDelayed.deliveredCount}
+                        runningDelayedCount={kpiData.deliveredRunningDelayed.runningDelayedCount}
+                        userRole={currentUser?.role}
+                        onDrillDown={handleKPIDrillDown}
+                      />
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-
-            {/* Second row: Three KPIs horizontally */}
-            <Grid size={{ xs:12, md:12 }}>
-              <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
-                <Grid size={{ xs:12, md:4 }}>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <PlacementEfficiencyKPI
-                      title="Placement Efficiency"
-                      value={kpiData.placementEfficiency.value}
-                      target={kpiData.placementEfficiency.target}
-                      formattedValue={`${formatToOneDecimal(kpiData.placementEfficiency.value)}%`}
-                      formattedTarget={`${formatToOneDecimal(kpiData.placementEfficiency.target)}%`}
-                      chartData={kpiData.placementEfficiency.chartData}
-                      userRole={currentUser?.role}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
-                </Grid>
-
-                <Grid size={{ xs:12, md:4 }}>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <OrderDeliveryTimeKPI
-                      title="Order to Delivery Time"
-                      value={kpiData.orderDeliveryTime.value}
-                      target={kpiData.orderDeliveryTime.target}
-                      formattedValue={`${formatToOneDecimal(kpiData.orderDeliveryTime.value)} days`}
-                      formattedTarget={`${formatToOneDecimal(kpiData.orderDeliveryTime.target)} days`}
-                      userRole={currentUser?.role}
-                      chartData={kpiData.orderDeliveryTime.chartData}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
-                </Grid>
-
-                <Grid size={{ xs:12, md:4 }}>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <OTIFKPI
-                      title="OTIF"
-                      value={kpiData.otif.value}
-                      target={kpiData.otif.target}
-                      formattedValue={`${formatToOneDecimal(kpiData.otif.value)}%`}
-                      formattedTarget={`${formatToOneDecimal(kpiData.otif.target)}%`}
-                      chartData={kpiData.otif.chartData}
-                      userRole={currentUser?.role}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-            </Grid>
-
-            {/* Third row: Three KPIs horizontally */}
-            <Grid size={{ xs:12, md:12 }}>
-              <Grid container spacing={2} sx={{ width: '100%', m: 0 }}>
-                <Grid size={{ xs:12, md:4 }}>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <DelayedDeliveryKPI
-                      title="Delayed Delivery %"
-                      value={kpiData.delayedDelivery.value}
-                      target={kpiData.delayedDelivery.target}
-                      formattedValue={`${formatToOneDecimal(kpiData.delayedDelivery.value)}%`}
-                      formattedTarget={`${formatToOneDecimal(kpiData.delayedDelivery.target)}%`}
-                      chartData={kpiData.delayedDelivery.chartData}
-                      userRole={currentUser?.role}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
-                </Grid>
-
-                <Grid size={{ xs:12, md:4 }}>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <PendingDispatchedKPI
-                      title="Pending Dispatched"
-                      value={kpiData.pendingDispatched.value}
-                      target={kpiData.pendingDispatched.target}
-                      formattedValue={`${formatToOneDecimal(kpiData.pendingDispatched.value)}%`}
-                      formattedTarget={`${formatToOneDecimal(kpiData.pendingDispatched.target)}%`}
-                      count={kpiData.pendingDispatched.count}
-                      userRole={currentUser?.role}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
-                </Grid>
-
-                <Grid size={{ xs:12, md:4 }}>
-                  {loading ? (
-                    <Skeleton variant="rectangular" width="100%" height={dashboardStyles.rowHeights.row3} sx={{ borderRadius: dashboardStyles.cardBorderRadius }} />
-                  ) : (
-                    <DeliveredVsRunningDelayedKPI
-                      title="Delivered vs Running Delayed"
-                      deliveredValue={kpiData.deliveredRunningDelayed.deliveredValue}
-                      runningDelayedValue={kpiData.deliveredRunningDelayed.runningDelayedValue}
-                      runningDelayedTarget={kpiData.deliveredRunningDelayed.runningDelayedTarget}
-                      formattedDeliveredValue={`${formatToOneDecimal(kpiData.deliveredRunningDelayed.deliveredValue)}%`}
-                      formattedRunningDelayedValue={`${formatToOneDecimal(kpiData.deliveredRunningDelayed.runningDelayedValue)}%`}
-                      formattedRunningDelayedTarget={`${formatToOneDecimal(kpiData.deliveredRunningDelayed.runningDelayedTarget)}%`}
-                      deliveredCount={kpiData.deliveredRunningDelayed.deliveredCount}
-                      runningDelayedCount={kpiData.deliveredRunningDelayed.runningDelayedCount}
-                      userRole={currentUser?.role}
-                      onDrillDown={handleKPIDrillDown}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
+          )}
         </StyledContentContainer>
 
         {/* KPI Drill-down Pane */}
