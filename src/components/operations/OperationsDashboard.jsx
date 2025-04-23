@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, CircularProgress, Alert } from '@mui/material';
+import { Box, Typography, CircularProgress, Alert, Grid, MenuItem, FormControl, Select, InputLabel } from '@mui/material';
 import PlanningSection from './PlanningSection';
 import PreDispatchSection from './PreDispatchSection';
 import InTransitSection from './InTransitSection';
 import PostDeliverySection from './PostDeliverySection';
-import { ptlKpiData } from '../../data/ptl';
+import LocationSelector from './LocationSelector';
+import SearchInput from './SearchInput';
+import { getOperationalDashboardData } from '../../services/operationalDashboardService';
 
 /**
  * Operations Dashboard component that integrates all KPI sections
@@ -15,17 +17,19 @@ const OperationsDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
+  const [userRole, setUserRole] = useState('cxo');
+  const [location, setLocation] = useState('MDC Labs, Amritsar');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Simulate loading data
+  // Load dashboard data
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
 
-        // Use mock data
-        setData(ptlKpiData);
+        // Fetch data from service
+        const dashboardData = await getOperationalDashboardData(userRole);
+        setData(dashboardData);
         setError(null);
       } catch (err) {
         console.error('Error loading KPI data:', err);
@@ -36,12 +40,27 @@ const OperationsDashboard = () => {
     };
 
     loadData();
-  }, []);
+  }, [userRole]);
 
   // Handle KPI click for drilldown
   const handleKPIClick = (kpiId, kpiData) => {
     console.log('KPI clicked:', kpiId, kpiData);
     // Implement drilldown functionality here
+  };
+
+  // Handle location change
+  const handleLocationChange = (newLocation) => {
+    setLocation(newLocation);
+  };
+
+  // Handle search
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
+  // Handle user role change
+  const handleUserRoleChange = (event) => {
+    setUserRole(event.target.value);
   };
 
   if (loading) {
@@ -69,18 +88,49 @@ const OperationsDashboard = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Planning Section */}
-      <PlanningSection data={data.planning} onKPIClick={handleKPIClick} />
+    <Box sx={{ p: 3 }}>
+      {/* Header */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, color: '#434F64' }}>
+          Operational Dashboard
+        </Typography>
 
-      {/* Pre Dispatch Section */}
-      <PreDispatchSection data={data.preDispatch} onKPIClick={handleKPIClick} />
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <SearchInput onSearch={handleSearch} />
+          <LocationSelector value={location} onChange={handleLocationChange} />
 
-      {/* In Transit Section */}
-      <InTransitSection data={data.inTransit} onKPIClick={handleKPIClick} />
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel id="user-role-select-label">View As</InputLabel>
+            <Select
+              labelId="user-role-select-label"
+              id="user-role-select"
+              value={userRole}
+              label="View As"
+              onChange={handleUserRoleChange}
+              sx={{ borderRadius: '8px' }}
+            >
+              <MenuItem value="cxo">CXO</MenuItem>
+              <MenuItem value="company">Company</MenuItem>
+              <MenuItem value="branch">Branch</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </Box>
 
-      {/* Post Delivery Section */}
-      <PostDeliverySection data={data.postDelivery} onKPIClick={handleKPIClick} />
+      {/* Dashboard Content */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        {/* Planning Section */}
+        <PlanningSection data={data.planning} onKPIClick={handleKPIClick} />
+
+        {/* Pre Dispatch Section */}
+        <PreDispatchSection data={data.preDispatch} onKPIClick={handleKPIClick} />
+
+        {/* In Transit Section */}
+        <InTransitSection data={data.inTransit} onKPIClick={handleKPIClick} />
+
+        {/* Post Delivery Section */}
+        <PostDeliverySection data={data.postDelivery} onKPIClick={handleKPIClick} />
+      </Box>
     </Box>
   );
 };

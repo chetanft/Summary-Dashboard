@@ -4,73 +4,56 @@
 
 export const planningKpiData = {
   title: "Planning",
-  kpis: [
-    {
-      id: "orders-created",
-      name: "Orders Created",
-      type: "stat-tile",
-      value: 245,
-      trend: "up",
-      trendValue: 12,
-      status: "normal",
-      unit: "",
-      metadata: {
-        description: "Day-wise view of orders created",
-        thresholds: {
-          warning: 200,
-          critical: 300
-        }
-      }
+  totalOrders: {
+    id: "total-orders",
+    name: "Total Orders",
+    value: 1000,
+    trend: "up",
+    trendValue: 4,
+    breakdown: {
+      planned: { value: 104, percentage: 10.4 },
+      partiallyPlanned: { value: 204, percentage: 20.4 },
+      unplanned: { value: 692, percentage: 69.2 }
     },
-    {
-      id: "orders-assigned",
-      name: "Orders Assigned to Trip",
-      type: "donut-chart",
-      chartData: [
-        { name: "Assigned", value: 75, color: "#4CAF50" },
-        { name: "Pending", value: 25, color: "#FFC107" }
-      ],
-      metadata: {
-        description: "Percentage of orders assigned to trips",
-        total: 100
-      }
+    trendChart: [
+      { month: "Feb", value: 850, date: "2023-02-15" },
+      { month: "Mar", value: 900, date: "2023-03-15" },
+      { month: "Apr", value: 950, date: "2023-04-15" },
+      { month: "May", value: 980, date: "2023-05-15" },
+      { month: "Jun", value: 1000, date: "2023-06-15" }
+    ]
+  },
+  plannedLogisticCost: {
+    id: "planned-logistic-cost",
+    name: "Planned Logistic Cost",
+    value: 21.71,
+    unit: "Cr",
+    trend: "up",
+    trendValue: 4,
+    transporters: [
+      { name: "Laxmi Transporters", value: 4.2, percentage: 19.3, color: "#FF5252" },
+      { name: "Singh Transporters", value: 3.2, percentage: 14.7, color: "#26A69A" },
+      { name: "Yones Transporters", value: 2.7, percentage: 12.4, color: "#42A5F5" },
+      { name: "Others", value: 10.1, percentage: 46.5, color: "#3949AB" }
+    ]
+  },
+  ordersPlanned: {
+    id: "orders-planned",
+    name: "Orders Planned",
+    value: 104,
+    percentage: 10.4,
+    trend: "up",
+    trendValue: 4,
+    fulfillment: {
+      fulfilled: { value: 35, percentage: 76 },
+      unfulfilled: { value: 11, percentage: 24 }
     },
-    {
-      id: "order-trip-match-rate",
-      name: "Order vs Trip Match Rate",
-      type: "stat-tile",
-      value: 92,
-      trend: "up",
-      trendValue: 3,
-      status: "normal",
-      unit: "%",
-      metadata: {
-        description: "Percentage of orders matched with trips",
-        thresholds: {
-          warning: 85,
-          critical: 75
-        }
-      }
-    },
-    {
-      id: "trip-creation-trend",
-      name: "Trip Creation Trend",
-      type: "line-chart",
-      chartData: [
-        { date: "Apr 1", value: 32 },
-        { date: "Apr 5", value: 28 },
-        { date: "Apr 10", value: 35 },
-        { date: "Apr 15", value: 42 },
-        { date: "Apr 20", value: 38 },
-        { date: "Apr 25", value: 45 },
-        { date: "Apr 30", value: 48 }
-      ],
-      metadata: {
-        description: "Volume trend last 30 days",
-        unit: "trips"
-      }
-    }
-  ]
+    slaBreached: [
+      { category: ">4 days", value: 4 },
+      { category: "1-4 days", value: 5 },
+      { category: "1 day", value: 2 }
+    ]
+  }
 };
 
 export default planningKpiData;
