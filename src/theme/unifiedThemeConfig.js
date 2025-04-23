@@ -228,7 +228,8 @@ const components = {
       },
       head: {
         fontWeight: 600,
-        backgroundColor: colors.background.light,
+        backgroundColor: '#838C9D',
+        color: '#FFFFFF',
       },
     },
   },

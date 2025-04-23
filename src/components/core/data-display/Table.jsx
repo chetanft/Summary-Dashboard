@@ -49,34 +49,34 @@ const Table = ({
   // Sort and paginate data
   const sortedData = useMemo(() => {
     let sortedRows = [...data];
-    
+
     if (sortBy) {
       const column = columns.find(col => col.id === sortBy);
       if (column && column.sortable !== false) {
         sortedRows.sort((a, b) => {
           const valueA = column.accessor ? column.accessor(a) : a[sortBy];
           const valueB = column.accessor ? column.accessor(b) : b[sortBy];
-          
+
           // Handle different data types
           if (valueA === valueB) return 0;
-          
+
           if (valueA === null || valueA === undefined) return 1;
           if (valueB === null || valueB === undefined) return -1;
-          
+
           // Compare based on data type
           if (typeof valueA === 'string') {
             return sortDirection === 'asc'
               ? valueA.localeCompare(valueB)
               : valueB.localeCompare(valueA);
           }
-          
+
           return sortDirection === 'asc'
             ? valueA - valueB
             : valueB - valueA;
         });
       }
     }
-    
+
     return sortedRows;
   }, [data, sortBy, sortDirection, columns]);
 
@@ -123,7 +123,7 @@ const Table = ({
   // Handle row selection
   const handleRowSelect = (event, id) => {
     event.stopPropagation();
-    
+
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -172,7 +172,8 @@ const Table = ({
                   sortDirection={sortBy === column.id ? sortDirection : false}
                   sx={{
                     fontWeight: 600,
-                    backgroundColor: 'var(--color-background-table-header, #F5F7FA)',
+                    backgroundColor: 'var(--color-background-table-header, #838C9D)',
+                    color: '#FFFFFF',
                     ...(column.width && { width: column.width }),
                     ...(column.minWidth && { minWidth: column.minWidth }),
                     ...(column.maxWidth && { maxWidth: column.maxWidth }),
@@ -184,6 +185,15 @@ const Table = ({
                       active={sortBy === column.id}
                       direction={sortBy === column.id ? sortDirection : 'asc'}
                       onClick={() => handleRequestSort(column.id)}
+                      sx={{
+                        color: '#FFFFFF',
+                        '&.MuiTableSortLabel-active': {
+                          color: '#FFFFFF',
+                        },
+                        '& .MuiTableSortLabel-icon': {
+                          color: '#FFFFFF !important',
+                        },
+                      }}
                     >
                       {column.label}
                     </TableSortLabel>
@@ -198,7 +208,7 @@ const Table = ({
             {paginatedData.length > 0 ? (
               paginatedData.map((row, index) => {
                 const isItemSelected = selectable && isSelected(row.id);
-                
+
                 return (
                   <TableRow
                     hover
@@ -220,7 +230,7 @@ const Table = ({
                     )}
                     {columns.map((column) => {
                       const value = column.accessor ? column.accessor(row) : row[column.id];
-                      
+
                       return (
                         <TableCell
                           key={column.id}
@@ -248,7 +258,7 @@ const Table = ({
           </TableBody>
         </MuiTable>
       </TableContainer>
-      
+
       {pagination && (
         <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}

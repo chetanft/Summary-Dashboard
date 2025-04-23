@@ -19,7 +19,7 @@ import {
 /**
  * StandardTable component for displaying tabular data with sorting, pagination, and row selection
  * This component standardizes table styling and behavior across the application
- * 
+ *
  * @component
  * @example
  * <StandardTable
@@ -105,7 +105,7 @@ const StandardTable = ({
   // Handle row selection
   const handleClick = (event, id) => {
     if (!selectable) return;
-    
+
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -134,11 +134,11 @@ const StandardTable = ({
   // Sort the data
   const sortedData = React.useMemo(() => {
     if (!sortBy) return data;
-    
+
     return [...data].sort((a, b) => {
       const aValue = a[sortBy];
       const bValue = b[sortBy];
-      
+
       if (aValue < bValue) {
         return sortDirection === 'asc' ? -1 : 1;
       }
@@ -152,7 +152,7 @@ const StandardTable = ({
   // Paginate the data
   const paginatedData = React.useMemo(() => {
     if (!pagination) return sortedData;
-    
+
     return sortedData.slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
@@ -205,14 +205,14 @@ const StandardTable = ({
   const sizeStyles = getSizeStyles();
 
   // Header background color
-  const headerBgColor = headerBackgroundColor || theme.palette.background.light;
+  const headerBgColor = headerBackgroundColor || '#838C9D';
   const headerTextColor = theme.palette.getContrastText(headerBgColor);
 
   return (
     <Box sx={{ width: '100%', ...props.sx }}>
-      <TableContainer 
-        component={Paper} 
-        sx={{ 
+      <TableContainer
+        component={Paper}
+        sx={{
           borderRadius: '8px',
           ...variantStyles,
           ...sizeStyles,
@@ -244,7 +244,7 @@ const StandardTable = ({
                   key={column.id}
                   align={column.align || 'left'}
                   sortDirection={sortBy === column.id ? sortDirection : false}
-                  sx={{ 
+                  sx={{
                     color: headerTextColor,
                     fontWeight: 600,
                   }}
@@ -299,7 +299,7 @@ const StandardTable = ({
               paginatedData.map((row, index) => {
                 const isItemSelected = selectable && isSelected(row[rowIdField]);
                 const rowId = row[rowIdField];
-                
+
                 return (
                   <TableRow
                     hover={highlightOnHover}
@@ -379,97 +379,97 @@ StandardTable.propTypes = {
       renderCell: PropTypes.func,
     })
   ).isRequired,
-  
+
   /**
    * Data to display in the table
    */
   data: PropTypes.array.isRequired,
-  
+
   /**
    * Initial sort column
    */
   initialSortBy: PropTypes.string,
-  
+
   /**
    * Initial sort direction
    */
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
-  
+
   /**
    * Function to call when a row is clicked
    */
   onRowClick: PropTypes.func,
-  
+
   /**
    * Function to call when selection changes
    */
   onSelectionChange: PropTypes.func,
-  
+
   /**
    * Whether rows are selectable
    */
   selectable: PropTypes.bool,
-  
+
   /**
    * Whether the table is in a loading state
    */
   loading: PropTypes.bool,
-  
+
   /**
    * Whether to show pagination
    */
   pagination: PropTypes.bool,
-  
+
   /**
    * Options for rows per page
    */
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number),
-  
+
   /**
    * Default rows per page
    */
   defaultRowsPerPage: PropTypes.number,
-  
+
   /**
    * Whether the header is sticky
    */
   stickyHeader: PropTypes.bool,
-  
+
   /**
    * Message to display when there is no data
    */
   emptyStateMessage: PropTypes.string,
-  
+
   /**
    * Field to use as row ID
    */
   rowIdField: PropTypes.string,
-  
+
   /**
    * Label for rows per page
    */
   rowsPerPageLabel: PropTypes.string,
-  
+
   /**
    * Whether to show zebra striping
    */
   zebra: PropTypes.bool,
-  
+
   /**
    * Whether to highlight rows on hover
    */
   highlightOnHover: PropTypes.bool,
-  
+
   /**
    * Background color for the header
    */
   headerBackgroundColor: PropTypes.string,
-  
+
   /**
    * Variant of the table
    */
   variant: PropTypes.oneOf(['default', 'outlined', 'filled', 'elevated']),
-  
+
   /**
    * Size of the table
    */

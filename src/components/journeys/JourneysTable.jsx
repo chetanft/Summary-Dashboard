@@ -335,7 +335,7 @@ const JourneysTable = ({ journeys, onJourneyClick }) => {
         selectable={true}
         onSelectionChange={handleSelectionChange}
         zebra={true}
-        headerBackgroundColor="#F5F7FA"
+        // Using default header background color #434F64
         variant="outlined"
         size="small"
         initialSortBy="from"

@@ -31,7 +31,7 @@ import { colors } from '../../../theme/themeConfig';
 
 /**
  * DataTable component for displaying tabular data with sorting, pagination, and row selection
- * 
+ *
  * @component
  * @example
  * <DataTable
@@ -245,15 +245,14 @@ const DataTable = ({
   const sizeStyles = getSizeStyles();
 
   // Get header background color
-  const headerBgColor = headerBackgroundColor || (variant === 'default' ? '#838C9D' : '#F8F9FA');
-  const headerTextColor = headerBackgroundColor ? theme.palette.getContrastText(headerBackgroundColor) : 
-                          (variant === 'default' ? '#FFFFFF' : colors.text.primary);
+  const headerBgColor = headerBackgroundColor || '#838C9D';
+  const headerTextColor = headerBackgroundColor ? theme.palette.getContrastText(headerBackgroundColor) : '#FFFFFF';
 
   return (
     <Box sx={{ width: '100%', ...props.sx }}>
-      <TableContainer 
-        component={Paper} 
-        sx={{ 
+      <TableContainer
+        component={Paper}
+        sx={{
           borderRadius: '8px',
           ...variantStyles,
           ...sizeStyles,
@@ -289,7 +288,7 @@ const DataTable = ({
                 <TableCell
                   key={column.id}
                   align={column.align || 'left'}
-                  sx={{ 
+                  sx={{
                     color: headerTextColor,
                     fontWeight: 600,
                     whiteSpace: column.noWrap ? 'nowrap' : 'normal',
@@ -326,7 +325,7 @@ const DataTable = ({
               {actionColumn && (
                 <TableCell
                   align="center"
-                  sx={{ 
+                  sx={{
                     color: headerTextColor,
                     fontWeight: 600,
                   }}
@@ -341,9 +340,9 @@ const DataTable = ({
               <TableRow>
                 <TableCell
                   colSpan={
-                    columns.length + 
-                    (selectable ? 1 : 0) + 
-                    (expandableRows ? 1 : 0) + 
+                    columns.length +
+                    (selectable ? 1 : 0) +
+                    (expandableRows ? 1 : 0) +
                     (actionColumn ? 1 : 0)
                   }
                   align="center"
@@ -359,9 +358,9 @@ const DataTable = ({
               <TableRow>
                 <TableCell
                   colSpan={
-                    columns.length + 
-                    (selectable ? 1 : 0) + 
-                    (expandableRows ? 1 : 0) + 
+                    columns.length +
+                    (selectable ? 1 : 0) +
+                    (expandableRows ? 1 : 0) +
                     (actionColumn ? 1 : 0)
                   }
                   align="center"
@@ -475,13 +474,13 @@ const DataTable = ({
                       <TableRow>
                         <TableCell
                           colSpan={
-                            columns.length + 
-                            (selectable ? 1 : 0) + 
-                            (expandableRows ? 1 : 0) + 
+                            columns.length +
+                            (selectable ? 1 : 0) +
+                            (expandableRows ? 1 : 0) +
                             (actionColumn ? 1 : 0)
                           }
-                          sx={{ 
-                            paddingTop: 0, 
+                          sx={{
+                            paddingTop: 0,
                             paddingBottom: 0,
                             backgroundColor: '#FAFAFA',
                           }}

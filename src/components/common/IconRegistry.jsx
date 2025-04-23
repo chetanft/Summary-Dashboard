@@ -158,26 +158,10 @@ export const IconRegistryProvider = ({ children }) => {
   const [lucideIcons, setLucideIcons] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(true);
 
-  // Load Lucide icons dynamically at runtime only (not during build)
+  // Disable dynamic loading of Lucide icons
   useEffect(() => {
-    // Use a function constructor to avoid Vite/Rollup from trying to analyze this import
-    // This is a workaround for the Netlify build issue
-    const dynamicImport = new Function('return import("lucide-react")');
-
-    dynamicImport()
-      .then(module => {
-        setLucideIcons(module);
-        // Only preload common icons if we successfully loaded lucide-react
-        if (typeof preloadCommonIcons === 'function') {
-          preloadCommonIcons();
-        }
-      })
-      .catch(error => {
-        console.warn('Failed to load Lucide icons at runtime:', error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    // Set isLoading to false immediately since we're not loading Lucide icons
+    setIsLoading(false);
   }, []);
 
   return (
