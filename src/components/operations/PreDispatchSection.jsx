@@ -17,8 +17,37 @@ import BarChartComponent from '../charts/BarChartComponent';
 const PreDispatchSection = ({ data, onKPIClick }) => {
   if (!data) return null;
 
-  const { ftl, ptl } = data;
-  const activeData = ftl; // Use FTL data by default, can be changed based on toggle
+  // Create default structure for the data
+  const defaultKpiData = {
+    name: 'N/A',
+    id: 'default',
+    value: 0,
+    unit: '%',
+    trendValue: 0,
+    chartData: [],
+    slaBreakdown: [],
+    breakdown: {
+      accepted: { value: 0, percentage: 0 },
+      pending: { value: 0, percentage: 0 },
+      reporting: { value: 0, percentage: 0 },
+      assign: { value: 0, percentage: 0 }
+    }
+  };
+
+  // Extract data with defaults
+  const { indentStatus = {}, acceptedSplit = {}, pickupSlaBreached = {} } = data;
+
+  // Apply defaults to each section
+  const safeIndentStatus = { ...defaultKpiData, ...indentStatus, name: 'Indent Status' };
+  const safeAcceptedSplit = { ...defaultKpiData, ...acceptedSplit, name: 'Accepted Split' };
+  const safePickupSlaBreached = { ...defaultKpiData, ...pickupSlaBreached, name: 'Pickup SLA Breached' };
+
+  // Create a safe active data object
+  const activeData = {
+    indentStatus: safeIndentStatus,
+    acceptedSplit: safeAcceptedSplit,
+    pickupSlaBreached: safePickupSlaBreached
+  };
 
   return (
     <Box sx={{ p: 3, bgcolor: '#F8F8F9', borderRadius: '12px', mb: 3 }}>

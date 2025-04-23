@@ -18,8 +18,36 @@ import BarChartComponent from '../charts/BarChartComponent';
 const InTransitSection = ({ data, onKPIClick }) => {
   if (!data) return null;
 
-  const { ftl, ptl } = data;
-  const activeData = ftl; // Use FTL data by default, can be changed based on toggle
+  // Create default structure for the data
+  const defaultKpiData = {
+    name: 'N/A',
+    id: 'default',
+    value: 0,
+    unit: '%',
+    trendValue: 0,
+    chartData: [],
+    delayBreakdown: [],
+    accuracyTrend: [],
+    breakdown: {
+      delivered: { value: 0, percentage: 0 },
+      inTransit: { value: 0, percentage: 0 }
+    }
+  };
+
+  // Extract data with defaults
+  const { deliveredVsInTransit = {}, tripDelayFlag = {}, etaAccuracy = {} } = data;
+
+  // Apply defaults to each section
+  const safeDeliveredVsInTransit = { ...defaultKpiData, ...deliveredVsInTransit, name: 'Delivered vs In-Transit' };
+  const safeTripDelayFlag = { ...defaultKpiData, ...tripDelayFlag, name: 'Trip Delay Flag' };
+  const safeEtaAccuracy = { ...defaultKpiData, ...etaAccuracy, name: 'ETA Accuracy' };
+
+  // Create a safe active data object
+  const activeData = {
+    deliveredVsInTransit: safeDeliveredVsInTransit,
+    tripDelayFlag: safeTripDelayFlag,
+    etaAccuracy: safeEtaAccuracy
+  };
 
   return (
     <Box sx={{ p: 3, bgcolor: '#F8F8F9', borderRadius: '12px', mb: 3 }}>

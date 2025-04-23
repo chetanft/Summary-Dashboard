@@ -19,7 +19,32 @@ import BarChartComponent from '../charts/BarChartComponent';
 const PlanningSection = ({ data, onKPIClick }) => {
   if (!data) return null;
 
-  const { totalOrders, plannedLogisticCost, ordersPlanned } = data;
+  const { totalOrders = {}, plannedLogisticCost = {}, ordersPlanned = {} } = data;
+
+  // Ensure all required nested objects exist
+  ordersPlanned.fulfillment = ordersPlanned.fulfillment || {
+    fulfilled: { percentage: 0, value: 0 },
+    unfulfilled: { percentage: 0, value: 0 }
+  };
+
+  ordersPlanned.slaBreached = ordersPlanned.slaBreached || [];
+
+  totalOrders.breakdown = totalOrders.breakdown || {
+    partiallyPlanned: { value: 0, percentage: 0 },
+    unplanned: { value: 0, percentage: 0 },
+    planned: { value: 0, percentage: 0 }
+  };
+
+  totalOrders.trendChart = totalOrders.trendChart || [];
+  totalOrders.value = totalOrders.value || 0;
+  totalOrders.trendValue = totalOrders.trendValue || 0;
+
+  plannedLogisticCost.transporters = plannedLogisticCost.transporters || [];
+  plannedLogisticCost.value = plannedLogisticCost.value || 0;
+  plannedLogisticCost.trendValue = plannedLogisticCost.trendValue || 0;
+
+  ordersPlanned.value = ordersPlanned.value || 0;
+  ordersPlanned.trendValue = ordersPlanned.trendValue || 0;
 
   return (
     <Box sx={{ p: 3, bgcolor: '#F8F8F9', borderRadius: '12px', mb: 3 }}>

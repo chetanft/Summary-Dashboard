@@ -17,8 +17,38 @@ import BarChartComponent from '../charts/BarChartComponent';
 const PostDeliverySection = ({ data, onKPIClick }) => {
   if (!data) return null;
 
-  const { ftl, ptl } = data;
-  const activeData = ftl; // Use FTL data by default, can be changed based on toggle
+  // Create default structure for the data
+  const defaultKpiData = {
+    name: 'N/A',
+    id: 'default',
+    value: 0,
+    unit: '%',
+    trendValue: 0,
+    chartData: [],
+    approvalBreakdown: [],
+    breakdown: {
+      submitted: { value: 0, percentage: 0 },
+      pending: { value: 0, percentage: 0 },
+      approved: { value: 0, percentage: 0 },
+      rejected: { value: 0, percentage: 0 },
+      generated: { value: 0, percentage: 0 }
+    }
+  };
+
+  // Extract data with defaults
+  const { epodSubmittedVsPending = {}, epodApprovalRate = {}, invoiceStatus = {} } = data;
+
+  // Apply defaults to each section
+  const safeEpodSubmittedVsPending = { ...defaultKpiData, ...epodSubmittedVsPending, name: 'ePOD Submitted vs Pending' };
+  const safeEpodApprovalRate = { ...defaultKpiData, ...epodApprovalRate, name: 'ePOD Approval Rate' };
+  const safeInvoiceStatus = { ...defaultKpiData, ...invoiceStatus, name: 'Invoice Status' };
+
+  // Create a safe active data object
+  const activeData = {
+    epodSubmittedVsPending: safeEpodSubmittedVsPending,
+    epodApprovalRate: safeEpodApprovalRate,
+    invoiceStatus: safeInvoiceStatus
+  };
 
   return (
     <Box sx={{ p: 3, bgcolor: '#F8F8F9', borderRadius: '12px', mb: 3 }}>
