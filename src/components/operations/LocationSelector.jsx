@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 /**
  * Location selector component for selecting a location
- * 
+ *
  * @param {Object} props - Component props
  * @param {string} props.value - Selected location
  * @param {Function} props.onChange - Change handler function
@@ -12,8 +12,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
  * @returns {JSX.Element}
  */
 const LocationSelector = ({ value = 'MDC Labs, Amritsar', onChange, sx = {} }) => {
-  const [location, setLocation] = useState(value);
-  
+  const [location, setLocation] = useState(value || 'MDC Labs, Amritsar');
+
   const handleChange = (event) => {
     const newValue = event.target.value;
     setLocation(newValue);
@@ -21,14 +21,14 @@ const LocationSelector = ({ value = 'MDC Labs, Amritsar', onChange, sx = {} }) =
       onChange(newValue);
     }
   };
-  
+
   const locations = [
     'MDC Labs, Amritsar',
     'Tata Motors, Pune',
     'Freight Tiger HQ, Mumbai',
     'Logistics Hub, Delhi'
   ];
-  
+
   return (
     <TextField
       select

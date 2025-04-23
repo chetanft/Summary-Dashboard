@@ -46,6 +46,12 @@ import SupportIcon from '@mui/icons-material/Support';
 import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 import PlanningIcon from '@mui/icons-material/Event';
 import PaletteIcon from '@mui/icons-material/Palette';
+import RocketIcon from '@mui/icons-material/Rocket';
+import BellIcon from '@mui/icons-material/Notifications';
+import UserIcon from '@mui/icons-material/Person';
+import SwitchHorizontalIcon from '@mui/icons-material/SwapHoriz';
+import KeyIcon from '@mui/icons-material/Key';
+import LogOutIcon from '@mui/icons-material/Logout';
 
 // We'll load Lucide icons at runtime, not during build
 // This empty object will be populated at runtime
@@ -97,6 +103,12 @@ const materialIcons = {
   ViewQuilt: ViewQuiltIcon,
   Planning: PlanningIcon,
   Palette: PaletteIcon,
+  Rocket: RocketIcon,
+  Bell: BellIcon,
+  User: UserIcon,
+  SwitchHorizontal: SwitchHorizontalIcon,
+  Key: KeyIcon,
+  LogOut: LogOutIcon,
 };
 
 // Create a mapping between Material UI icons and their Lucide equivalents

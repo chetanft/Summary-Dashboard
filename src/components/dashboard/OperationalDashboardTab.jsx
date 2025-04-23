@@ -17,10 +17,102 @@ import { getOperationalDashboardData } from '../../services/operationalDashboard
 
 const OperationalDashboardTab = () => {
   const [data, setData] = useState({
-    planning: {},
-    preDispatch: {},
-    inTransit: {},
-    postDelivery: {}
+    planning: {
+      totalOrders: {
+        value: 0,
+        trend: 'up',
+        trendValue: 0,
+        breakdown: {
+          planned: { value: 0, percentage: 0 },
+          partiallyPlanned: { value: 0, percentage: 0 },
+          unplanned: { value: 0, percentage: 0 }
+        },
+        trendChart: []
+      },
+      plannedLogisticCost: {
+        value: 0,
+        trend: 'up',
+        trendValue: 0,
+        breakdown: {
+          transporter1: { value: 0, percentage: 0 },
+          transporter2: { value: 0, percentage: 0 },
+          transporter3: { value: 0, percentage: 0 }
+        }
+      },
+      ordersPlanned: {
+        value: 0,
+        trend: 'up',
+        trendValue: 0,
+        fulfillmentStatus: { value: 0, percentage: 0 },
+        slaBreached: { value: 0, percentage: 0 }
+      }
+    },
+    preDispatch: {
+      indentStatus: {
+        breakdown: {
+          accepted: { value: 0, percentage: 0 },
+          pending: { value: 0, percentage: 0 }
+        }
+      },
+      acceptedSplit: {
+        breakdown: {
+          reporting: { value: 0, percentage: 0 },
+          assign: { value: 0, percentage: 0 }
+        }
+      },
+      pickupSlaBreached: {
+        value: 0,
+        breakdown: {
+          lessThan2Hours: { value: 0, percentage: 0 },
+          twoToFourHours: { value: 0, percentage: 0 },
+          moreThan4Hours: { value: 0, percentage: 0 }
+        }
+      }
+    },
+    inTransit: {
+      deliveredVsInTransit: {
+        breakdown: {
+          delivered: { value: 0, percentage: 0 },
+          inTransit: { value: 0, percentage: 0 }
+        }
+      },
+      tripDelayFlag: {
+        value: 0,
+        breakdown: {
+          lessThan2Hours: { value: 0, percentage: 0 },
+          twoToFourHours: { value: 0, percentage: 0 },
+          moreThan4Hours: { value: 0, percentage: 0 }
+        }
+      },
+      etaAccuracy: {
+        value: 0,
+        trend: 'up',
+        trendValue: 0,
+        trendChart: []
+      }
+    },
+    postDelivery: {
+      epodSubmittedVsPending: {
+        breakdown: {
+          submitted: { value: 0, percentage: 0 },
+          pending: { value: 0, percentage: 0 }
+        }
+      },
+      epodApprovalRate: {
+        value: 0,
+        breakdown: {
+          approved: { value: 0, percentage: 0 },
+          rejected: { value: 0, percentage: 0 },
+          pending: { value: 0, percentage: 0 }
+        }
+      },
+      invoiceStatus: {
+        breakdown: {
+          generated: { value: 0, percentage: 0 },
+          pending: { value: 0, percentage: 0 }
+        }
+      }
+    }
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,7 +121,7 @@ const OperationalDashboardTab = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [drilldownOpen, setDrilldownOpen] = useState(false);
   const [selectedKpi, setSelectedKpi] = useState({ id: null, data: null });
-  
+
   const { currentUser } = useAuth();
   const { refreshData } = useData();
 
@@ -38,7 +130,7 @@ const OperationalDashboardTab = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch data from service
         const dashboardData = await getOperationalDashboardData(userRole, location, searchTerm);
         setData(dashboardData);
@@ -92,7 +184,7 @@ const OperationalDashboardTab = () => {
         <Box sx={{ display: 'flex', gap: 2 }}>
           <SearchInput onSearch={handleSearch} />
           <LocationSelector value={location} onChange={handleLocationChange} />
-          
+
           <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel id="user-role-select-label">View As</InputLabel>
             <Select
@@ -110,7 +202,7 @@ const OperationalDashboardTab = () => {
           </FormControl>
         </Box>
       </Box>
-      
+
       {/* Dashboard Content */}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {/* Planning Section */}
@@ -125,7 +217,7 @@ const OperationalDashboardTab = () => {
         {/* Post Delivery Section */}
         <PostDeliverySection data={data.postDelivery} onKPIClick={handleKPIClick} />
       </Box>
-      
+
       {/* KPI Drilldown Dialog */}
       <KpiDrilldownDialog
         open={drilldownOpen}
