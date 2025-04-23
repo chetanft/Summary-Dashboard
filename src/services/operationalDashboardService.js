@@ -1,7 +1,7 @@
 /**
  * Service for fetching and transforming operational dashboard data
  */
-import { getMonthToDateRange, getLastSixMonthsRange, filterDataByDateRange } from '../utils/dateUtils';
+import { getMonthToDateRange, getLastSixMonthsRange } from '../utils/dateUtils';
 import { transformDataForUserRole } from '../utils/userRoleUtils';
 import { planningKpiData } from '../data/ptl/planningKpiData';
 import { preDispatchKpiData } from '../data/ptl/preDispatchKpiData';

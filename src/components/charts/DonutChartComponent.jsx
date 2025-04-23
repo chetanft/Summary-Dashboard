@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Text } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 /**
  * DonutChartComponent for displaying circular metrics
@@ -98,4 +98,4 @@ const DonutChartComponent = ({
   );
 };
 
-export default DonutChartComponent; 
+export default DonutChartComponent;

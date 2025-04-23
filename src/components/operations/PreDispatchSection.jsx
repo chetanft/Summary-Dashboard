@@ -58,9 +58,8 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
                 showLabel={true}
                 height="100%"
                 centerLabel={{
-                  title: "Accepted",
                   value: `${activeData.indentStatus.breakdown.accepted.percentage}%`,
-                  subtitle: ""
+                  label: "Accepted"
                 }}
               />
             </Box>
@@ -96,9 +95,8 @@ const PreDispatchSection = ({ data, onKPIClick }) => {
                 showLabel={true}
                 height="100%"
                 centerLabel={{
-                  title: "Reporting",
                   value: `${activeData.acceptedSplit.breakdown.reporting.percentage}%`,
-                  subtitle: ""
+                  label: "Reporting"
                 }}
               />
             </Box>

@@ -57,7 +57,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       title: 'Dashboards',
       icon: 'BarChart2',
       path: '/dashboards',
-      active: location.pathname === '/dashboards',
+      active: location.pathname === '/dashboards' || location.pathname === '/operations-dashboard',
     },
     {
       title: 'Reports',
@@ -168,7 +168,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       active: location.pathname === '/contracts',
     },
   ];
-  
+
   // PTL Order Booking items
   const ptlOrderBookingItems = [
     {
@@ -178,7 +178,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       active: location.pathname === '/order-booking',
     },
   ];
-  
+
   // PTL Tracking items
   const ptlTrackingItems = [
     {
@@ -188,7 +188,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       active: location.pathname === '/my-shipments',
     },
   ];
-  
+
   // Freight Invoicing section items for PTL
   const ptlFreightInvoicingItems = [
     {
@@ -238,9 +238,15 @@ const NavigationDrawer = ({ open, onClose }) => {
       active: location.pathname === '/indent-analytics',
     },
   ];
-  
+
   // Dashboard Analytics items
   const dashboardItems = [
+    {
+      title: 'Operational Dashboard',
+      icon: 'BarChart2',
+      path: '/operations-dashboard',
+      active: location.pathname === '/operations-dashboard',
+    },
     {
       title: 'Journey Analytics',
       icon: 'Circle',
@@ -266,7 +272,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       active: location.pathname === '/freight-invoicing-analytics',
     },
   ];
-  
+
   // Reports items
   const reportItems = [
     {
@@ -306,7 +312,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       active: location.pathname === '/report-6',
     },
   ];
-  
+
   // Support items
   const supportItems = [
     {
@@ -316,7 +322,7 @@ const NavigationDrawer = ({ open, onClose }) => {
       active: location.pathname === '/masters',
     },
   ];
-  
+
   // Component items
   const componentItems = [
     {
@@ -404,14 +410,14 @@ const NavigationDrawer = ({ open, onClose }) => {
       {title}
     </Typography>
   );
-  
+
   // Function to determine which submenu to show based on selected main item
   const getSubmenuContent = () => {
     // Find the active main navigation item
     const activeMainItem = mainNavigationItems.find(item => item.active);
-    
+
     if (!activeMainItem) return null;
-    
+
     switch (activeMainItem.title) {
       case 'Summary Page':
         return (

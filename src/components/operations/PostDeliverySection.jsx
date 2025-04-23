@@ -58,9 +58,8 @@ const PostDeliverySection = ({ data, onKPIClick }) => {
                 showLabel={true}
                 height="100%"
                 centerLabel={{
-                  title: "Submitted",
                   value: `${activeData.epodSubmittedVsPending.breakdown.submitted.percentage}%`,
-                  subtitle: ""
+                  label: "Submitted"
                 }}
               />
             </Box>
@@ -146,9 +145,8 @@ const PostDeliverySection = ({ data, onKPIClick }) => {
                 showLabel={true}
                 height="100%"
                 centerLabel={{
-                  title: "Generated",
                   value: `${activeData.invoiceStatus.breakdown.generated.percentage}%`,
-                  subtitle: ""
+                  label: "Generated"
                 }}
               />
             </Box>

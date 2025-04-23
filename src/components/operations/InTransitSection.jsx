@@ -59,9 +59,8 @@ const InTransitSection = ({ data, onKPIClick }) => {
                 showLabel={true}
                 height="100%"
                 centerLabel={{
-                  title: "Delivered",
                   value: `${activeData.deliveredVsInTransit.breakdown.delivered.percentage}%`,
-                  subtitle: ""
+                  label: "Delivered"
                 }}
               />
             </Box>

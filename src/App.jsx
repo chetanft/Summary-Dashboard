@@ -18,6 +18,7 @@ import ControlTowerPage from './components/control-tower/ControlTowerPage';
 import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
 import IconsDemo from './pages/IconsDemo';
 import PlaceholderPage from './pages/PlaceholderPage';
+import OperationsDashboard from './components/operations/OperationsDashboard';
 
 // Import the unified theme
 import theme from './theme/unifiedThemeConfig';
@@ -102,6 +103,16 @@ function App() {
                       <ControlTowerProvider>
                         <ControlTowerPage />
                       </ControlTowerProvider>
+                    </DataProvider>
+                  </ProtectedRoute>
+              }
+            />
+              <Route
+                path="/operations-dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <OperationsDashboard />
                     </DataProvider>
                   </ProtectedRoute>
               }
