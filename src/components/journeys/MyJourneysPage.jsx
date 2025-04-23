@@ -125,8 +125,8 @@ const MyJourneysPage = () => {
 
   // Handle journey click
   const handleJourneyClick = (journey) => {
-    setSelectedJourney(journey);
-    setDrawerOpen(true);
+    // Navigate to the journey details page
+    navigate(`/journey/${journey.id}`);
 
     // Add to recent searches
     addRecentSearch({
@@ -134,6 +134,10 @@ const MyJourneysPage = () => {
       value: journey.id,
       tripId: journey.tripId
     });
+
+    // Keep the drawer functionality for backward compatibility
+    // setSelectedJourney(journey);
+    // setDrawerOpen(true);
   };
 
   // Handle close drawer

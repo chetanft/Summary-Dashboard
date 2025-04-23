@@ -13,6 +13,7 @@ import OrdersPage from './components/orders/OrdersPage';
 import OrderDetailPage from './components/orders/OrderDetailPage';
 import AlertsWithLayout from './components/alerts/AlertsWithLayout';
 import MyJourneysPage from './components/journeys/MyJourneysPage';
+import JourneyDetailsPage from './components/journeys/JourneyDetailsPage';
 import JourneyPage from './pages/JourneyPage';
 import ControlTowerPage from './components/control-tower/ControlTowerPage';
 import CoreComponentLibraryDemo from './pages/CoreComponentLibraryDemo';
@@ -78,6 +79,16 @@ function App() {
                   <ProtectedRoute>
                     <DataProvider>
                       <MyJourneysPage />
+                    </DataProvider>
+                  </ProtectedRoute>
+              }
+            />
+              <Route
+                path="/journey/:journeyId"
+                element={
+                  <ProtectedRoute>
+                    <DataProvider>
+                      <JourneyDetailsPage />
                     </DataProvider>
                   </ProtectedRoute>
               }

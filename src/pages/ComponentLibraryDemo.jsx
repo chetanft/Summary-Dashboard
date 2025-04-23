@@ -590,7 +590,7 @@ const ComponentLibraryDemo = () => {
           selectable
           onSelectionChange={handleSelectionChange}
           variant="outlined"
-          headerBackgroundColor="#F8F9FA"
+          headerBackgroundColor="#838C9D"
         />
       </Box>
 
